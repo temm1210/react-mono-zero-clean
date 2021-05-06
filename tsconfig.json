@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "baseUrl": "./packages",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    // import add from './add.js'허용
+    "allowJs": true,
+    // 모든 선언파일(*.d.ts)의 유형검사를 건너뛸지 여부
+    "skipLibCheck": false,
+    //  commonjs와 es module간에 상호작용이 가능하게 해줌
+    "esModuleInterop": true,
+    // export default가 아닌것도 export default로 사용하게 해주는것(import * as _ from 'lodash' -> import _ from 'lodash' 로 사용하게 해줌)
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    // ./FileManager.ts를 지정하여 fileManager.ts를 가져 오려고하면 파일은 대소 문자를 구분하지 않는 파일 시스템에서 발견되지만 대소 문자를 구분하는 파일 시스템에서는 발견되지 않음
+    // 해당 옵션을 true로 지정하면 이러한상황에서 error를 표시함
+    "forceConsistentCasingInFileNames": true,
+    // "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    // 각파일을 별도의 모듈로 변환
+    "isolatedModules": true,
+    // 타입파일들 위치
+    "typeRoots": ["node_modules/@types"],
+    // node타입을 추가(node관련 타입들을 인식하기위해(path, __dirname..))
+    // 여기다가 추가한 타입들은 자동으로 타입추론이 이루어짐(node에서 제공되는 모듈들은 타입이 제공됨)
+    "types": ["node"],
+    // "paths": {},
+    // 사용하지 않는 로걸변수 error발생
+    "noUnusedLocals": true,
+    // ts프로젝트를 빠르게 찾기위한 옵션()
+    "composite": true,
+    // 이전 컴파일에서 디크스의파일로 정보를 읽어 증분 컴파일 활성화(이전에 빌드된, 아직까지 최신 상태인 구성 요소는 다시 빌드하지 않는 것이 중요)
+    // 주로 incremental이랑 같이사용(현재는 큰 메리트가 없음)
+    "noUnusedParameters": true, // 사용안된 파라미터에 대한 오류 보고 여부
+    "removeComments": true, // 모든 주석제거
+    "allowUnreachableCode": false, // // 도달 불가능한 코드에 대한 허용 여부.
+    // importHelpers:false // 중복코드제거(tslib사용시 적용)
+    "noFallthroughCasesInSwitch": true // 잘못 적힌 switch문에대한 에러발생
+  },
+  "exclude": ["node_modules"],
+  "include": ["packages"]
+}
