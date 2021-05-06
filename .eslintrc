@@ -5,17 +5,9 @@
     "jest/globals": true
   },
   "plugins": ["@typescript-eslint", "react-hooks", "jest", "prettier"],
-  "extends": [
-    "airbnb",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:import/typescript",
-    "plugin:prettier/recommended",
-    "prettier/@typescript-eslint"
-  ],
+  "extends": ["airbnb", "plugin:react/recommended", "plugin:@typescript-eslint/recommended", "plugin:react-hooks/recommended", "plugin:import/typescript", "plugin:prettier/recommended"],
   "rules": {
-    "prettier/prettier": "off",
+    "prettier/prettier": "error",
     "no-console": "off",
     "import/no-unresolved": "off",
     "import/no-extraneous-dependencies": "off",
