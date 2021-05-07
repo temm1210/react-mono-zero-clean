@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "baseUrl": "./packages",
+    // "baseUrl": "./packages",
     "lib": ["dom", "dom.iterable", "esnext"],
     // import add from './add.js'허용
     "allowJs": true,
