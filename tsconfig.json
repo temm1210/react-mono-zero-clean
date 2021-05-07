@@ -29,6 +29,7 @@
     // "paths": {},
     // 사용하지 않는 로걸변수 error발생
     "noUnusedLocals": true,
+    "noImplicitAny": true,
     // ts프로젝트를 빠르게 찾기위한 옵션()
     "composite": true,
     // 이전 컴파일에서 디크스의파일로 정보를 읽어 증분 컴파일 활성화(이전에 빌드된, 아직까지 최신 상태인 구성 요소는 다시 빌드하지 않는 것이 중요)
