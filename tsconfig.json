@@ -25,6 +25,7 @@
     // node타입을 추가(node관련 타입들을 인식하기위해(path, __dirname..))
     // 여기다가 추가한 타입들은 자동으로 타입추론이 이루어짐(node에서 제공되는 모듈들은 타입이 제공됨)
     "types": ["node"],
+    "jsx": "react",
     // "paths": {},
     // 사용하지 않는 로걸변수 error발생
     "noUnusedLocals": true,
