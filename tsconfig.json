@@ -35,7 +35,7 @@
     // 이전 컴파일에서 디크스의파일로 정보를 읽어 증분 컴파일 활성화(이전에 빌드된, 아직까지 최신 상태인 구성 요소는 다시 빌드하지 않는 것이 중요)
     // 주로 incremental이랑 같이사용(현재는 큰 메리트가 없음)
     "noUnusedParameters": true, // 사용안된 파라미터에 대한 오류 보고 여부
-    "removeComments": true, // 모든 주석제거
+    "removeComments": false, // 모든 주석제거
     "allowUnreachableCode": false, // // 도달 불가능한 코드에 대한 허용 여부.
     // importHelpers:false // 중복코드제거(tslib사용시 적용)
     "noFallthroughCasesInSwitch": true // 잘못 적힌 switch문에대한 에러발생
