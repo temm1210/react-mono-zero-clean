@@ -27,20 +27,22 @@ function getTsConfigJsonFile() {
     throw new Error("tsconfig.json이 반드시 있어야합니다.");
   }
 
-  // tsconfig.json의 compilerOptions값 추출
-  const { compilerOptions }: ITsConfig = ts.readConfigFile("tsconfig.json", ts.sys.readFile).config;
+  // tsconfig.json 저장
+  const tsconfig: ITsConfig = ts.readConfigFile("tsconfig.json", ts.sys.readFile).config;
 
-  return compilerOptions;
+  return tsconfig;
 }
 
 /**
  * tsconfig.json의 옵션중 compilerOptions.baseUrl의 셋팅값을 찾아
  * 해당 경로를 반환하는 함수(webpack의 modules에 추가할때도 사용)
- * @param {compilerOptions } compilerOptions tsconfig.json의 compilerOptions
+ * @param {compilerOptions } ITsConfig
  * @returns { string | null | error | "" } baseUrl이 있을시 해당 경로를 반환. 없을시에는 ""반환. paths.appSrc의 값이랄 다를경우 error반환
  */
-function getModulesPath(compilerOptions: CompilerOptions) {
-  const { baseUrl } = compilerOptions;
+function getModulesPath(tsConfig: ITsConfig) {
+  const {
+    compilerOptions: { baseUrl },
+  } = tsConfig;
 
   //   baseUrl이 없다면 module지정 하지않음(전부 상대경로로 받아와야함)
   if (!baseUrl) {
