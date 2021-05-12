@@ -8,7 +8,7 @@ const appDirectory = process.cwd();
 // 주어진경로(appPath)의 전체 경로를 반환하는 함수
 const resolveAppPath = (appPath: string) => path.resolve(appDirectory, appPath);
 
-// appDirectory경로부터 resolveAppPath의 값으로 넘긴 경로까지의 전체 경로를 구함
+// appDirectory(app)경로부터 resolveAppPath의 값으로 넘긴 경로까지의 전체 경로를 구함
 export default {
   appPath: resolveAppPath("."),
   buildPath: resolveAppPath("build"),
