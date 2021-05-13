@@ -2,6 +2,7 @@
 
 import { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
+import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import dotenv from "dotenv";
 import paths from "../paths";
 import getModulePaths from "../modules";
@@ -18,7 +19,6 @@ export interface IConfiguration extends WebpackConfiguration {
 
 const config = (): IConfiguration => {
   return {
-    mode: "production",
     entry: paths.entryPath,
     module: {
       rules: [
@@ -66,6 +66,17 @@ const config = (): IConfiguration => {
       // 앱 디렉터리부터 node_modules를 포함해, tsconfig.json의 baseUrl까지의 전체 경로를 설정
       modules: ["node_modules", paths.appNodeModules].concat(getModulePaths.modulePath || []),
     },
+    plugins: [
+      new ForkTsCheckerWebpackPlugin({
+        // true면 webpack 컴파일이 끝난후 리포트 보고가 이루어짐
+        // 될수있으면 watch모드(development)에서 실행하는걸 권장
+        async: false,
+        eslint: {
+          // tsx,ts파일만 type checking진행(.css 무시)
+          files: "./src/**/*.{tsx,ts}",
+        },
+      }),
+    ],
   };
 };
 
