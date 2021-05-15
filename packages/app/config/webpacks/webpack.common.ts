@@ -1,11 +1,12 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import { Configuration as WebpackConfiguration } from "webpack";
+import webpack, { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import dotenv from "dotenv";
 import paths from "../paths";
 import getModulePaths from "../modules";
+import getEnvironment from "../env";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ export interface IConfiguration extends WebpackConfiguration {
 }
 
 const config = (): IConfiguration => {
+  const env = getEnvironment("/");
+
   return {
     entry: paths.entryPath,
     module: {
@@ -76,6 +79,9 @@ const config = (): IConfiguration => {
           files: "./src/**/*.{tsx,ts}",
         },
       }),
+      // env값들을 react에서 사용하기위한 설정
+      // new webpack.DefinePlugin(env.stringified),
+      new webpack.EnvironmentPlugin(env),
     ],
   };
 };
