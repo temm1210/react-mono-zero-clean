@@ -3,10 +3,11 @@
 import webpack, { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
+import HtmlWebpackPlugin from "html-webpack-plugin";
 import dotenv from "dotenv";
 import paths from "../paths";
 import getModulePaths from "../modules";
-import getEnvironment from "../env";
+import getEnvironment, { Environment } from "../env";
 
 dotenv.config();
 
@@ -70,6 +71,27 @@ const config = (): IConfiguration => {
       modules: ["node_modules", paths.appNodeModules].concat(getModulePaths.modulePath || []),
     },
     plugins: [
+      // 번들링 한 css, js파일을 각각 html파일에
+      // link태그와 script태그로 추가 해주는 플러그인
+      new HtmlWebpackPlugin({
+        inject: true,
+        template: "./public/index.html",
+        minify:
+          process.env.NODE_ENV === Environment.PRODUCTION
+            ? {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+                removeEmptyAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                keepClosingSlash: true,
+                minifyJS: true,
+                minifyCSS: true,
+                minifyURLs: true,
+              }
+            : undefined,
+      }),
       new ForkTsCheckerWebpackPlugin({
         // true면 webpack 컴파일이 끝난후 리포트 보고가 이루어짐
         // 될수있으면 watch모드(development)에서 실행하는걸 권장
