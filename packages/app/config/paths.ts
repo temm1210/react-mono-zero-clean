@@ -19,4 +19,5 @@ export default {
   entryPath: resolveAppPath("src/index.tsx"),
   publicPath: resolveAppPath("public"),
   packageJson: resolveAppPath("package.json"),
+  publicHtmlPath: resolveAppPath("public/index.html"),
 };

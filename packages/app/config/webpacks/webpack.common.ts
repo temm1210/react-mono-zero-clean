@@ -75,7 +75,7 @@ const config = (): IConfiguration => {
       // link태그와 script태그로 추가 해주는 플러그인
       new HtmlWebpackPlugin({
         inject: true,
-        template: "./public/index.html",
+        template: paths.publicHtmlPath,
         minify:
           process.env.NODE_ENV === Environment.PRODUCTION
             ? {
