@@ -1,1 +1,1 @@
-# mono repo + zero config + clean architecture study
+# mono repo + zero config + clean
