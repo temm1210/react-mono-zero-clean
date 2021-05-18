@@ -1,4 +1,6 @@
 import { Configuration } from "webpack";
+import { mergeWithCustomize } from "webpack-merge";
+import commonWebpack from "./webpack.common";
 import { Environment } from "../env";
 
 const DEV_MODE = Environment.DEVELOPMENT;
@@ -17,7 +19,8 @@ const webpackDevelopmentConfig: Configuration = {
         oneOf: [
           {
             test: /\.css$/i,
-            use: ["style-loader", "css-loader"],
+            // auto prefix 사용하기 위해 postcss-loader 추가
+            use: ["style-loader", "css-loader", "postcss-loader"],
           },
         ],
       },
@@ -26,4 +29,12 @@ const webpackDevelopmentConfig: Configuration = {
   plugins: [],
 };
 
-export default webpackDevelopmentConfig;
+// webpack.common.ts파일과 webpackDevelopmentConfig 머지
+const config = mergeWithCustomize({
+  customizeArray(commonOptions, devOptions, key) {
+    if (key === "module") return devOptions;
+    return commonOptions;
+  },
+})(commonWebpack(), webpackDevelopmentConfig);
+
+export default config;
