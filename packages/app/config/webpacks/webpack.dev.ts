@@ -19,8 +19,7 @@ const webpackDevelopmentConfig: Configuration = {
         oneOf: [
           {
             test: /\.css$/i,
-            // auto prefix 사용하기 위해 postcss-loader 추가
-            use: ["style-loader", "css-loader", "postcss-loader"],
+            use: ["style-loader", "css-loader"],
           },
         ],
       },
@@ -32,8 +31,12 @@ const webpackDevelopmentConfig: Configuration = {
 // webpack.common.ts파일과 webpackDevelopmentConfig 머지
 const config = mergeWithCustomize({
   customizeArray(commonOptions, devOptions, key) {
-    if (key === "module") return devOptions;
-    return commonOptions;
+    switch (key) {
+      case "module.rules":
+        return [{ oneOf: [...devOptions[0].oneOf, ...commonOptions[0].oneOf] }];
+      default:
+        return undefined;
+    }
   },
 })(commonWebpack(), webpackDevelopmentConfig);
 
