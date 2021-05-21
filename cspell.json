@@ -1,16 +1,7 @@
 {
   "language": "en",
   // spell check를 진행할 타입 이름
-  "enabledLanguageIds": [
-    "javascript",
-    "javascriptreact",
-    "markdown",
-    "plaintext",
-    "typescript",
-    "typescriptreact",
-    "yml",
-    "json"
-  ],
+  "enabledLanguageIds": ["javascript", "javascriptreact", "markdown", "plaintext", "typescript", "typescriptreact", "yml", "json"],
 
   // Enable / Disable the spell checker.
   "enabled": true,
@@ -19,19 +10,10 @@
   "showStatus": true,
 
   // 반드시 맞다고 기록될 단어들을 기록
-  "words": ["webp", "avif", "devserver", "webpacks"],
+  "words": ["webp", "avif", "devserver", "webpacks", "entrypoint"],
 
   // Specify paths/files to ignore.
-  "ignorePaths": [
-    "node_modules",
-    ".babelrc.json",
-    "package.json",
-    "config/webpacks/webpack.*.ts",
-    ".eslintrc",
-    ".eslintignore",
-    ".prettierrc",
-    ".prettierignore"
-  ],
+  "ignorePaths": ["node_modules", ".babelrc.json", "package.json", "config/webpacks/webpack.*.ts", ".eslintrc", ".eslintignore", ".prettierrc", ".prettierignore"],
 
   // 반드시 거부될 단어들을  기록
   "flagWords": [],
