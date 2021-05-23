@@ -19,7 +19,8 @@ const webpackDevelopmentConfig: Configuration = {
         oneOf: [
           {
             test: /\.css$/i,
-            use: ["style-loader", "css-loader"],
+            // autoprefix 사용하기 위해 postcss-loader 추가
+            use: ["style-loader", "css-loader", "postcss-loader"],
           },
         ],
       },

@@ -24,7 +24,8 @@ const webpackProductionConfig: Configuration = {
           // style을 css파일로 추출
           {
             test: /\.css$/i,
-            use: [MiniCssExtractPlugin.loader, "css-loader"],
+            // autoprefix 사용하기 위해 postcss-loader 추가
+            use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
           },
         ],
       },
