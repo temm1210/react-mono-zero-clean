@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import webpack, { Configuration } from "webpack";
 // style을 css파일로 병합및 추출해줌
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 // css압축및 캐시기능 활성화
-// 현재 @types/css-minimizer-webpack-plugin 1.1.1버전만 호환
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
+import TerserPlugin from "terser-webpack-plugin";
 import { Environment } from "../env";
 
 const PROD_MODE = Environment.PRODUCTION;
@@ -35,6 +36,53 @@ const webpackProductionConfig: Configuration = {
   optimization: {
     minimize: true,
     minimizer: [
+      new TerserPlugin({
+        // 빌드속도 향상
+        parallel: true,
+        terserOptions: {
+          parse: {
+            // ecma8을 파싱
+            ecma: 2017,
+          },
+          compress: {
+            // 위의 parse에서 설정된 ecma2017을 따르지않음.
+            // 압축할땐 ecma5방식으로 사용(+6의 축약문법 사용X {a:a} => {a}로 사용 X)
+            // ecma 설정 5는 최신 코드를 ES5로 변환하지X
+            ecma: 5,
+            // 비교연산자 reverse사용안함
+            comparisons: false,
+            // console.*제거
+            drop_console: true,
+            // 도달하지않는 코드 제거
+            dead_code: true,
+            // es6모듈 압축
+            module: true,
+            // Disabled because of an issue with Terser breaking valid code:
+            // https://github.com/facebook/create-react-app/issues/5250
+            // Pending further investigation:
+            // https://github.com/terser-js/terser/issues/120
+            inline: 2,
+          },
+          // 난독화 사파리에서도 활성화
+          safari10: true,
+          // 프로파일링 모드에서 활성화
+          // 클래스네임 난독화
+          // keep_classnames: true,
+          // 함수네임 난독화
+          // keep_fnames: true,
+          output: {
+            // 위의 parse에서 설정된 ecma2017을 따르지않음.
+            // 압축할땐 ecma5방식으로 사용(+6의 축약문법 사용X {a:a} => {a}로 사용 X)
+            // ecma 설정 5는 최신 코드를 ES5로 변환하지X
+            ecma: 5,
+            // jsdoc및 모든주석 제거
+            comments: true,
+            // 표현식(regex)과 이모티콘이 default(false)에서 작동하지않음
+            // https://github.com/facebook/create-react-app/issues/2488
+            ascii_only: true,
+          },
+        },
+      }),
       // css압축
       new CssMinimizerPlugin({
         // 여러프로세스를 parallel 하게 실행해서 빌드속도를 높여줌(기본값 cpu 프로세스 -1)
