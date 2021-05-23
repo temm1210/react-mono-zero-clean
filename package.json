@@ -45,6 +45,11 @@
       "npx prettier --write ./src"
     ]
   },
+  "browserslist": [
+    "> 2%",
+    "not dead",
+    "last 2 versions"
+  ],
   "author": "SongTaecWoo <temm1210@naver.com>",
   "license": "MIT",
   "dependencies": {}
