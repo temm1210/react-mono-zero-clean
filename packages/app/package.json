@@ -34,6 +34,7 @@
     "webpack-merge": "^5.7.3"
   },
   "scripts": {
-    "start": "webpack --config ./config/webpacks/webpack.dev.ts"
+    "start": "ts-node ./config/commands/start.ts",
+    "build": "webpack --config ./config/webpacks/webpack.prod.ts"
   }
 }
