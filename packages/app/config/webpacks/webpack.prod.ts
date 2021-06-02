@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import webpack, { Configuration } from "webpack";
+import { Configuration } from "webpack";
 // style을 css파일로 병합및 추출해줌
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 // css압축및 캐시기능 활성화
@@ -105,7 +105,6 @@ const webpackProductionConfig: Configuration = {
       filename: "static/css/[name].[contenthash:8].css",
       chunkFilename: "static/css/[name].[contenthash:8].chunk.css",
     }),
-    new webpack.HotModuleReplacementPlugin(),
   ],
 };
 
