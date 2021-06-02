@@ -1,23 +1,40 @@
 {
-  "language": "en",
-  // spell check를 진행할 타입 이름
-  "enabledLanguageIds": ["javascript", "javascriptreact", "markdown", "plaintext", "typescript", "typescriptreact", "yml", "json"],
-
-  // Enable / Disable the spell checker.
-  "enabled": true,
-
-  // Display the spell checker status on the status bar.
-  "showStatus": true,
-
-  // 반드시 맞다고 기록될 단어들을 기록
-  "words": ["webp", "avif", "devserver", "webpacks", "entrypoint", "browserslist", "autoprefix"],
-
-  // Specify paths/files to ignore.
-  "ignorePaths": ["node_modules", ".babelrc.json", "package.json", "config/webpacks/webpack.*.ts", ".eslintrc", ".eslintignore", ".prettierrc", ".prettierignore"],
-
-  // 반드시 거부될 단어들을  기록
-  "flagWords": [],
-
-  // Set the delay before spell checking the document. Default is 50.
-  "spellCheckDelayMs": 50
+    "version": "0.1",
+    "language": "en",
+    "enabledLanguageIds": [
+        "javascript",
+        "javascriptreact",
+        "markdown",
+        "plaintext",
+        "typescript",
+        "typescriptreact",
+        "yml",
+        "json"
+    ],
+    "enabled": true,
+    "showStatus": true,
+    "words": [
+        "webp",
+        "avif",
+        "devserver",
+        "webpacks",
+        "entrypoint",
+        "browserslist",
+        "autoprefix"
+    ],
+    "ignorePaths": [
+        "node_modules",
+        ".babelrc.json",
+        "package.json",
+        "config/webpacks/webpack.*.ts",
+        ".eslintrc",
+        ".eslintignore",
+        ".prettierrc",
+        ".prettierignore"
+    ],
+    "flagWords": [],
+    "spellCheckDelayMs": 50,
+    "enableFiletypes": [
+        "typescript"
+    ]
 }
