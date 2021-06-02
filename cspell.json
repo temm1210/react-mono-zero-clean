@@ -10,7 +10,7 @@
   "showStatus": true,
 
   // 반드시 맞다고 기록될 단어들을 기록
-  "words": ["webp", "avif", "devserver", "webpacks", "entrypoint"],
+  "words": ["webp", "avif", "devserver", "webpacks", "entrypoint", "browserslist", "autoprefix"],
 
   // Specify paths/files to ignore.
   "ignorePaths": ["node_modules", ".babelrc.json", "package.json", "config/webpacks/webpack.*.ts", ".eslintrc", ".eslintignore", ".prettierrc", ".prettierignore"],
