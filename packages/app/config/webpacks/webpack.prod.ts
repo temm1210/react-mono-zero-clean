@@ -102,6 +102,9 @@ const webpackProductionConfig: Configuration = {
       name: (entrypoint: any) => `runtime~${entrypoint.name}`,
     },
   },
+  // 아래 문구를 넣지않으면 webpack5 버전에서 HMR이 작동하지않음.
+  // https://github.com/webpack/webpack-dev-server/issues/2758
+  target: "browserslist",
   plugins: [
     new MiniCssExtractPlugin({
       filename: "static/css/[name].[contenthash:8].css",

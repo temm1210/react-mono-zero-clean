@@ -1,4 +1,4 @@
-import { Configuration } from "webpack";
+import webpack, { Configuration as WebpackConfiguration } from "webpack";
 import { mergeWithCustomize } from "webpack-merge";
 import commonWebpack from "./webpack.common";
 import { Environment } from "../env";
@@ -7,7 +7,7 @@ const DEV_MODE = Environment.DEVELOPMENT;
 
 process.env.NODE_ENV = DEV_MODE;
 
-const webpackDevelopmentConfig: Configuration = {
+const webpackDevelopmentConfig: WebpackConfiguration = {
   mode: DEV_MODE,
   devtool: "cheap-module-source-map",
   bail: false,
@@ -26,7 +26,11 @@ const webpackDevelopmentConfig: Configuration = {
       },
     ],
   },
-  plugins: [],
+  // HMR설정
+  plugins: [new webpack.HotModuleReplacementPlugin()],
+  // 아래 문구를 넣지않으면 webpack5 버전에서 HMR이 작동하지않음.
+  // https://github.com/webpack/webpack-dev-server/issues/2758
+  target: "web",
 };
 
 // webpack.common.ts파일과 webpackDevelopmentConfig 머지
