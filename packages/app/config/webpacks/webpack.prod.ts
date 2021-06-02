@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Configuration } from "webpack";
+import { mergeWithCustomize } from "webpack-merge";
 // style을 css파일로 병합및 추출해줌
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 // css압축및 캐시기능 활성화
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 import TerserPlugin from "terser-webpack-plugin";
+import commonWebpack from "./webpack.common";
 import { Environment } from "../env";
 
 const PROD_MODE = Environment.PRODUCTION;
@@ -108,4 +110,16 @@ const webpackProductionConfig: Configuration = {
   ],
 };
 
-export default webpackProductionConfig;
+// webpack.common.ts파일과 webpackProductionConfig 머지
+const config = mergeWithCustomize({
+  customizeArray(commonOptions, devOptions, key) {
+    switch (key) {
+      case "module.rules":
+        return [{ oneOf: [...devOptions[0].oneOf, ...commonOptions[0].oneOf] }];
+      default:
+        return undefined;
+    }
+  },
+})(commonWebpack(), webpackProductionConfig);
+
+export default config;
