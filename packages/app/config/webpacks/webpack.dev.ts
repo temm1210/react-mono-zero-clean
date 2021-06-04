@@ -3,13 +3,9 @@ import { mergeWithCustomize } from "webpack-merge";
 import commonWebpack from "./webpack.common";
 import { Environment } from "../env";
 
-const DEV_MODE = Environment.DEVELOPMENT;
-
-process.env.NODE_ENV = DEV_MODE;
-
 const webpackDevelopmentConfig: WebpackConfiguration = {
-  mode: DEV_MODE,
-  devtool: "cheap-module-source-map",
+  mode: Environment.DEVELOPMENT,
+  devtool: "inline-source-map",
   bail: false,
   module: {
     rules: [

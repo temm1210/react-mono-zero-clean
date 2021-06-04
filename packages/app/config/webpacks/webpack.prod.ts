@@ -9,12 +9,8 @@ import TerserPlugin from "terser-webpack-plugin";
 import commonWebpack from "./webpack.common";
 import { Environment } from "../env";
 
-const PROD_MODE = Environment.PRODUCTION;
-
-process.env.NODE_ENV = PROD_MODE;
-
 const webpackProductionConfig: Configuration = {
-  mode: PROD_MODE,
+  mode: Environment.PRODUCTION,
   devtool: "cheap-module-source-map",
   // 에러발생시 바로 번들리 종료시킴
   // dev에서는 HMR을 사용하여 번들링 취소보단 console에 로그를 기록.(false)
