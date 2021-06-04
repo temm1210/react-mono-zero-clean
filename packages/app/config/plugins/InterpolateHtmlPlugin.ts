@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-param-reassign */
 /* eslint-disable class-methods-use-this */
-import { Compiler, Compilation } from "webpack";
+import { Compiler } from "webpack";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
 interface IData {
@@ -25,7 +25,7 @@ class CustomInterpolateHtmlPlugin {
   }
 
   apply(compiler: Compiler) {
-    compiler.hooks.compilation.tap("CustomInterpolateHtmlPlugin", (compilation: Compilation) => {
+    compiler.hooks.compilation.tap("CustomInterpolateHtmlPlugin", (compilation: any) => {
       HtmlWebpackPlugin.getHooks(compilation).afterTemplateExecution.tap("CustomInterpolateHtmlPlugin", (data: any) => {
         Object.entries(this.replacements).forEach(replaceKeyToValueInHtml(data));
         return data;
