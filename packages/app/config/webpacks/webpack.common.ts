@@ -1,10 +1,14 @@
-/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import webpack, { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
+import ESLintPlugin from "eslint-webpack-plugin";
 import dotenv from "dotenv";
+import path from "path";
+import typescriptFormatter from "../utils/typescriptFormatter";
+import InterpolateHtmlPlugin from "../plugins/InterpolateHtmlPlugin";
 import paths from "../paths";
 import getModulePaths from "../modules";
 import getEnvironment, { Environment } from "../env";
@@ -17,10 +21,12 @@ dotenv.config();
  */
 export interface IConfiguration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
+  plugins: any[];
 }
 
+const PUBLIC_URL = process.env.PUBLIC_URL || "/";
 const config = (): IConfiguration => {
-  const env = getEnvironment("/");
+  const env = getEnvironment(PUBLIC_URL);
 
   return {
     entry: paths.entryPath,
@@ -71,6 +77,18 @@ const config = (): IConfiguration => {
       modules: ["node_modules", paths.appNodeModules].concat(getModulePaths.modulePath || []),
     },
     plugins: [
+      new InterpolateHtmlPlugin({ PUBLIC_URL }),
+      new ForkTsCheckerWebpackPlugin({
+        typescript: true,
+        // true면 webpack 컴파일이 끝난후 리포트 보고가 이루어짐
+        // 될수있으면 watch모드(development)에서 실행하는걸 권장
+        async: false,
+        formatter: process.env.NODE_ENV === "production" ? typescriptFormatter : undefined,
+        // eslint: {
+        //   // tsx,ts파일만 type checking진행(.css 무시)
+        //   files: "./src/**/*.{tsx,ts}",
+        // },
+      }),
       // 번들링 한 css, js파일을 각각 html파일에
       // link태그와 script태그로 추가 해주는 플러그인
       new HtmlWebpackPlugin({
@@ -92,14 +110,13 @@ const config = (): IConfiguration => {
               }
             : undefined,
       }),
-      new ForkTsCheckerWebpackPlugin({
-        // true면 webpack 컴파일이 끝난후 리포트 보고가 이루어짐
-        // 될수있으면 watch모드(development)에서 실행하는걸 권장
-        async: false,
-        eslint: {
-          // tsx,ts파일만 type checking진행(.css 무시)
-          files: "./src/**/*.{tsx,ts}",
-        },
+
+      new ESLintPlugin({
+        extensions: ["js", "mjs", "jsx", "ts", "tsx"],
+        cache: true,
+        cacheLocation: path.resolve(paths.appNodeModules, ".cache/.eslintcache"),
+        context: paths.appSrc,
+        resolvePluginsRelativeTo: __dirname,
       }),
       // env값들을 react에서 사용하기위한 설정
       // new webpack.DefinePlugin(env.stringified),

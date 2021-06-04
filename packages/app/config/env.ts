@@ -7,7 +7,6 @@ export const Environment = {
   DEVELOPMENT: "development",
   PRODUCTION: "production",
   TEST: "test",
-  LOCAL: "local",
 } as const;
 
 /**
