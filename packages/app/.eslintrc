@@ -1,3 +1,7 @@
 {
-  "extends": "../../.eslintrc"
+  "extends": "../../.eslintrc",
+  "rules": {
+    "camelcase": ["error", { "allow": ["_webpack_"] }],
+    "no-underscore-dangle": "off"
+  }
 }
