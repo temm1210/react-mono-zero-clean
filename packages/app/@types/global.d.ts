@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // global타입을 확장시키는 작업
 // .env에 정의한 변수를 여기서도 선언해줘야 타입추론이 이루어짐
 declare global {
@@ -8,6 +9,9 @@ declare global {
       PORT: string;
       test: string;
     }
+  }
+  interface NodeModule {
+    hot: any;
   }
 }
 
