@@ -19,6 +19,13 @@ const devserverConfig = (): Configuration => {
     hot: true,
     // devserver log off
     quiet: true,
+    clientLogLevel: "none",
+    transportMode: "ws",
+    // Prevent a WS client from getting injected as we're already including
+    // `webpackHotDevClient`.
+    injectClient: false,
+    overlay: false,
+    // disableHostCheck: true,
   };
 };
 
