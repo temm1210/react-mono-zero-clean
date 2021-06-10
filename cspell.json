@@ -14,13 +14,14 @@
     "enabled": true,
     "showStatus": true,
     "words": [
-        "webp",
+        "autoprefix",
         "avif",
-        "devserver",
-        "webpacks",
-        "entrypoint",
         "browserslist",
-        "autoprefix"
+        "devserver",
+        "entrypoint",
+        "pmmmwh",
+        "webp",
+        "webpacks"
     ],
     "ignorePaths": [
         "node_modules",
