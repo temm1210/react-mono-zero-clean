@@ -2,6 +2,7 @@
   "parser": "@typescript-eslint/parser",
   "env": {
     "browser": true,
+    "node": true,
     "jest/globals": true
   },
   "plugins": ["@typescript-eslint", "react-hooks", "jest", "prettier"],
@@ -29,6 +30,8 @@
       {
         "extensions": [".tsx", ".ts", ".js"]
       }
-    ]
+    ],
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
   }
 }
