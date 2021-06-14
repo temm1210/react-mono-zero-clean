@@ -24,22 +24,18 @@ export interface IConfiguration extends WebpackConfiguration {
   plugins: any[];
 }
 
-const PUBLIC_URL = process.env.PUBLIC_URL || "/";
+const PUBLIC_URL = process.env.PUBLIC_URL || ".";
+
 const config = (): IConfiguration => {
   const env = getEnvironment(PUBLIC_URL);
 
   return {
-    entry: paths.entryPath,
+    entry: [paths.entryPath],
     module: {
       rules: [
         {
           // 아래 rule중 하나만 만족하도록 설정
           oneOf: [
-            {
-              test: /\.(js|ts|tsx)$/,
-              exclude: /node_modules/,
-              loader: "babel-loader",
-            },
             // asset관련 파일 처리(10kb 미만의 작은 에셋들만 처리)
             // 파일대신 string으로 값을 뽑아 대체함
             {
@@ -121,6 +117,10 @@ const config = (): IConfiguration => {
       // env값들을 react에서 사용하기위한 설정
       // new webpack.DefinePlugin(env.stringified),
       new webpack.EnvironmentPlugin(env),
+      // process is undefined 문제를 해결하기 위해 사용
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+      }),
     ],
   };
 };
