@@ -1,7 +1,11 @@
 import webpack, { Configuration as WebpackConfiguration } from "webpack";
 import { mergeWithCustomize } from "webpack-merge";
+// 웹팩 fast refresh(핫 리로딩)
+import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import commonWebpack from "./webpack.common";
 import { Environment } from "../env";
+
+const webpackDevClientEntry = require.resolve("../utils/webpackHotDev");
 
 const webpackDevelopmentConfig: WebpackConfiguration = {
   mode: Environment.DEVELOPMENT,
@@ -9,10 +13,18 @@ const webpackDevelopmentConfig: WebpackConfiguration = {
   bail: false,
   module: {
     rules: [
-      // style파일 처리
-      // style을 head태그에 넣음
       {
         oneOf: [
+          {
+            test: /\.(js|ts|tsx)$/,
+            exclude: /node_modules/,
+            loader: "babel-loader",
+            options: {
+              plugins: [require.resolve("react-refresh/babel")],
+            },
+          },
+          // style파일 처리
+          // style을 head태그에 넣음
           {
             test: /\.css$/i,
             // autoprefix 사용하기 위해 postcss-loader 추가
@@ -23,7 +35,15 @@ const webpackDevelopmentConfig: WebpackConfiguration = {
     ],
   },
   // HMR설정
-  plugins: [new webpack.HotModuleReplacementPlugin()],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new ReactRefreshWebpackPlugin({
+      overlay: {
+        entry: webpackDevClientEntry,
+        sockIntegration: false,
+      },
+    }),
+  ],
   // 아래 문구를 넣지않으면 webpack5 버전에서 HMR이 작동하지않음.
   // https://github.com/webpack/webpack-dev-server/issues/2758
   target: "web",

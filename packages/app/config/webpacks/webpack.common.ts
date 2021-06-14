@@ -117,6 +117,10 @@ const config = (): IConfiguration => {
       // env값들을 react에서 사용하기위한 설정
       // new webpack.DefinePlugin(env.stringified),
       new webpack.EnvironmentPlugin(env),
+      // process is undefined 문제를 해결하기 위해 사용
+      new webpack.ProvidePlugin({
+        process: "process/browser",
+      }),
     ],
   };
 };

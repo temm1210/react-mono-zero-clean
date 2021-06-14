@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Configuration } from "webpack";
 import { mergeWithCustomize } from "webpack-merge";
@@ -19,6 +20,11 @@ const webpackProductionConfig: Configuration = {
     rules: [
       {
         oneOf: [
+          {
+            test: /\.(js|ts|tsx)$/,
+            exclude: /node_modules/,
+            loader: "babel-loader",
+          },
           // style파일 처리
           // style을 css파일로 추출
           {
