@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/no-dynamic-require */
 import webpack from "webpack";
 import chalk from "chalk";
 import WebpackDevserver from "webpack-dev-server";
+
 import webpackDevConfig from "../webpacks/webpack.dev";
 import devserverConfig from "../devServerConfig";
 import clearConsole from "../utils/clearConsole";
@@ -24,7 +26,11 @@ if (!HOST || !PUBLIC_URL) {
 
 const urls = prepareUrls(protocol, HOST, PORT, PUBLIC_URL);
 
-const webpackCompiler: any = createWebpackCompiler(webpackDevConfig, webpack, urls);
+const devSocket = {
+  warnings: (warnings: any) => webpackDevserver.sockWrite(webpackDevserver.sockets, "warnings", warnings),
+  errors: (errors: any) => webpackDevserver.sockWrite(webpackDevserver.sockets, "errors", errors),
+};
+const webpackCompiler: any = createWebpackCompiler(webpackDevConfig, devSocket, webpack, urls);
 const webpackDevserver = new WebpackDevserver(webpackCompiler, devserverConfig());
 
 // 서버실행

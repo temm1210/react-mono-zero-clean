@@ -32,7 +32,7 @@ function printInstructions(appName: string, urls: Record<string, any>) {
  * @param config webpack설정파일
  * @param webpack webpack모듈
  */
-function createWebpackCompiler(config: Record<string, any>, webpack: typeof exports, urls: Record<string, any>) {
+function createWebpackCompiler(config: Record<string, any>, devSocket: any, webpack: typeof exports, urls: Record<string, any>) {
   let webpackCompiler;
   try {
     webpackCompiler = webpack(config);
@@ -85,8 +85,14 @@ function createWebpackCompiler(config: Record<string, any>, webpack: typeof expo
       }, 100);
 
       // 검사결과 나올때까지 waiting
-      await tsMessagesPromise;
+      const messages = await tsMessagesPromise;
       clearTimeout(delayedMsg);
+
+      if (messages.errors.length > 0) {
+        devSocket.errors(messages.errors);
+      } else if (messages.warnings.length > 0) {
+        devSocket.warnings(messages.warnings);
+      }
     }
 
     // type check결과를 formatting
@@ -104,6 +110,7 @@ function createWebpackCompiler(config: Record<string, any>, webpack: typeof expo
       if (allMessages.errors.length > 1) {
         allMessages.errors.length = 1;
       }
+
       console.log(chalk.red("Failed to compile.\n"));
       console.log(allMessages.errors.join("\n\n"));
       return;
