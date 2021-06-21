@@ -38,7 +38,7 @@ ErrorOverlay.startReportingRuntimeErrors({
 });
 
 if (module.hot && typeof module.hot.dispose === "function") {
-  module.hot.dispose(function () {
+  module.hot.dispose(() => {
     // TODO: why do we need this?
     ErrorOverlay.stopReportingRuntimeErrors();
   });
@@ -59,7 +59,7 @@ const connection = new WebSocket(
 // Unlike WebpackDevServer client, we won't try to reconnect
 // to avoid spamming the console. Disconnect usually happens
 // when developer stops the server.
-connection.onclose = function () {
+connection.onclose = () => {
   if (typeof console !== "undefined" && typeof console.info === "function") {
     console.info("The development server has disconnected.\nRefresh the page if necessary.");
   }
@@ -109,10 +109,10 @@ function tryApplyUpdates(onHotUpdateSuccess?: any) {
   // // webpack 2 returns a Promise instead of invoking a callback
   if (result && result.then) {
     result.then(
-      function (updatedModules: any) {
+      (updatedModules: any) => {
         handleApplyUpdates(null, updatedModules);
       },
-      function (err: any) {
+      (err: any) => {
         handleApplyUpdates(err, null);
       },
     );
@@ -224,8 +224,7 @@ function handleAvailableHash(hash: any) {
 }
 
 // Handle messages from the server.
-connection.onmessage = function (e) {
-  console.log("여기와야해");
+connection.onmessage = (e) => {
   const message = JSON.parse(e.data);
   switch (message.type) {
     case "hash":

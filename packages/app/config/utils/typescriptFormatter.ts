@@ -10,7 +10,6 @@ const issueOrigins = {
 };
 
 function formatter(issue: any) {
-  console.log("issue:", issue);
   const { severity, file, line, message, code, character } = issue;
 
   const messageColor = severity === "warning" ? chalk.yellow : chalk.red;

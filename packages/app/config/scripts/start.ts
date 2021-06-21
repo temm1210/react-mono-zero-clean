@@ -10,32 +10,46 @@ import webpackDevConfig from "../webpacks/webpack.dev";
 import devserverConfig from "../devServerConfig";
 import clearConsole from "../utils/clearConsole";
 import createWebpackCompiler from "../utils/createWebpackCompiler";
+import checkBrowser from "../utils/checkBrowser";
 import prepareUrls from "../utils/prepareUrls";
 import { Environment } from "../env";
+import paths from "../paths";
+import choosePort from "../utils/choosePort";
 
 process.env.NODE_ENV = Environment.DEVELOPMENT;
 
 const protocol = process.env.HTTPS === "true" ? "https" : "http";
-const { HOST, PUBLIC_URL } = process.env;
+const PUBLIC_URL = process.env.PUBLIC_URL || ".";
 const PORT = parseInt(process.env.PORT || "3000", 10);
+const HOST = process.env.HOST || "0.0.0.0";
 
-if (!HOST || !PUBLIC_URL) {
-  console.log(chalk.red(`Must have ${chalk.bold.red("HOST")},${chalk.bold.red("PUBLIC_URL")} in .env`));
-  process.exit(0);
-}
+checkBrowser(paths.appPath)
+  .then(() => {
+    // 시작하기전에 PORT로 실행되는 앱이 있는지 확인
+    return choosePort(HOST, PORT);
+  })
+  // 이미 주어진 PORT로 실행중이라면
+  // 다음 .then에서는 다른 port값으로 앱을 실행시킴
+  .then((port: number) => {
+    // port가 없거나
+    // prompt창에서 이미 존재하는 포트가 있으므로 다른 포트로 실행하시겠습니까? 에서 no를 클릭했을때
+    // 앱을 종료시킴
+    if (port === null) {
+      return;
+    }
+    const urls = prepareUrls(protocol, HOST, port, PUBLIC_URL);
 
-const urls = prepareUrls(protocol, HOST, PORT, PUBLIC_URL);
+    const devSocket = {
+      warnings: (warnings: any) => webpackDevserver.sockWrite(webpackDevserver.sockets, "warnings", warnings),
+      errors: (errors: any) => webpackDevserver.sockWrite(webpackDevserver.sockets, "errors", errors),
+    };
+    const webpackCompiler: any = createWebpackCompiler(webpackDevConfig, devSocket, webpack, urls);
+    const webpackDevserver = new WebpackDevserver(webpackCompiler, devserverConfig());
 
-const devSocket = {
-  warnings: (warnings: any) => webpackDevserver.sockWrite(webpackDevserver.sockets, "warnings", warnings),
-  errors: (errors: any) => webpackDevserver.sockWrite(webpackDevserver.sockets, "errors", errors),
-};
-const webpackCompiler: any = createWebpackCompiler(webpackDevConfig, devSocket, webpack, urls);
-const webpackDevserver = new WebpackDevserver(webpackCompiler, devserverConfig());
-
-// 서버실행
-webpackDevserver.listen(PORT, HOST, (err) => {
-  clearConsole();
-  if (err) return console.log(chalk.red(err));
-  console.log(chalk.bold("---Starting react development server---"));
-});
+    // 서버실행
+    webpackDevserver.listen(port, HOST, (err) => {
+      clearConsole();
+      if (err) return console.log(chalk.red(err));
+      console.log(chalk.bold("---Starting react development server---"));
+    });
+  });

@@ -4,7 +4,7 @@ import f from "./test.jpeg";
 
 function App() {
   test2();
-  const b: any = "asdfasf";
+  // const b: any = "asdfasf";
   // const a: any = "test";
   // console.log("c:", a);
   // console.log("c:", b);

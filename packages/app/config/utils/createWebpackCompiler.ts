@@ -113,6 +113,7 @@ function createWebpackCompiler(config: Record<string, any>, devSocket: any, webp
 
       console.log(chalk.red("Failed to compile.\n"));
       console.log(allMessages.errors.join("\n\n"));
+      // devSocket.errors(allMessages.errors.join("\n\n"));
       return;
     }
 
@@ -120,6 +121,7 @@ function createWebpackCompiler(config: Record<string, any>, devSocket: any, webp
     if (allMessages.warnings.length) {
       console.log(chalk.yellow("Compiled with warnings.\n"));
       console.log(allMessages.warnings.join("\n\n"));
+      // devSocket.errors(allMessages.warnings.join("\n\n"));
     }
   });
 

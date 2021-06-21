@@ -20,6 +20,7 @@ const devserverConfig = (): Configuration => {
     // devserver log off
     quiet: true,
     clientLogLevel: "none",
+    // error-overlay를 사용할꺼기 때문에 ws로변경
     transportMode: "ws",
     // Prevent a WS client from getting injected as we're already including
     // `webpackHotDevClient`.

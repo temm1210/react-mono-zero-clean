@@ -57,7 +57,7 @@ function getModulesPath(tsConfig: ITsConfig) {
     return [paths.appSrc];
   }
 
-  throw new Error(`반드시 ${paths.appSrc}와 tsconfig.json의 baseUrl을 일치시켜주세요`);
+  // throw new Error(`반드시 ${paths.appSrc}와 tsconfig.json의 baseUrl을 일치시켜주세요`);
 }
 
 export default {
