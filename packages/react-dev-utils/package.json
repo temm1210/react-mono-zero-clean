@@ -1,5 +1,19 @@
 {
   "name": "@project/react-dev-utils",
   "private": true,
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "@babel/code-frame": "^7.14.5",
+    "@types/babel__code-frame": "^7.0.2",
+    "@types/prompts": "^2.0.13",
+    "address": "^1.1.2",
+    "detect-port-alt": "^1.1.6",
+    "prompts": "^2.4.1",
+    "react-error-overlay": "^6.0.9",
+    "strip-ansi": "^7.0.0",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "ts-node": "^10.0.0"
+  }
 }
