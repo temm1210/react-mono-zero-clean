@@ -2,19 +2,19 @@ import chalk from "chalk";
 import address from "address";
 import url from "url";
 
-function prepareUrls(protocol: string, host: string, port: number, pathname = "/") {
-  const formatUrl = (hostname: string) =>
+function prepareUrls(protocol, host, port, pathname = "/") {
+  const formatUrl = (hostname) =>
     url.format({
       protocol,
       hostname,
       port,
       pathname,
     });
-  const prettyPrintUrl = (hostname: string) =>
+  const prettyPrintUrl = (hostname) =>
     url.format({
       protocol,
       hostname,
-      port: chalk.bold(port),
+      port: chalk.bold(port.toString()),
       pathname,
     });
 

@@ -5,12 +5,11 @@
 import chalk from "chalk";
 import forkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import clearConsole from "./clearConsole";
-import paths from "../paths";
 import typescriptFormatter from "./typescriptFormatter";
 import formatWebpackMessages from "./formatWebpackMessages";
 
 // 최종컴파일 성공 후 app의 정보를 표시
-function printInstructions(appName: string, urls: Record<string, any>) {
+function printInstructions(appName, urls) {
   console.log();
   console.log(`You can now view ${chalk.bold(appName)} in the browser.`);
   console.log();
@@ -32,7 +31,7 @@ function printInstructions(appName: string, urls: Record<string, any>) {
  * @param config webpack설정파일
  * @param webpack webpack모듈
  */
-function createWebpackCompiler(config: Record<string, any>, devSocket: any, webpack: typeof exports, urls: Record<string, any>) {
+function createWebpackCompiler(config, devSocket, webpack, urls, appName) {
   let webpackCompiler;
   try {
     webpackCompiler = webpack(config);
@@ -48,20 +47,20 @@ function createWebpackCompiler(config: Record<string, any>, devSocket: any, webp
     console.log(chalk.green("Compiling....."));
   });
 
-  let tsMessagesPromise: any;
-  let tsMessagesResolver: any;
+  let tsMessagesPromise;
+  let tsMessagesResolver;
 
   // 컴파일전
   webpackCompiler.hooks.beforeCompile.tap("beforeCompiler", () => {
     tsMessagesPromise = new Promise((resolve) => {
-      tsMessagesResolver = (msgs: Record<string, any>) => resolve(msgs);
+      tsMessagesResolver = (msgs) => resolve(msgs);
     });
   });
 
   // 타입체크후
-  forkTsCheckerWebpackPlugin.getCompilerHooks(webpackCompiler).issues.tap("afterTypeScriptCheck", (diagnostics: any, lints: any) => {
+  forkTsCheckerWebpackPlugin.getCompilerHooks(webpackCompiler).issues.tap("afterTypeScriptCheck", (diagnostics, lints) => {
     const allMsgs = [...diagnostics, ...lints];
-    const format = (message: any) => `${message.file}\n${typescriptFormatter(message)}`;
+    const format = (message) => `${message.file}\n${typescriptFormatter(message)}`;
 
     tsMessagesResolver({
       errors: allMsgs.filter((msg) => msg.severity === "error").map(format),
@@ -70,7 +69,7 @@ function createWebpackCompiler(config: Record<string, any>, devSocket: any, webp
   });
 
   // 컴파일이 끝난후 실행되는 Hook
-  webpackCompiler.hooks.done.tap("done", async (stats: any) => {
+  webpackCompiler.hooks.done.tap("done", async (stats) => {
     clearConsole();
 
     const statsData = stats.toJson({
@@ -100,7 +99,6 @@ function createWebpackCompiler(config: Record<string, any>, devSocket: any, webp
     const isSuccessful = !allMessages.errors.length && !allMessages.warnings.length;
 
     if (isSuccessful) {
-      const appName = require(paths.packageJson).name;
       console.log(chalk.green("Compiled successfully!"));
       printInstructions(appName, urls);
     }

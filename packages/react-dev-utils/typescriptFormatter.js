@@ -12,7 +12,7 @@ const issueOrigins = {
 /**
  * type check 결과를 출력
  */
-function formatter(issue: any) {
+function formatter(issue) {
   const { severity, file, line, message, code, character } = issue;
 
   const messageColor = severity === "warning" ? chalk.yellow : chalk.red;

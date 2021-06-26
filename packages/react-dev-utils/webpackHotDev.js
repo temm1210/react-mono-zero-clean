@@ -1,7 +1,6 @@
 /* eslint-disable no-useless-concat */
 /* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-template */
 import stripAnsi from "strip-ansi";
 import * as ErrorOverlay from "react-error-overlay";
@@ -10,7 +9,7 @@ import formatWebpackMessages from "./formatWebpackMessages";
 
 const END_POINT = "/__open-stack-frame-in-editor";
 
-ErrorOverlay.setEditorHandler(function editorHandler(errorLocation: any) {
+ErrorOverlay.setEditorHandler(function editorHandler(errorLocation) {
   // Keep this sync with errorOverlayMiddleware.js
   fetch(
     END_POINT +
@@ -68,10 +67,10 @@ connection.onclose = () => {
 // Remember some state related to hot module replacement.
 let isFirstCompilation = true;
 let hasCompileErrors = false;
-let mostRecentCompilationHash: any = null;
+let mostRecentCompilationHash = null;
 
 // Attempt to update code on the fly, fall back to a hard reload.
-function tryApplyUpdates(onHotUpdateSuccess?: any) {
+function tryApplyUpdates(onHotUpdateSuccess) {
   if (!module.hot) {
     // HotModuleReplacementPlugin is not in webpack configuration.
     window.location.reload();
@@ -82,7 +81,7 @@ function tryApplyUpdates(onHotUpdateSuccess?: any) {
     return;
   }
 
-  function handleApplyUpdates(err: any, updatedModules: any) {
+  function handleApplyUpdates(err, updatedModules) {
     // NOTE: This var is injected by Webpack's DefinePlugin, and is a boolean instead of string.
     const hasReactRefresh = process.env.FAST_REFRESH;
     const wantsForcedReload = err || !updatedModules || hadRuntimeError;
@@ -109,10 +108,10 @@ function tryApplyUpdates(onHotUpdateSuccess?: any) {
   // // webpack 2 returns a Promise instead of invoking a callback
   if (result && result.then) {
     result.then(
-      (updatedModules: any) => {
+      (updatedModules) => {
         handleApplyUpdates(null, updatedModules);
       },
-      (err: any) => {
+      (err) => {
         handleApplyUpdates(err, null);
       },
     );
@@ -147,7 +146,7 @@ function handleSuccess() {
 }
 
 // Compilation with warnings (e.g. ESLint).
-function handleWarnings(warnings: any) {
+function handleWarnings(warnings) {
   clearOutdatedErrors();
 
   const isHotUpdate = !isFirstCompilation;
@@ -185,7 +184,7 @@ function handleWarnings(warnings: any) {
 }
 
 // Compilation with errors (e.g. syntax error or missing modules).
-function handleErrors(errors: any) {
+function handleErrors(errors) {
   clearOutdatedErrors();
 
   isFirstCompilation = false;
@@ -218,7 +217,7 @@ function tryDismissErrorOverlay() {
 }
 
 // There is a newer version of the code available.
-function handleAvailableHash(hash: any) {
+function handleAvailableHash(hash) {
   // Update last known compilation hash.
   mostRecentCompilationHash = hash;
 }

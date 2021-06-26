@@ -13,9 +13,9 @@ const isInteractive = process.stdout.isTTY;
  * 주어진 host와 defaultPort에 실행되는 앱이 있는지 확인후
  * 없으면 앱을 실행하고 있으면 prompts로 메세지를 띄워서 사용자와 interactive를 함
  */
-function choosePort(host: string, defaultPort: number, appName: string) {
+function choosePort(host, defaultPort, appName) {
   return detect(defaultPort, host).then(
-    (port: number) =>
+    (port) =>
       new Promise((resolve) => {
         if (port === defaultPort) {
           return resolve(port);
@@ -33,7 +33,7 @@ function choosePort(host: string, defaultPort: number, appName: string) {
             name: "shouldChangePort",
             message: chalk.yellow(message + `${existingProcess ? ` Probably:\n  ${existingProcess}` : ""}`) + "\n\nWould you like to run the app on another port instead?",
             initial: true,
-          } as const;
+          };
 
           // 사용자와 terminal상에서 interactive
           prompts(question).then((answer) => {
@@ -50,7 +50,7 @@ function choosePort(host: string, defaultPort: number, appName: string) {
           resolve(null);
         }
       }),
-    (err: any) => {
+    (err) => {
       throw new Error(chalk.red(`Could not find an open port at ${chalk.bold(host)}.`) + "\n" + ("Network error message: " + err.message || err) + "\n");
     },
   );

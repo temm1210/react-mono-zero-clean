@@ -3,12 +3,12 @@
 /* eslint-disable no-param-reassign */
 const friendlySyntaxErrorLabel = "Syntax error:";
 
-function isLikelyASyntaxError(message: any) {
+function isLikelyASyntaxError(message) {
   return message.indexOf(friendlySyntaxErrorLabel) !== -1;
 }
 
 // Cleans up webpack error messages.
-function formatMessage(message: any) {
+function formatMessage(message) {
   let lines = [];
   const MESSAGE_KEY = "message";
 
@@ -17,7 +17,7 @@ function formatMessage(message: any) {
   } else if (MESSAGE_KEY in message) {
     lines = message[MESSAGE_KEY].split("\n");
   } else if (Array.isArray(message)) {
-    message.forEach((message: any) => {
+    message.forEach((message) => {
       if (MESSAGE_KEY in message) {
         lines = message[MESSAGE_KEY].split("\n");
       }
@@ -26,11 +26,11 @@ function formatMessage(message: any) {
 
   // Strip webpack-added headers off errors/warnings
   // https://github.com/webpack/webpack/blob/master/lib/ModuleError.js
-  lines = lines.filter((line: any) => !/Module [A-z ]+\(from/.test(line));
+  lines = lines.filter((line) => !/Module [A-z ]+\(from/.test(line));
 
   // Transform parsing error into syntax error
   // TODO: move this to our ESLint formatter?
-  lines = lines.map((line: any) => {
+  lines = lines.map((line) => {
     const parsingError = /Line (\d+):(?:(\d+):)?\s*Parsing error: (.+)$/.exec(line);
     if (!parsingError) {
       return line;
@@ -76,7 +76,7 @@ function formatMessage(message: any) {
   lines = message.split("\n");
 
   // Remove duplicated newlines
-  lines = lines.filter((line: any, index: any, arr: any) => index === 0 || line.trim() !== "" || line.trim() !== arr[index - 1].trim());
+  lines = lines.filter((line, index, arr) => index === 0 || line.trim() !== "" || line.trim() !== arr[index - 1].trim());
 
   // Reassemble the message
   message = lines.join("\n");
@@ -86,7 +86,7 @@ function formatMessage(message: any) {
 /**
  * webpack의 에러메세지를 터미널에 출력
  */
-function formatWebpackMessages(json: any) {
+function formatWebpackMessages(json) {
   const formattedErrors = json.errors.map(formatMessage);
   const formattedWarnings = json.warnings.map(formatMessage);
   const result = { errors: formattedErrors, warnings: formattedWarnings };

@@ -6,7 +6,6 @@
 import chalk from "chalk";
 // execSync는 명령어의 집합(command. ex execOptions) 의 동기버전
 import { execSync, execFileSync } from "child_process";
-import paths from "../paths";
 
 const execOptions = {
   encoding: "utf8",
@@ -15,19 +14,19 @@ const execOptions = {
     "pipe", // stdout (default)
     "ignore", // stderr
   ],
-} as any;
+};
 
-function getProcessIdOnPort(port: number) {
+function getProcessIdOnPort(port) {
   return execFileSync("lsof", ["-i:" + port, "-P", "-t", "-sTCP:LISTEN"], execOptions)
     .split("\n")[0]
     .trim();
 }
 
-function getDirectoryOfProcessById(processId: string) {
+function getDirectoryOfProcessById(processId) {
   return execSync("lsof -p " + processId + ' | awk \'$4=="cwd" {for (i=9; i<=NF; i++) printf "%s ", $i}\'', execOptions).trim();
 }
 
-function getProcessCommand(processId: string, appName: string) {
+function getProcessCommand(processId, appName) {
   const command = execSync("ps -o command -p " + processId + " | sed -n 2p", execOptions).replace(/\n$/, "");
 
   return appName || command;
@@ -36,7 +35,7 @@ function getProcessCommand(processId: string, appName: string) {
 /**
  * 주어진 PORT로 기존에 실행되는 앱이 있는지 확인하는 함수
  */
-function getProcessForPort(port: number, appName: string) {
+function getProcessForPort(port, appName) {
   try {
     const processId = getProcessIdOnPort(port);
     const directory = getDirectoryOfProcessById(processId);
