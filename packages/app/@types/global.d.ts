@@ -13,8 +13,6 @@ declare global {
   interface NodeModule {
     hot: any;
   }
-
-  const __webpack_hash__: string;
 }
 
 // If this file has no import/export statements (i.e. is a script)
