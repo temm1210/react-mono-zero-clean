@@ -71,9 +71,9 @@ const webpackProductionConfig: Configuration = {
           safari10: true,
           // 프로파일링 모드에서 활성화
           // 클래스네임 난독화
-          // keep_classnames: true,
+          keep_classnames: true,
           // 함수네임 난독화
-          // keep_fnames: true,
+          keep_fnames: true,
           output: {
             // 위의 parse에서 설정된 ecma2017을 따르지않음.
             // 압축할땐 ecma5방식으로 사용(+6의 축약문법 사용X {a:a} => {a}로 사용 X)
