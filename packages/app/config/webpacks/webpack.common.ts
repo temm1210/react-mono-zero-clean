@@ -7,7 +7,7 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import ESLintPlugin from "eslint-webpack-plugin";
 import dotenv from "dotenv";
 import path from "path";
-import typescriptFormatter from "../utils/typescriptFormatter";
+import { typescriptFormatter } from "@project/react-dev-utils";
 import InterpolateHtmlPlugin from "../plugins/InterpolateHtmlPlugin";
 import paths from "../paths";
 import getModulePaths from "../modules";

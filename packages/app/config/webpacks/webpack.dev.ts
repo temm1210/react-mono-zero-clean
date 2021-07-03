@@ -5,7 +5,7 @@ import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 import commonWebpack from "./webpack.common";
 import { Environment } from "../env";
 
-const webpackDevClientEntry = require.resolve("../utils/webpackHotDev");
+const webpackDevClientEntry = require.resolve("@project/react-dev-utils/webpackHotDev");
 
 const webpackDevelopmentConfig: WebpackConfiguration = {
   mode: Environment.DEVELOPMENT,
