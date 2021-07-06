@@ -28,7 +28,7 @@ const devserverConfig = (): Configuration => {
     overlay: false,
     // disableHostCheck: true,
     historyApiFallback: {
-      // Paths with dots should still use the history fallback.
+      // react-router 작동을 위한 설정
       // See https://github.com/facebook/create-react-app/issues/387.
       disableDotRule: true,
     },

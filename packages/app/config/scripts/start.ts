@@ -5,16 +5,12 @@
 import webpack from "webpack";
 import chalk from "chalk";
 import WebpackDevserver from "webpack-dev-server";
+import { clearConsole, createWebpackCompiler, checkBrowser, prepareUrls, choosePort } from "@project/react-dev-utils";
 
 import webpackDevConfig from "../webpacks/webpack.dev";
 import devserverConfig from "../devServerConfig";
-import clearConsole from "../utils/clearConsole";
-import createWebpackCompiler from "../utils/createWebpackCompiler";
-import checkBrowser from "../utils/checkBrowser";
-import prepareUrls from "../utils/prepareUrls";
 import { Environment } from "../env";
 import paths from "../paths";
-import choosePort from "../utils/choosePort";
 
 process.env.NODE_ENV = Environment.DEVELOPMENT;
 
@@ -22,11 +18,12 @@ const protocol = process.env.HTTPS === "true" ? "https" : "http";
 const PUBLIC_URL = process.env.PUBLIC_URL || ".";
 const PORT = parseInt(process.env.PORT || "3000", 10);
 const HOST = process.env.HOST || "0.0.0.0";
+const APP_NAME = require(paths.packageJson).name;
 
 checkBrowser(paths.appPath)
   .then(() => {
     // 시작하기전에 PORT로 실행되는 앱이 있는지 확인
-    return choosePort(HOST, PORT);
+    return choosePort(HOST, PORT, APP_NAME);
   })
   // 이미 주어진 PORT로 실행중이라면
   // 다음 .then에서는 다른 port값으로 앱을 실행시킴
@@ -43,7 +40,7 @@ checkBrowser(paths.appPath)
       warnings: (warnings: any) => webpackDevserver.sockWrite(webpackDevserver.sockets, "warnings", warnings),
       errors: (errors: any) => webpackDevserver.sockWrite(webpackDevserver.sockets, "errors", errors),
     };
-    const webpackCompiler: any = createWebpackCompiler(webpackDevConfig, devSocket, webpack, urls);
+    const webpackCompiler: any = createWebpackCompiler(webpackDevConfig, devSocket, webpack, urls, APP_NAME);
     const webpackDevserver = new WebpackDevserver(webpackCompiler, devserverConfig());
 
     // 서버실행
