@@ -43,6 +43,5 @@
     // importHelpers:false // 중복코드제거(tslib사용시 적용)
     "noFallthroughCasesInSwitch": true // 잘못 적힌 switch문에대한 에러발생
   },
-  "exclude": ["node_modules"],
-  "include": ["packages"]
+  "exclude": ["node_modules"]
 }
