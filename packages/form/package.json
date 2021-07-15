@@ -2,7 +2,7 @@
   "name": "@project/form",
   "version": "1.0.0",
   "types": "dist/index.d.ts",
-  "main": "dist/main.js",
+  "main": "dist/index.js",
   "author": "stw",
   "dependencies": {
     "react": "^17.0.2"
