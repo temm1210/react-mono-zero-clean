@@ -5,6 +5,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "start-app": "yarn workspace @project/app start"
+  },
   "devDependencies": {
     "@babel/core": "^7.14.0",
     "@babel/plugin-transform-runtime": "^7.13.15",
