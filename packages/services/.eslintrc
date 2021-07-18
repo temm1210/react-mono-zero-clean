@@ -1,0 +1,6 @@
+{
+  "extends": "../../.eslintrc",
+  "rules": {
+    "camelcase": 0
+  }
+}
