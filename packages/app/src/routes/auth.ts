@@ -1,4 +1,4 @@
-import { mapRouter } from "./utils";
+import mapRouter from "./utils/mapRouter";
 
 export default mapRouter({
   regexPath: "/auth",

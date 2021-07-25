@@ -1,19 +1,14 @@
 import { TStringRemove } from "./types";
 
-const removeStringByType = (
-  target: string,
-  type: TStringRemove,
-  findIndex: number,
-) => {
-  let result: string;
+const strategy = {
+  start: (target: string, findIndex: number) => target.slice(findIndex + 1, target.length),
+  base: (target: string, findIndex: number) => target.slice(0, findIndex) + target.slice(findIndex + 1, target.length),
+  end: (target: string, findIndex: number) => target.slice(0, findIndex),
+};
 
-  if (type === "start") result = target.slice(findIndex + 1, target.length);
-  else if (type === "base")
-    result =
-      target.slice(0, findIndex) + target.slice(findIndex + 1, target.length);
-  else result = target.slice(0, findIndex);
-
-  return result;
+const removeStringByType = (target: string, type: TStringRemove, findIndex: number) => {
+  const strategyFnc = strategy[type];
+  return strategyFnc(target, findIndex);
 };
 
 /**
@@ -23,9 +18,7 @@ const removeStringByType = (
  * @param target 삭제할 문자열
  * @returns {string}
  */
-export const remove = (target: string) => (type: TStringRemove) => (
-  value: string,
-) => {
+export const remove = (target: string) => (type: TStringRemove) => (value: string) => {
   const findIndex = value.indexOf(target);
   if (findIndex === -1) return value;
 
