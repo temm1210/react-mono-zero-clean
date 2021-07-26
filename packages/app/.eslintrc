@@ -1,3 +1,6 @@
 {
-  "extends": "../../.eslintrc"
+  "extends": "../../.eslintrc",
+  "rules": {
+    "react/jsx-props-no-spreading": "off"
+  }
 }
