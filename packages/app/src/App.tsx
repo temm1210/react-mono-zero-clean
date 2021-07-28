@@ -1,17 +1,22 @@
-import Home from "pages/Home";
-import Test from "pages/Test";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { home, auth } from "routes";
+import _ from "lodash/fp";
+import { Routes, Route } from "react-router-dom";
+import routeConfigs from "routes";
 import "./index.css";
 
+const { values, map } = _;
+const routes = values(routeConfigs);
+
 function App() {
+  console.log("111");
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/test" element={<Test />} />
-      </Routes>
-    </Router>
+    <Routes>
+      {map(
+        (route) => (
+          <Route key={route.regexPath} path={route.path} element={route.component()} />
+        ),
+        routes,
+      )}
+    </Routes>
   );
 }
 
