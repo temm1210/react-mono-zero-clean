@@ -7,6 +7,9 @@ const strategy = {
 };
 
 const removeStringByType = (target: string, type: TStringRemove, findIndex: number) => {
+  // if(type === "start" ) target.slice(findIndex + 1, target.length);
+  // else if(type === "base") target.slice(0, findIndex) + target.slice(findIndex + 1, target.length);
+  // else target.slice(0, findIndex)
   const strategyFnc = strategy[type];
   return strategyFnc(target, findIndex);
 };
