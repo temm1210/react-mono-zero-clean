@@ -1,18 +1,22 @@
-import test2 from "test2";
+import _ from "lodash/fp";
+import { Routes, Route } from "react-router-dom";
+import routeConfigs from "routes";
 import "./index.css";
-import f from "./test.jpeg";
+
+const { values, map } = _;
+const routes = values(routeConfigs);
 
 function App() {
-  test2();
-  // const b: any = "asdfasf";
-  // const a: any = "test";
-  // console.log("c:", a);
-  // console.log("c:", b);
+  console.log("111");
   return (
-    <div className="test-css">
-      App22
-      <img src={f} alt="test" />
-    </div>
+    <Routes>
+      {map(
+        (route) => (
+          <Route key={route.regexPath} path={route.path} element={route.component()} />
+        ),
+        routes,
+      )}
+    </Routes>
   );
 }
 
