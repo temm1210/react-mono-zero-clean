@@ -1,7 +1,7 @@
-import _ from "lodash/fp";
+import fp from "../fp";
 import { remove } from "./removeString";
 
-const { flow, map, split, filter, includes, replace, join, keyBy, identity } = _;
+const { chain, map, split, filter, includes, replace, join, keyBy, identity } = fp;
 
 const removeQuestionMark = remove("?");
 const removeQuestionMarkFromFindIndexToEnd = removeQuestionMark("end");
@@ -10,7 +10,7 @@ const removeBraces = remove("(");
 const removeBracesFromFindIndexToEnd = removeBraces("end");
 
 export const extractParams = (value: string) =>
-  flow(
+  chain(
     split("/"),
     filter(includes(":")),
     map(replace(":", "")),
@@ -19,6 +19,8 @@ export const extractParams = (value: string) =>
     keyBy(identity),
   )(value);
 
-export const extractQueryString = (value: string) => flow(split("?"), filter(includes("&")))(value);
+export const extractQueryString = (value: string) =>
+  chain(split("?"), filter(includes("&")))(value);
 
-export const extractPath = (value: string) => flow(split("/"), map(removeBracesFromFindIndexToEnd), join("/"))(value);
+export const extractPath = (value: string) =>
+  chain(split("/"), map(removeBracesFromFindIndexToEnd), join("/"))(value);
