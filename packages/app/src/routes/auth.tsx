@@ -1,5 +1,5 @@
+import { mapRouter } from "@project/utils";
 import { Auth } from "pages";
-import mapRouter from "./utils/mapRouter";
 
 export default mapRouter({
   component: function AuthPage(args) {

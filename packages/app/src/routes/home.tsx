@@ -1,5 +1,5 @@
+import { mapRouter } from "@project/utils";
 import { Home } from "pages";
-import mapRouter from "./utils/mapRouter";
 
 export default mapRouter({
   regexPath: "/",

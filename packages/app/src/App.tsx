@@ -1,9 +1,9 @@
-import _ from "lodash/fp";
+import { fp } from "@project/utils";
 import { Routes, Route } from "react-router-dom";
 import routeConfigs from "routes";
 import "./index.css";
 
-const { values, map } = _;
+const { values, map } = fp;
 const routes = values(routeConfigs);
 
 function App() {
