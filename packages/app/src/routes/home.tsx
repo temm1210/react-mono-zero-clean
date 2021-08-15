@@ -1,4 +1,4 @@
-import { mapRouter } from "@project/utils";
+import mapRouter from "@project/react-router-utils";
 import { Home } from "pages";
 
 export default mapRouter({

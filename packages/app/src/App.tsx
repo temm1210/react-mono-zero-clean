@@ -7,7 +7,6 @@ const { values, map } = fp;
 const routes = values(routeConfigs);
 
 function App() {
-  console.log("111");
   return (
     <Routes>
       {map(

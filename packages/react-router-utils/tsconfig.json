@@ -13,9 +13,9 @@
     "inlineSources": true,
     "declarationDir": "./dist",
     "outDir": "./dist",
+    "types": ["node", "jest"],
     "composite": true
   },
 
-  "include": ["."],
-  "exclude": ["node_modules"]
+  "include": ["./src"]
 }

@@ -1,18 +1,13 @@
-import { TStringRemove } from "./types";
+import removeString from "./removeStringByStrategy";
+import { TStringRemove, TStringRemoveStrategy } from "./types";
 
-const strategy = {
+const strategy: TStringRemoveStrategy = {
   start: (target: string, findIndex: number) => target.slice(findIndex + 1, target.length),
   base: (target: string, findIndex: number) => target.slice(0, findIndex) + target.slice(findIndex + 1, target.length),
   end: (target: string, findIndex: number) => target.slice(0, findIndex),
 };
 
-const removeStringByType = (target: string, type: TStringRemove, findIndex: number) => {
-  // if(type === "start" ) target.slice(findIndex + 1, target.length);
-  // else if(type === "base") target.slice(0, findIndex) + target.slice(findIndex + 1, target.length);
-  // else target.slice(0, findIndex)
-  const strategyFnc = strategy[type];
-  return strategyFnc(target, findIndex);
-};
+const removeStringByType = removeString(strategy);
 
 /**
  * type:start - 찾은 문자열을 시작으로 끝 문자열까지 반환(target: "?", value:"react?kim", result="kim")
@@ -21,9 +16,11 @@ const removeStringByType = (target: string, type: TStringRemove, findIndex: numb
  * @param target 삭제할 문자열
  * @returns {string}
  */
-export const remove = (target: string) => (type: TStringRemove) => (value: string) => {
+const remove = (target: string) => (type: TStringRemove) => (value: string) => {
   const findIndex = value.indexOf(target);
   if (findIndex === -1) return value;
 
   return removeStringByType(value, type, findIndex);
 };
+
+export default remove;

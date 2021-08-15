@@ -1,4 +1,4 @@
-import { mapRouter } from "@project/utils";
+import mapRouter from "@project/react-router-utils";
 import { Auth } from "pages";
 
 export default mapRouter({
@@ -22,4 +22,4 @@ export default mapRouter({
   //   auth3: { regexPath: "/auth/:id/:type?", title: "auth3" },
   //   auth4: { regexPath: "/auth/:id(a|b)/:type?", title: "auth3" },
   // },
-});
+} as const);
