@@ -9,9 +9,10 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+
     // 그냥 sourceMap은 작동하지가 않음
     "inlineSources": true,
-    "declarationDir": "./dist",
+    "declarationDir": "./types",
     "outDir": "./dist",
     "types": ["node", "jest"],
     "composite": true
