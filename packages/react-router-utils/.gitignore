@@ -5,6 +5,9 @@
 .DS_Store
 .env
 
+/dist
+/types
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
