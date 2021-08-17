@@ -6,7 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "start-app": "yarn workspace @project/app start"
+    "start-app": "yarn workspace @project/app start",
+    "build": "lerna run build"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",
