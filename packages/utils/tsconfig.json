@@ -4,18 +4,17 @@
     "files": true
   },
   "compilerOptions": {
+    "target": "ESNext",
     "baseUrl": "./src",
-    "target": "es5",
-    "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
-    // 그냥 sourceMap은 작동하지가 않음
-    "inlineSources": true,
+    "emitDeclarationOnly": true,
+    "declaration": true,
     "declarationDir": "./dist",
-    "outDir": "./dist",
-    "composite": true
+    "noEmit": false,
+    "outDir": "./dist"
+    // "composite": true
   },
 
   "include": ["."],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "rollup.config.js", "babel.config.js"]
 }

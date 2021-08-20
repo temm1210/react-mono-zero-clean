@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "es5",
     // "baseUrl": "./packages",
     "lib": ["dom", "dom.iterable", "esnext"],
     // import add from './add.js'허용
@@ -25,14 +24,10 @@
     // node타입을 추가(node관련 타입들을 인식하기위해(path, __dirname..))
     // 여기다가 추가한 타입들은 자동으로 타입추론이 이루어짐(node에서 제공되는 모듈들은 타입이 제공됨)
     "types": ["node"],
-    // new transform jsx를 쓰기위한 옵션
-    "jsx": "react-jsx",
     // "paths": {},
     // 사용하지 않는 로걸변수 error발생
     "noUnusedLocals": true,
     "noImplicitAny": true,
-    // d.ts파일만 생성
-    "emitDeclarationOnly": true,
     // ts프로젝트(reference)를 빠르게 찾기위한 옵션
     // 사용되어지는 프로젝트 tsconfig에 composite가 true로 설정되면
     // 의존관계에있는 해당 프로젝트가 컴파일링이됨.
