@@ -1,3 +1,13 @@
 {
-  "extends": "../../.babelrc.json"
+  "presets": [
+    ["@babel/preset-env", { "modules": false, "loose": true }],
+    [
+      "@babel/preset-react",
+      {
+        "runtime": "automatic"
+      }
+    ],
+    "@babel/preset-typescript"
+  ],
+  "plugins": [["@babel/plugin-transform-runtime", { "corejs": 3 }]]
 }
