@@ -14,7 +14,7 @@
   "scripts": {
     "build": "yarn clean && yarn build:types && rollup -c",
     "build:types": "tsc",
-    "start": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts",
+    "start": "nodemon --watch src/**/*.ts --exec ts-node -r tsconfig-paths/register src/index.ts",
     "clean": "rimraf dist",
     "test": "jest"
   },
@@ -38,6 +38,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.30.0",
     "ts-node": "^10.2.0",
+    "tsconfig-paths": "^3.10.1",
     "typescript": "^4.3.5"
   }
 }

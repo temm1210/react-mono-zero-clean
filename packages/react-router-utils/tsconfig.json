@@ -5,7 +5,6 @@
   },
   "compilerOptions": {
     "target": "es2017",
-    // "rootDir": "src",
     "baseUrl": "./src",
     "sourceMap": true,
     // d.ts파일만 생성
@@ -14,8 +13,11 @@
     "declarationDir": "./dist",
     "outDir": "./dist",
     "noEmit": false,
-    "types": ["node", "jest"]
+    "types": ["node", "jest"],
+    "paths": {
+      "src/*": ["src/*"]
+    }
   },
   "include": [".", "*/**/*.json"],
-  "exclude": ["dist", "node_modules", "babel.config.js", "rollup.config.js"]
+  "exclude": ["dist", "node_modules", "rollup.config.js"]
 }
