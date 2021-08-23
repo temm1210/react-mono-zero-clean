@@ -1,0 +1,4 @@
+{
+  "presets": [["@babel/preset-env", { "modules": "auto", "loose": true }], "@babel/preset-typescript"],
+  "plugins": ["lodash", ["@babel/plugin-transform-runtime", { "corejs": 3 }]]
+}

@@ -4,19 +4,18 @@
     "files": true
   },
   "compilerOptions": {
+    "target": "es2017",
+    // "rootDir": "src",
     "baseUrl": "./src",
-    "target": "es5",
-    "declaration": true,
-    "declarationMap": true,
     "sourceMap": true,
-
-    // 그냥 sourceMap은 작동하지가 않음
-    "inlineSources": true,
-    "declarationDir": "./types",
+    // d.ts파일만 생성
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "declarationDir": "./dist",
     "outDir": "./dist",
-    "types": ["node", "jest"],
-    "composite": true
+    "noEmit": false,
+    "types": ["node", "jest"]
   },
-
-  "include": ["./src"]
+  "include": [".", "*/**/*.json"],
+  "exclude": ["dist", "node_modules", "babel.config.js", "rollup.config.js"]
 }
