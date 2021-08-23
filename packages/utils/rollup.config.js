@@ -27,7 +27,7 @@ const config = {
   plugins: [
     resolve({ extensions }),
     babel({ babelHelpers: "runtime", exclude: "node_modules/**", extensions }),
-    commonjs({ extensions, transformMixedEsModules: true }),
+    commonjs({ extensions }),
     peerDepsExternal(),
     sourcemaps(),
     terser(),
