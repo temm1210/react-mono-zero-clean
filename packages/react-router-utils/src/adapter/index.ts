@@ -1,5 +1,6 @@
-import { fp, removeString } from "@project/utils";
+import { removeString } from "@project/utils";
 import { IRouter } from "../types";
+import fp from "../boundaries/lodash";
 
 const { chaining, map, split, join } = fp;
 
