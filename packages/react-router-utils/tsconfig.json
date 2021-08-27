@@ -4,7 +4,7 @@
     "files": true
   },
   "compilerOptions": {
-    "target": "es2017",
+    "target": "ESNext",
     "baseUrl": "./src",
     "sourceMap": true,
     // d.ts파일만 생성
@@ -18,6 +18,6 @@
       "src/*": ["src/*"]
     }
   },
-  "include": [".", "*/**/*.json"],
+  "include": ["./src"],
   "exclude": ["dist", "node_modules", "rollup.config.js"]
 }

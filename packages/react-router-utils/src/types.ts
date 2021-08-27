@@ -9,7 +9,7 @@ export type IRouterChildren = { [key: string]: IRouter };
 export type IRouter<P = string, C = IRouterChildren> = {
   regexPath: P;
   title: string;
-  component: (args?: any) => React.ReactElement;
+  component: (args: any) => React.ReactElement;
   children?: C;
 };
 
