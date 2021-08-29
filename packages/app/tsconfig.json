@@ -1,12 +1,16 @@
 {
   "extends": "../../tsconfig.json",
-  "ts-node": {
-    "files": true
-  },
   "compilerOptions": {
     "baseUrl": "./src",
-    "typeRoots": ["./node_modules/@types", "@types"]
+    "target": "es5",
+    // new transform jsx를 쓰기위한 옵션
+    "jsx": "react-jsx",
+    "emitDeclarationOnly": false,
+    "composite": true,
+    "noEmit": true,
+    "typeRoots": ["node_modules/@types", "@types"]
   },
 
-  "include": ["."]
+  "include": ["./"],
+  "exclude": ["node_modules"]
 }
