@@ -6,7 +6,10 @@
     "packages/*"
   ],
   "scripts": {
-    "start-app": "yarn workspace @project/app start"
+    "start-app": "yarn workspace @project/app start",
+    "build": "lerna run build",
+    "lint-fix": "eslint --fix",
+    "format": "prettier --write ./packages/**"
   },
   "devDependencies": {
     "@babel/core": "^7.14.0",
@@ -17,8 +20,8 @@
     "@babel/runtime": "^7.14.0",
     "@babel/runtime-corejs3": "^7.14.0",
     "@types/node": "^15.0.2",
-    "@typescript-eslint/eslint-plugin": "^4.22.1",
-    "@typescript-eslint/parser": "^4.22.1",
+    "@typescript-eslint/eslint-plugin": "^4.29.2",
+    "@typescript-eslint/parser": "^4.29.2",
     "autoprefixer": "^10.2.5",
     "chalk": "^4.1.1",
     "eslint": "^7.25.0",
@@ -45,8 +48,9 @@
     }
   },
   "lint-staged": {
-    "*.{js,css,json,md,ts,tsx}": [
-      "npx prettier --write ./src"
+    "*.{js,css,ts,tsx}": [
+      "yarn format",
+      "yarn lint-fix"
     ]
   },
   "browserslist": [

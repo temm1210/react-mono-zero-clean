@@ -1,2 +1,1 @@
-export { default as fp } from "./fp";
-export { default as mapRouter } from "./route/mapRouter";
+export { default as removeString } from "./removeString";

@@ -7,14 +7,17 @@
     "target": "ESNext",
     "baseUrl": "./src",
     "sourceMap": true,
+    // d.ts파일만 생성
     "emitDeclarationOnly": true,
     "declaration": true,
     "declarationDir": "./dist",
+    "outDir": "./dist",
     "noEmit": false,
-    "outDir": "./dist"
-    // "composite": true
+    "types": ["node", "jest"],
+    "paths": {
+      "src/*": ["src/*"]
+    }
   },
-
   "include": ["./src"],
-  "exclude": ["node_modules", "rollup.config.js", "babel.config.js"]
+  "exclude": ["dist", "node_modules", "rollup.config.js"]
 }

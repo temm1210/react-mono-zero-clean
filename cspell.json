@@ -1,41 +1,41 @@
 {
-    "version": "0.1",
-    "language": "en",
-    "enabledLanguageIds": [
-        "javascript",
-        "javascriptreact",
-        "markdown",
-        "plaintext",
-        "typescript",
-        "typescriptreact",
-        "yml",
-        "json"
-    ],
-    "enabled": true,
-    "showStatus": true,
-    "words": [
-        "autoprefix",
-        "avif",
-        "browserslist",
-        "devserver",
-        "entrypoint",
-        "pmmmwh",
-        "webp",
-        "webpacks"
-    ],
-    "ignorePaths": [
-        "node_modules",
-        ".babelrc.json",
-        "package.json",
-        "config/webpacks/webpack.*.ts",
-        ".eslintrc",
-        ".eslintignore",
-        ".prettierrc",
-        ".prettierignore"
-    ],
-    "flagWords": [],
-    "spellCheckDelayMs": 50,
-    "enableFiletypes": [
-        "typescript"
-    ]
+  "version": "0.1",
+  "language": "en",
+  "enabledLanguageIds": [
+    "javascript",
+    "javascriptreact",
+    "markdown",
+    "plaintext",
+    "typescript",
+    "typescriptreact",
+    "yml",
+    "json"
+  ],
+  "enabled": true,
+  "showStatus": true,
+  "words": [
+    "autoprefix",
+    "avif",
+    "browserslist",
+    "devserver",
+    "entrypoint",
+    "pmmmwh",
+    "webp",
+    "webpacks",
+    "corejs",
+    "esmodules"
+  ],
+  "ignorePaths": [
+    "node_modules",
+    ".babelrc.json",
+    "package.json",
+    "config/webpacks/webpack.*.ts",
+    ".eslintrc",
+    ".eslintignore",
+    ".prettierrc",
+    ".prettierignore"
+  ],
+  "flagWords": [],
+  "spellCheckDelayMs": 50,
+  "enableFiletypes": ["typescript"]
 }
