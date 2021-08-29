@@ -1,18 +1,18 @@
-import mapRouter from "@project/react-router-utils";
+/* eslint-disable react/display-name */
+import { mapRouter } from "@project/react-router-utils";
 import { Auth } from "pages";
 
 export default mapRouter({
+  regexPath: "/auth/:entity(a|b|c)",
+  title: "Auth",
   component: function AuthPage(args) {
     return <Auth {...args} />;
   },
-
-  regexPath: "/auth/:entity",
-  title: "Auth",
   children: {
     auth2: {
-      regexPath: "/auth23",
+      regexPath: "/auth/:id",
       title: "Auth",
-      component: function AuthPage(args) {
+      component: function AuthPage2(args) {
         return <Auth {...args} />;
       },
     },

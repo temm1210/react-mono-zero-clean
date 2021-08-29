@@ -1,4 +1,4 @@
-import mapRouter from "@project/react-router-utils";
+import { mapRouter } from "@project/react-router-utils";
 import { Home } from "pages";
 
 export default mapRouter({
@@ -7,7 +7,6 @@ export default mapRouter({
   component: function HomePage(args) {
     return <Home {...args} />;
   },
-
   // children: {
   //   home1: { regexPath: "/", title: "home1" },
   //   home2: { regexPath: "/home/:id", title: "home2" },

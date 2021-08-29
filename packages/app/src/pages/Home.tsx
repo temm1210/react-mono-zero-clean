@@ -1,4 +1,4 @@
-import { Link, generatePath } from "react-router-dom";
+import { generatePath, Link } from "react-router-dom";
 import routes from "routes";
 
 function Home() {

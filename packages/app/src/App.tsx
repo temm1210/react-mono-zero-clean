@@ -1,5 +1,5 @@
-import { fp } from "@project/utils";
-import { Routes, Route } from "react-router-dom";
+import fp from "utils/boundaries/lodash";
+import { Switch, Route } from "react-router-dom";
 import routeConfigs from "routes";
 import "./index.css";
 
@@ -8,14 +8,14 @@ const routes = values(routeConfigs);
 
 function App() {
   return (
-    <Routes>
+    <Switch>
       {map(
         (route) => (
-          <Route key={route.regexPath} path={route.path} element={route.component()} />
+          <Route key={route.regexPath} path={route.path} component={route.component} />
         ),
         routes,
       )}
-    </Routes>
+    </Switch>
   );
 }
 
