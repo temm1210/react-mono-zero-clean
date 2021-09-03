@@ -27,8 +27,9 @@ const webpackDevelopmentConfig: WebpackConfiguration = {
           // style을 head태그에 넣음
           {
             test: /\.css$/i,
-            // autoprefix 사용하기 위해 postcss-loader 추가
-            use: ["style-loader", "css-loader", "postcss-loader"],
+            // TODO:autoprefix 사용하기 위해 postcss-loader 추가
+            use: ["style-loader", "css-loader"],
+            // use: ["style-loader", "css-loader", "postcss-loader"],
           },
         ],
       },
