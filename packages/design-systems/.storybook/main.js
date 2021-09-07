@@ -1,4 +1,5 @@
 const path = require("path");
+const postcssNormalize = require("postcss-normalize");
 
 module.exports = {
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
@@ -19,6 +20,27 @@ module.exports = {
         {
           loader: "css-loader",
           options: {
+            sourceMap: true,
+          },
+        },
+        {
+          loader: "postcss-loader",
+          options: {
+            postcssOptions: {
+              plugins: [
+                [
+                  "postcss-flexbugs-fixes",
+                  "postcss-preset-env",
+                  {
+                    autoprefixer: {
+                      flexbox: "no-2009",
+                    },
+                    stage: 3,
+                  },
+                  postcssNormalize(),
+                ],
+              ],
+            },
             sourceMap: true,
           },
         },
