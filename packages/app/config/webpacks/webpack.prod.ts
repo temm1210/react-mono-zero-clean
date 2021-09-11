@@ -10,7 +10,11 @@ import TerserPlugin from "terser-webpack-plugin";
 import commonWebpack from "./webpack.common";
 import { Environment } from "../env";
 
-const webpackProductionConfig: Configuration = {
+export interface WebpackConfiguration extends Configuration {
+  optimization: any;
+}
+
+const webpackProductionConfig: WebpackConfiguration = {
   mode: Environment.PRODUCTION,
   devtool: "cheap-module-source-map",
   // 에러발생시 바로 번들리 종료시킴
@@ -29,8 +33,9 @@ const webpackProductionConfig: Configuration = {
           // style을 css파일로 추출
           {
             test: /\.css$/i,
-            // autoprefix 사용하기 위해 postcss-loader 추가
-            use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
+            // TODO:autoprefix 사용하기 위해 postcss-loader 추가
+            use: [MiniCssExtractPlugin.loader, "css-loader"],
+            // use: [MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"],
           },
         ],
       },
