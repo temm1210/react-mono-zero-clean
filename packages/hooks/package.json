@@ -3,6 +3,19 @@
   "private": true,
   "version": "1.0.0",
   "license": "MIT",
+  "source": "src/index.ts",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "yarn clean && yarn build:tsc",
+    "build:tsc": "yarn build:cjs && yarn build:es",
+    "build:cjs": "tsc -m commonjs --outDir ./dist/cjs",
+    "build:es": "tsc -m esNext --outDir ./dist/es",
+    "start": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts",
+    "clean": "rimraf dist"
+  },
   "dependencies": {},
   "devDependencies": {},
   "peerDependencies": {
