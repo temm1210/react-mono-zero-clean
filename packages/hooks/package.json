@@ -1,0 +1,8 @@
+{
+  "name": "@project/react-hooks",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
