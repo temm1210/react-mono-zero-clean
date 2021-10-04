@@ -6,6 +6,7 @@
     "packages/*"
   ],
   "scripts": {
+    "hooks-build": "yarn workspace @project/react-hooks build",
     "utils-build": "yarn workspace @project/utils build",
     "start-app": "yarn workspace @project/app start",
     "storybook": "yarn workspace @project/design-systems storybook",
