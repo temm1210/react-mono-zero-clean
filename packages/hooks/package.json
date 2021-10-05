@@ -16,7 +16,9 @@
     "start": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts",
     "clean": "rimraf dist"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@project/utils": "1.0.0"
+  },
   "devDependencies": {},
   "peerDependencies": {
     "react": "^17.0.2",
