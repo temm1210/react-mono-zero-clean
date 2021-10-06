@@ -17,7 +17,8 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@project/utils": "1.0.0"
+    "@project/utils": "1.0.0",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {},
   "peerDependencies": {
