@@ -8,28 +8,16 @@ export default {
   title: "Design Systems/Sticky",
 } as Meta;
 
-export const Base = BaseStory;
-
-// const Template: Story<StickyContainerProps> = (args) => <StickyContainer {...args} />;
-
-// const Placeholder = () => <div style={{ margin: "50px 0" }}>placeholder</div>;
-
-// export const Base = Template.bind({});
-// Base.args = {
-//   children: (
-//     <div>
-//       <div>{Array(5).fill(null).map(Placeholder)}</div>
-//       <Sticky>
-//         <div style={{ backgroundColor: "#b2bec3" }}>
-//           <div>sticky</div>
-//           <div>sticky</div>
-//           <div>sticky</div>
-//           <div>sticky</div>
-//           <div>sticky</div>
-//         </div>
-//       </Sticky>
-
-//       <div>{Array(15).fill(null).map(Placeholder)}</div>
-//     </div>
-//   ),
-// };
+export const Base = BaseStory.bind({});
+Base.args = {
+  offset: 10,
+  children: (
+    <div style={{ backgroundColor: "#b2bec3" }}>
+      <div>sticky</div>
+      <div>sticky</div>
+      <div>sticky</div>
+      <div>sticky</div>
+      <div>sticky</div>
+    </div>
+  ),
+};
