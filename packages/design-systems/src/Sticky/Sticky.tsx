@@ -25,21 +25,17 @@ function Sticky({ children, offset = 0 }: Props) {
   };
 
   /**
-   * calculatePositionHandlers method에서 return하는 타입
-   * @typedef {Object} StickyHandlers
-   * @property {() => boolean} isReachContainerBottom - sticky영역이 위로 올라가는 시점(viewport에서 container의 위치가 sticky element의 높이보다 작아질때)
-   * @property {() => boolean} isReachScreenTop - sticky영역이 현재 viewport상단에 고정되는 시점(offset이 주어지면 그만큼 떨어진상태로 고정)
-   */
-  /**
    * sticky element의 위치를 확인하여 상태를 계산해주는 methods 모음
-   * @return {StickyHandlers} 현재 상태를 계산해주는 methods
    */
   const calculatePositionHandlers = useCallback(() => {
     const rects = assignRects();
     if (!rects) return;
 
     const { stickyRect, containerRect, heightRect } = rects;
+    // sticky영역이 위로 올라가는 시점(viewport에서 container의 위치가 sticky element의 높이보다 작아질때)
     const isReachContainerBottom = () => stickyRect?.height + offset >= containerRect?.bottom;
+
+    // sticky영역이 현재 viewport상단에 고정되는 시점(offset이 주어지면 그만큼 떨어진상태로 고정)
     const isReachScreenTop = () => heightRect.top < offset;
 
     return { isReachContainerBottom, isReachScreenTop };
@@ -50,8 +46,19 @@ function Sticky({ children, offset = 0 }: Props) {
    */
   const update = useCallback(() => {
     const handlers = calculatePositionHandlers();
+    if (!handlers) return;
 
-    console.log(handlers);
+    const { isReachContainerBottom, isReachScreenTop } = handlers;
+
+    // sticky element가 상단에 고정되었을때(sticky 상태일때)
+    if (isReachScreenTop()) {
+      console.log("top");
+
+      return;
+    }
+
+    console.log("isReachContainerBottom:", isReachContainerBottom());
+    console.log("isReachScreenTop:", isReachScreenTop());
   }, [calculatePositionHandlers]);
 
   const handleUpdate = useCallback(() => {
@@ -68,9 +75,9 @@ function Sticky({ children, offset = 0 }: Props) {
   }, []);
 
   return (
-    <div ref={assignContainerClientRect}>
+    <div ref={assignContainerClientRect} className="sticky-wrap">
       <div ref={heightRef} className="sticky-height" />
-      <div ref={stickyRef} className="sticky">
+      <div ref={stickyRef} className="sticky-content">
         {children}
       </div>
     </div>
