@@ -1,6 +1,6 @@
 import { DependencyList, EffectCallback, useRef, useEffect } from "react";
 import { isPrimitive } from "@project/utils";
-import isEqual from "./utils/isEqual";
+import isEqual from "../utils/isEqual";
 
 // effect의 dependency가 null이아닌 undefined로 설정되어있어서 undefined사용
 type DependencyRef = DependencyList | undefined;
@@ -12,7 +12,7 @@ type DependencyRef = DependencyList | undefined;
  * @param effect
  * @param dependencies 원시타입이 아닌 배열 값
  */
-const useDeepCompareEffect = (effect: EffectCallback, dependencies: DependencyList) => {
+function useDeepCompareEffect(effect: EffectCallback, dependencies: DependencyList) {
   if (dependencies.every(isPrimitive)) {
     throw Error(
       "`useDeepCompareEffect` should not be used with primitive dependencies. Use not primitive dependencies.",
@@ -28,6 +28,6 @@ const useDeepCompareEffect = (effect: EffectCallback, dependencies: DependencyLi
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(effect, ref.current);
-};
+}
 
 export default useDeepCompareEffect;

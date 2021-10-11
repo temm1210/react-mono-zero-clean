@@ -1,4 +1,4 @@
-import useDeepCompareEffect from "./useDeepCompareEffect";
+import useDeepCompareEffect from "../useDeepCompareEffect";
 
 type Context = Window | HTMLElement | null;
 type WindowEventListener = Window["addEventListener"];
@@ -14,12 +14,12 @@ type ListenerOptions = Parameters<WindowEventListener>[2];
  * @param options  listener함수가 실행될때 적용할 options
  * @param context Event에 등록할 대상(기본값 Window)
  */
-const useEvent = (
+function useEvent(
   eventName: ListenerEventType,
   listener: Listener,
   options?: ListenerOptions,
   context: Context = window,
-) => {
+) {
   // useEffect를 쓸때 dependencies로 object로 넘겨줄시 원하지않는 결과가 나올수있음
   // ex.값은 변하지 않았는데 오브젝트가 새로할당돼서 effect가 실행되는경우
   useDeepCompareEffect(() => {
@@ -39,6 +39,6 @@ const useEvent = (
       }
     };
   }, [context, eventName, listener, options]);
-};
+}
 
 export default useEvent;
