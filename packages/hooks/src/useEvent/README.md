@@ -1,8 +1,8 @@
-# useEvent
+# `useEvent`
 
 주어진 listener를 event에 등록하고 제거해주는 hook
 
-# Usage
+## Usage
 
 ```typescript
 
@@ -18,7 +18,7 @@ function Element() => {
 
 ```
 
-# API
+## API
 
 ```typescript
 useEvent(eventName: ListenerEventType, listener: Listener, options?: ListenerOptions, context: Context = window,): void

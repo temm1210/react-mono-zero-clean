@@ -1,8 +1,8 @@
-# useDeepCompareEffect
+# `useDeepCompareEffect`
 
 `useEffect`를 사용할 때 dependency값으로 object를 할당하면 값은 변하지않아도 object가 새로 만들어질 경우 effect가 실행되는 문제를 해결하기위한 hook. object를 deep compare해서 값이 바뀐경우만 effect를 실행
 
-# Usage
+## Usage
 
 ```typescript
 
@@ -18,7 +18,7 @@ function Element(object:Object) => {
 
 ```
 
-# API
+## API
 
 ```typescript
 useDeepCompareEffect(effect: EffectCallback, dependencies: DependencyList): void

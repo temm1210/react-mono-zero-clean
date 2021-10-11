@@ -1,8 +1,8 @@
-# useClosetParent
+# `useClosetParent`
 
 현재 element를 기준으로 주어진 selector에 맞는 가장 가까운 부모 element를 찾아주는 hook
 
-# Usage
+## Usage
 
 ```typescript
 function ReactElement() {
@@ -22,7 +22,7 @@ function ReactElement() {
 }
 ```
 
-# API
+## API
 
 ```typescript
 useClosetParent(parentSelector:string): {
