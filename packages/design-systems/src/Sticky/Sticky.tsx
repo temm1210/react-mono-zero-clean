@@ -1,45 +1,72 @@
-import { useCallback, useRef } from "react";
-import { useEvent } from "@project/react-hooks";
+import { useCallback, useEffect, useRef, useState } from "react";
+import cx from "clsx";
+import { useEvent, useClosetParent } from "@project/react-hooks";
+import useCalculatePositions from "./hooks/useCalculatePositions";
 
 export interface Props {
   /** test */
   children: React.ReactNode;
   /** 상단에서 얼마나 떨어진 상태로 sticky가 진행될지 결정 */
   offset?: number;
+  /** Sticky컴포넌트가 mount 됐을때 실행할 callback 함수 */
+  onMount?: () => void;
+  /** Sticky컴포넌트가 sticky 됐을때 실행할 callback 함수 */
+  onSticky?: () => void;
+  /** Sticky컴포넌트가 unSticky 됐을때 실행할 callback 함수 */
+  onUnSticky?: () => void;
 }
 
-function Sticky({ children, offset = 0 }: Props) {
-  const containerRef = useRef<Element>();
+type SinglePosition = number | null;
+interface Position {
+  top: SinglePosition;
+  bottom: SinglePosition;
+}
 
-  // const [isSticky, setIsSticky] = useState(false);
+interface StickyStatus {
+  isSticky: boolean;
+  isAbsolute: boolean;
+}
+
+function Sticky({ children, offset = 0, onMount, onSticky, onUnSticky }: Props) {
+  const [isSticky, setIsSticky] = useState(false);
+  const [isAbsolute, setIsIsAbsolute] = useState(false);
+  const [top, setTop] = useState<SinglePosition>(0);
+  const [bottom, setBottom] = useState<SinglePosition>(0);
+
+  const { parentRef, findParentFrom } = useClosetParent(".sticky-container");
   const stickyRef = useRef<HTMLDivElement>(null);
   const heightRef = useRef<HTMLDivElement>(null);
 
-  const assignRects = () => {
-    const containerRect = containerRef.current?.getBoundingClientRect();
-    const heightRect = heightRef.current?.getBoundingClientRect();
-    const stickyRect = stickyRef.current?.getBoundingClientRect();
+  const calculatePositionHandlers = useCalculatePositions({ containerRef: parentRef, stickyRef, heightRef, offset });
 
-    if (!containerRect || !heightRect || !stickyRect) return null;
-    return { containerRect, heightRect, stickyRect };
+  const fireStickyCallback = (pIsSticky: boolean) => {
+    if (pIsSticky && onSticky) return onSticky();
+    if (!pIsSticky && onUnSticky) return onUnSticky();
   };
 
   /**
-   * sticky element의 위치를 확인하여 상태를 계산해주는 methods 모음
+   * sticky상태는 다음과 같이 2가지로 다시 나뉨
+   * 1) sticky element가 container bottom영역까지 도달하고 위로 서서히 사라질때
+   * 2) sticky element가 계속 screen의 상단에 고정되어있을때
+   * 1번과 같은 경우는 position: absolute로 바뀌어야함
+   * 2번과 같은 경우는 position: fixed로 바뀌어야함
    */
-  const calculatePositionHandlers = useCallback(() => {
-    const rects = assignRects();
-    if (!rects) return;
+  const setSticky = ({ isSticky: pIsSticky, isAbsolute: pIsAbsolute }: StickyStatus) => {
+    setIsSticky(pIsSticky);
+    setIsIsAbsolute(pIsAbsolute);
+    fireStickyCallback(pIsSticky);
+  };
 
-    const { stickyRect, containerRect, heightRect } = rects;
-    // sticky영역이 위로 올라가는 시점(viewport에서 container의 위치가 sticky element의 높이보다 작아질때)
-    const isReachContainerBottom = () => stickyRect?.height + offset >= containerRect?.bottom;
+  const setTopAndBottom = ({ top: pTop, bottom: pBottom }: Position) => {
+    setTop(pTop);
+    setBottom(pBottom);
+  };
 
-    // sticky영역이 현재 viewport상단에 고정되는 시점(offset이 주어지면 그만큼 떨어진상태로 고정)
-    const isReachScreenTop = () => heightRect.top < offset;
-
-    return { isReachContainerBottom, isReachScreenTop };
-  }, [offset]);
+  // sticky영역이 viewport상단에 고정되었을때 실행할 함수
+  const stickyToScreenTop = () => {
+    setTopAndBottom({ top: offset, bottom: null });
+    setSticky({ isSticky: true, isAbsolute: false });
+  };
 
   /**
    * 현재 sticky element의 상태값을 사용하여 처리하는 함수
@@ -52,31 +79,20 @@ function Sticky({ children, offset = 0 }: Props) {
 
     // sticky element가 상단에 고정되었을때(sticky 상태일때)
     if (isReachScreenTop()) {
-      console.log("top");
-
-      return;
+      return stickyToScreenTop();
     }
-
-    console.log("isReachContainerBottom:", isReachContainerBottom());
-    console.log("isReachScreenTop:", isReachScreenTop());
-  }, [calculatePositionHandlers]);
+  }, [calculatePositionHandlers, stickyToScreenTop]);
 
   const handleUpdate = useCallback(() => {
-    // raf처리
     update();
   }, [update]);
 
   useEvent("scroll", handleUpdate, { passive: true });
   useEvent("resize", handleUpdate);
 
-  const assignContainerClientRect = useCallback((node: HTMLDivElement) => {
-    const stickyContainer = node.parentElement?.closest(".sticky-container") || document.body;
-    containerRef.current = stickyContainer;
-  }, []);
-
   return (
-    <div ref={assignContainerClientRect} className="sticky-wrap">
-      <div ref={heightRef} className="sticky-height" />
+    <div ref={findParentFrom} className="sticky-wrap">
+      <div ref={heightRef} className="sticky-height" style={{ position: "fixed" }} />
       <div ref={stickyRef} className="sticky-content">
         {children}
       </div>
