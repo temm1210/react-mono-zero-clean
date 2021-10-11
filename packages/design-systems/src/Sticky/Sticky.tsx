@@ -62,10 +62,20 @@ function Sticky({ children, offset = 0, onMount, onSticky, onUnSticky }: Props) 
     setBottom(pBottom);
   };
 
-  // sticky영역이 viewport상단에 고정되었을때 실행할 함수
+  // sticky영역이 viewport상단에 고정되었을때 실행 할 함수
   const stickyToScreenTop = () => {
     setTopAndBottom({ top: offset, bottom: null });
     setSticky({ isSticky: true, isAbsolute: false });
+  };
+
+  // sticky영역이 container bottom에 도달했을때 실행 할 함수
+  const stickyToContainerBottom = () => {
+    setSticky({ isSticky: true, isAbsolute: true });
+  };
+
+  // sticky영역이 container top에 도달했을때 실행 할 함수
+  const stickyToContainerTop = () => {
+    setSticky({ isSticky: false, isAbsolute: false });
   };
 
   /**
@@ -79,9 +89,13 @@ function Sticky({ children, offset = 0, onMount, onSticky, onUnSticky }: Props) 
 
     // sticky element가 상단에 고정되었을때(sticky 상태일때)
     if (isReachScreenTop()) {
+      // sticky상태에서 container의 bottom에 도달했을때
+      if (isReachContainerBottom()) return stickyToContainerBottom();
       return stickyToScreenTop();
     }
-  }, [calculatePositionHandlers, stickyToScreenTop]);
+
+    return stickyToContainerTop();
+  }, [calculatePositionHandlers]);
 
   const handleUpdate = useCallback(() => {
     update();
