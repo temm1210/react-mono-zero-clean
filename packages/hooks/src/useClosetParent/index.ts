@@ -6,7 +6,7 @@ import { useCallback, useRef } from "react";
 function useClosetParent(parentSelector: string) {
   const parentRef = useRef<Element>();
 
-  const assignParent = useCallback(
+  const findParentFrom = useCallback(
     (node: HTMLDivElement) => {
       const stickyParent = node.parentElement?.closest(parentSelector) || document.body;
       parentRef.current = stickyParent;
@@ -14,7 +14,7 @@ function useClosetParent(parentSelector: string) {
     [parentSelector],
   );
 
-  return { parentRef, assignParent };
+  return { parentRef, findParentFrom };
 }
 
 export default useClosetParent;

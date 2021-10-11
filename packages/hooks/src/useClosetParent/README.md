@@ -6,7 +6,7 @@
 
 ```typescript
 function ReactElement() {
-  const { parentRef, assignParent } = useClosetParent(".sticky-container");
+  const { parentRef, findParentFrom } = useClosetParent(".sticky-container");
 
   if (parentRef) {
     // TODO
@@ -14,7 +14,7 @@ function ReactElement() {
   }
 
   return (
-    <div ref={assignParent}>
+    <div ref={findParentFrom}>
       <div>palceholder</div>
       <div>palceholder</div>
     </div>
@@ -27,7 +27,7 @@ function ReactElement() {
 ```typescript
 useClosetParent(parentSelector:string): {
   parentRef:RefObject<Element | undefined>,
-  assignParent:(node: HTMLDivElement) => void
+  findParentFrom:(node: HTMLDivElement) => void
 }
 ```
 
@@ -35,4 +35,4 @@ useClosetParent(parentSelector:string): {
   - `parentSelector` — 찾을 부모 selector
 - returns
   - `parentRef` — 찾은 부모 element의 값
-  - `assignParent()` — 해당 함수가 등록된 element에서부터 가까운 부모 element를 찾기시작(element의 ref값으로 넘겨줘야함)
+  - `findParentFrom()` — 해당 함수가 등록된 element에서부터 가까운 부모 element를 찾기시작(element의 ref값으로 넘겨줘야함)
