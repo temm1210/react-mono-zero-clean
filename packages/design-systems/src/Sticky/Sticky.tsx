@@ -48,9 +48,9 @@ function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
     return stickyHandler?.unStick();
   }, [calculatePositionHandlers]);
 
-  const handleUpdate = useCallback(() => {
-    update();
-  }, [update]);
+  // const handleUpdate = useCallback(() => {
+  //   update();
+  // }, [update]);
 
   /**
    * sticky상태는 다음과 같이 2가지로 다시 나뉨
@@ -69,13 +69,21 @@ function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
     setBottom(pBottom);
   };
 
+  const calculateStyle = () => {
+    if (!isSticky) return;
+    return {
+      top: isAbsolute ? undefined : top,
+      bottom: isAbsolute ? 0 : bottom,
+    };
+  };
+
   useEffect(() => {
     if (!stickyHandlerRef) return;
 
     stickyHandlerRef.current = {
       // sticky영역을 현재 screen(viewport)상단에 고정
       stickToScreenTop: () => {
-        setTopAndBottom(offset, null);
+        setTopAndBottom(offset, undefined);
         setStickyAndAbsolute(true, false);
         onStick?.();
       },
@@ -93,13 +101,14 @@ function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
     };
   }, [offset, onStick, onUnStick]);
 
-  useEvent("scroll", handleUpdate, { passive: true });
-  useEvent("resize", handleUpdate);
+  console.log("re-render");
+  useEvent("scroll", update, { passive: true });
+  useEvent("resize", update);
 
   return (
     <div ref={findParentFrom} className="sticky-wrap">
       <div ref={heightRef} className="sticky-height" />
-      <div ref={stickyRef} className="sticky-content">
+      <div ref={stickyRef} className="sticky-content" style={calculateStyle()}>
         {children}
       </div>
     </div>
