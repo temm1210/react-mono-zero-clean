@@ -1,20 +1,22 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { Story } from "@storybook/react";
 import Sticky, { Props as StickyProps } from "../Sticky";
 import StickyContainer from "../StickyContainer";
 
-const Placeholder = () => <div style={{ margin: "50px 0" }}>placeholder</div>;
+const Placeholder = () => <div style={{ padding: "20px 0" }}>placeholder</div>;
 
 const BaseStory: Story<StickyProps> = (args) => {
-  const { offset, children } = args;
+  const { children, ...rest } = args;
+
   return (
     <div>
-      <div>{Array(15).fill(null).map(Placeholder)}</div>
       <StickyContainer>
-        <div>{Array(5).fill(null).map(Placeholder)}</div>
-        <Sticky offset={offset}>{children}</Sticky>
-        <div>{Array(15).fill(null).map(Placeholder)}</div>
-        {/* <Sticky offset={offset}>{children}</Sticky> */}
+        <div>{Array(8).fill(null).map(Placeholder)}</div>
+        <Sticky {...rest}>{children}</Sticky>
+        <div>{Array(10).fill(null).map(Placeholder)}</div>
       </StickyContainer>
+
+      <div>{Array(10).fill(null).map(Placeholder)}</div>
     </div>
   );
 };

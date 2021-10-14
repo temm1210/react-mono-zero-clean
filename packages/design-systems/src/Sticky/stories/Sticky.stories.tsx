@@ -12,7 +12,12 @@ export const Base = BaseStory.bind({});
 Base.args = {
   offset: 10,
   children: (
-    <div style={{ backgroundColor: "#b2bec3" }}>
+    <div style={{ backgroundColor: "#2ecc71" }}>
+      <div>sticky</div>
+      <div>sticky</div>
+      <div>sticky</div>
+      <div>sticky</div>
+      <div>sticky</div>
       <div>sticky</div>
       <div>sticky</div>
       <div>sticky</div>
