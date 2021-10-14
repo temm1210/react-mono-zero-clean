@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+// eslint-disable-next-line camelcase
+import { unstable_batchedUpdates } from "react-dom";
 import cx from "clsx";
 import { useEvent, useClosetParent } from "@project/react-hooks";
 import useCalculatePositions from "./hooks/useCalculatePositions";
@@ -49,7 +51,6 @@ function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
       return stickyHandler?.stickToScreenTop();
     }
 
-    console.log(222);
     return stickyHandler?.unStick();
   }, [calculatePositionHandlers]);
 
@@ -95,9 +96,14 @@ function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
       stickToScreenTop: () => {
         const { width: pWidth, height: pHeight } = getStickyElement();
 
-        setTopAndBottom(offset, undefined);
-        setStickyAndAbsolute(true, false);
-        setWidthAndHeight(pWidth, pHeight);
+        // https://github.com/facebook/react/issues/10231#issuecomment-316644950
+        // react 강제 batch
+        unstable_batchedUpdates(() => {
+          setTopAndBottom(offset, undefined);
+          setStickyAndAbsolute(true, false);
+          setWidthAndHeight(pWidth, pHeight);
+        });
+
         onStick?.();
       },
 
@@ -105,19 +111,23 @@ function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
       stickToContainerBottom: () => {
         const { width: pWidth, height: pHeight } = getStickyElement();
 
-        setStickyAndAbsolute(true, true);
-        setWidthAndHeight(pWidth, pHeight);
+        unstable_batchedUpdates(() => {
+          setStickyAndAbsolute(true, true);
+          setWidthAndHeight(pWidth, pHeight);
+        });
         onStick?.();
       },
 
       unStick: () => {
-        setStickyAndAbsolute(false, false);
+        unstable_batchedUpdates(() => {
+          setStickyAndAbsolute(false, false);
+        });
+
         onUnStick?.();
       },
     };
   }, [offset, onStick, onUnStick]);
 
-  console.log("re-render");
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);
 
