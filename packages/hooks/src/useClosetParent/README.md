@@ -6,11 +6,11 @@
 
 ```typescript
 function ReactElement() {
-  const { parentNode, findParentFrom } = useClosetParent(".sticky-container");
+  const { parentRef, findParentFrom } = useClosetParent(".sticky-container");
 
-  if (parentNode) {
+  if (parentRef.current) {
     // TODO
-    // ex)) parentNode?.getBoundingClientRect()...
+    // ex)) parentRef.current.getBoundingClientRect()...
   }
 
   return (
