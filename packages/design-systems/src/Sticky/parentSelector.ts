@@ -1,1 +1,1 @@
-export default ".sticky-container";
+export default "sticky-container";
