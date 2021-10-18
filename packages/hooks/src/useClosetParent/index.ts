@@ -1,10 +1,10 @@
-import { useCallback, useRef, MutableRefObject } from "react";
+import { useCallback, useRef } from "react";
 
-type ParentRef = MutableRefObject<Element | null>;
+type ParentNode = Element | null;
 type FindParentFrom = (node: HTMLElement | null) => void;
 
 interface Return {
-  parentRef: ParentRef;
+  parentNode: ParentNode;
   findParentFrom: FindParentFrom;
 }
 /**
@@ -21,7 +21,7 @@ const useClosetParent = (parentSelector: string) => {
     [parentSelector],
   );
 
-  return { parentRef, findParentFrom } as Return;
+  return { parentNode: parentRef.current, findParentFrom } as Return;
 };
 
 export default useClosetParent;
