@@ -1,6 +1,7 @@
 import { Meta } from "@storybook/react";
 import { Sticky, StickyContainer } from "../index";
 import BaseStory from "./BaseStory";
+import PushStory from "./PushStory";
 
 export default {
   component: StickyContainer,
@@ -10,7 +11,7 @@ export default {
 
 export const Base = BaseStory.bind({});
 Base.args = {
-  offset: 10,
+  top: 10,
   children: (
     <div style={{ backgroundColor: "#2ecc71" }}>
       <div>sticky</div>
@@ -26,3 +27,5 @@ Base.args = {
     </div>
   ),
 };
+
+export const Push = PushStory.bind({});
