@@ -4,34 +4,41 @@ import { unstable_batchedUpdates } from "react-dom";
 import cx from "clsx";
 import { useEvent, useClosetParent } from "@project/react-hooks";
 import useCalculatePositions from "./hooks/useCalculatePositions";
-import { SinglePosition, StickyHandler } from "./types";
+import { StickyHandler } from "./types";
 import PARENT_SELECTOR from "./parentSelector";
 import "./Sticky.scss";
 
 export interface Props {
-  /** test */
   children: React.ReactNode;
   /** 상단에서 얼마나 떨어진 상태로 sticky가 진행될지 결정 */
-  offset?: number;
+  top?: number;
+  /** 하단에서 얼마나 떨어진 상태로 sticky가 진행될지 결정 */
+  bottom?: number;
   /** Sticky컴포넌트가 sticky 됐을때 실행할 callback 함수 */
   onStick?: () => void;
   /** Sticky컴포넌트가 unSticky 됐을때 실행할 callback 함수 */
   onUnStick?: () => void;
 }
 
-function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
+function Sticky({ children, top = 0, bottom = 0, onStick, onUnStick }: Props) {
   const [isSticky, setIsSticky] = useState(false);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
-  const [top, setTop] = useState<SinglePosition>(0);
-  const [bottom, setBottom] = useState<SinglePosition>(0);
+  // const [top, setTop] = useState<SinglePosition>(0);
+  // const [bottom, setBottom] = useState<SinglePosition>(0);
   const [width, setWidth] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
 
   const { parentRef, findParentFrom } = useClosetParent(PARENT_SELECTOR);
   const stickyRef = useRef<HTMLDivElement>(null);
   const heightRef = useRef<HTMLDivElement>(null);
-  const calculatePositionHandlers = useCalculatePositions({ containerRef: parentRef, stickyRef, heightRef, offset });
+  const calculatePositionHandlers = useCalculatePositions({
+    containerRef: parentRef,
+    stickyRef,
+    heightRef,
+    top,
+    bottom,
+  });
 
   const stickyHandlerRef = useRef<StickyHandler>();
 
@@ -70,11 +77,6 @@ function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
     setIsIsAbsolute(pIsAbsolute);
   };
 
-  const setTopAndBottom = (pTop: SinglePosition, pBottom: SinglePosition) => {
-    setTop(pTop);
-    setBottom(pBottom);
-  };
-
   const setWidthAndHeight = (pWidth: number, pHeight: number) => {
     setWidth(pWidth);
     setHeight(pHeight);
@@ -99,7 +101,6 @@ function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
         // https://github.com/facebook/react/issues/10231#issuecomment-316644950
         // react 강제 batch
         unstable_batchedUpdates(() => {
-          setTopAndBottom(offset, undefined);
           setStickyAndAbsolute(true, false);
           setWidthAndHeight(pWidth, pHeight);
         });
@@ -126,16 +127,17 @@ function Sticky({ children, offset = 0, onStick, onUnStick }: Props) {
         onUnStick?.();
       },
     };
-  }, [offset, onStick, onUnStick]);
+  }, [onStick, onUnStick]);
 
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);
 
   const calculateStyle = () => {
     if (!isSticky) return;
+
     return {
       top: isAbsolute ? undefined : top,
-      bottom: isAbsolute ? 0 : bottom,
+      bottom: isAbsolute ? 0 : undefined,
       width,
     };
   };
