@@ -3,7 +3,7 @@ import { useCallback, useRef } from "react";
 /**
  * callback으로 등록된 element를 기준으로 가장 가까운 parentSelector를 찾는 hook
  */
-function useClosetParent(parentSelector: string) {
+const useClosetParent = (parentSelector: string) => {
   const parentRef = useRef<Element>();
 
   const findParentFrom = useCallback(
@@ -15,6 +15,6 @@ function useClosetParent(parentSelector: string) {
   );
 
   return { parentRef, findParentFrom };
-}
+};
 
 export default useClosetParent;

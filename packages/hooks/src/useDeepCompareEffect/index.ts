@@ -12,7 +12,7 @@ type DependencyRef = DependencyList | undefined;
  * @param effect
  * @param dependencies 원시타입이 아닌 배열 값
  */
-function useDeepCompareEffect(effect: EffectCallback, dependencies: DependencyList) {
+const useDeepCompareEffect = (effect: EffectCallback, dependencies: DependencyList) => {
   if (dependencies.every(isPrimitive)) {
     throw Error(
       "`useDeepCompareEffect` should not be used with primitive dependencies. Use not primitive dependencies.",
@@ -28,6 +28,6 @@ function useDeepCompareEffect(effect: EffectCallback, dependencies: DependencyLi
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(effect, ref.current);
-}
+};
 
 export default useDeepCompareEffect;
