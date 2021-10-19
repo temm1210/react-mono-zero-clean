@@ -14,7 +14,9 @@ export interface Props {
   isSticky: boolean;
   /** sticky상태에서의 absolute여부 */
   isAbsolute: boolean;
+  /** sticky상태값을 update하는 함수모음 */
   handler: StickyHandler;
+  /** sticky엘리먼트의 상태 계산을위한 container element */
   parent: Element;
 }
 
@@ -46,7 +48,7 @@ const TopSticky = forwardRef<ChildHandler, Props>(
         stickToScreenTop() {
           // https://github.com/facebook/react/issues/10231#issuecomment-316644950
           // scroll event는 react batch작업이 이루어지지 않음
-          // 따라서 강제로 batch 실행
+          // 따라서 강제로 batch 실행(unstable_batchedUpdates)
           unstable_batchedUpdates(() => {
             const { width: pWidth, height: pHeight } = getStickyElement();
             setWidth(pWidth);
@@ -92,7 +94,7 @@ const TopSticky = forwardRef<ChildHandler, Props>(
       };
     });
 
-    const calculateStyle = () => {
+    const calculateStickyStyle = () => {
       if (!isSticky) return;
       return {
         top: isAbsolute ? undefined : top,
@@ -112,7 +114,7 @@ const TopSticky = forwardRef<ChildHandler, Props>(
       <div className="sticky-top">
         {/* 바로아래 sticky element가 fixed일시 실질적인 height값이 없어져서 전체 레이아웃이 깨지는걸방지 */}
         <div ref={heightRef} className="sticky__height" style={heightStyle} />
-        <div ref={stickyRef} className={stickyClassNames} style={calculateStyle()}>
+        <div ref={stickyRef} className={stickyClassNames} style={calculateStickyStyle()}>
           {children}
         </div>
       </div>
