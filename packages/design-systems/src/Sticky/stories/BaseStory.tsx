@@ -12,8 +12,12 @@ const BaseStory: Story<StickyProps> = (args) => {
     <div>
       <StickyContainer>
         <div>{Array(8).fill(null).map(Placeholder)}</div>
-        <Sticky {...rest}>{children}</Sticky>
-        <div>{Array(10).fill(null).map(Placeholder)}</div>
+        <div style={{ display: "flex", textAlign: "center" }}>
+          <div style={{ flex: 1 }}>
+            <Sticky {...rest}>{children}</Sticky>
+          </div>
+          <div style={{ flex: 1 }}>{Array(20).fill(null).map(Placeholder)}</div>
+        </div>
       </StickyContainer>
 
       <div>{Array(10).fill(null).map(Placeholder)}</div>
