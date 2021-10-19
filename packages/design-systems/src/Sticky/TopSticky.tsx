@@ -50,9 +50,9 @@ const TopSticky = forwardRef<ChildHandler, Props>(
           // scroll event는 react batch작업이 이루어지지 않음
           // 따라서 강제로 batch 실행(unstable_batchedUpdates)
           unstable_batchedUpdates(() => {
-            const { width: pWidth, height: pHeight } = getStickyElement();
-            setWidth(pWidth);
-            setHeight(pHeight);
+            const { width: lWidth, height: lHeight } = getStickyElement();
+            setWidth(lWidth);
+            setHeight(lHeight);
 
             handler.stickToScreenTop();
           });
@@ -82,7 +82,7 @@ const TopSticky = forwardRef<ChildHandler, Props>(
           // sticky 상태일때
           if (positionHandlers.isReachScreenTop()) {
             // sticky상태에서 element가 위로 서서히 사라지기 시작할때
-            if (positionHandlers.isReachContainerBottom()) {
+            if (positionHandlers.isReachContainerBottomFrom("top")) {
               return handlerProxy().stickToContainerBottom();
             }
             return handlerProxy().stickToScreenTop();
