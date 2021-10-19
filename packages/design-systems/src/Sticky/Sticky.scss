@@ -1,11 +1,11 @@
-.sticky-content {
+.sticky__content {
   position: static;
 }
 
-.sticky-content__fixed {
+.sticky__content--fixed {
   position: fixed;
 }
 
-.sticky-content__absolute {
+.sticky__content--absolute {
   position: absolute;
 }

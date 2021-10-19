@@ -1,19 +1,20 @@
 import { RefObject, useCallback } from "react";
 
 export interface Props {
-  containerRef: RefObject<Element | undefined>;
+  containerRef: Element;
   stickyRef: RefObject<Element | undefined>;
-  heightRef: RefObject<Element | undefined>;
-  offset: number;
+  heightRef?: RefObject<Element | undefined>;
+  top?: number;
+  bottom?: number;
 }
 
-function useCalculatePositions({ containerRef, stickyRef, heightRef, offset }: Props) {
+function useCalculatePositions({ containerRef, stickyRef, heightRef, top = 0, bottom = 0 }: Props) {
   const assignRects = useCallback(() => {
-    const containerRect = containerRef.current?.getBoundingClientRect();
-    const heightRect = heightRef.current?.getBoundingClientRect();
+    const containerRect = containerRef.getBoundingClientRect();
+    const heightRect = heightRef?.current?.getBoundingClientRect();
     const stickyRect = stickyRef.current?.getBoundingClientRect();
 
-    if (!containerRect || !heightRect || !stickyRect) return null;
+    if (!heightRect || !stickyRect) return null;
     return { containerRect, heightRect, stickyRect };
   }, [containerRef, stickyRef, heightRef]);
 
@@ -26,14 +27,18 @@ function useCalculatePositions({ containerRef, stickyRef, heightRef, offset }: P
 
     const { stickyRect, containerRect, heightRect } = rects;
 
-    // sticky영역이 위로 올라가는 시점(viewport에서 container의 위치가 sticky element의 높이보다 작아질때)
-    const isReachContainerBottom = () => stickyRect?.height + offset >= containerRect?.bottom;
+    // sticky영역이 상단에 고정되어있다가 위로 올라가는 시점(viewport에서 container의 위치가 sticky element의 높이보다 작아질때)
+    const isReachContainerBottom = () => {
+      return stickyRect?.height + top >= containerRect?.bottom + bottom;
+    };
+    // sticky영역이 현재 viewport상단에 고정되는 시점
+    const isReachScreenTop = () => heightRect.top < top;
 
-    // sticky영역이 현재 viewport상단에 고정되는 시점(offset이 주어지면 그만큼 떨어진상태로 고정)
-    const isReachScreenTop = () => heightRect.top < offset;
+    // sticky영역이 현재 viewport하단에 고정되는 시점
+    const isReachScreenBottom = () => containerRect.bottom + bottom > window.innerHeight;
 
-    return { isReachContainerBottom, isReachScreenTop };
-  }, [offset, assignRects]);
+    return { isReachContainerBottom, isReachScreenTop, isReachScreenBottom };
+  }, [top, bottom, assignRects]);
 
   return calculatePositionHandlers;
 }
