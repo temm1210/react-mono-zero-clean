@@ -26,13 +26,13 @@ function ReactElement() {
 
 ```typescript
 useClosetParent(parentSelector:string): {
-  parentRef:RefObject<Element | undefined>,
-  findParentFrom:(node: HTMLDivElement) => void
+  parentNode:Element | null,
+  findParentFrom:(node: HTMLElement | null) => void
 }
 ```
 
 - paremeters
   - `parentSelector` — 찾을 부모 selector
 - returns
-  - `parentRef` — 찾은 부모 element의 값
+  - `parentNode` — 찾은 부모 element의 값
   - `findParentFrom()` — 해당 함수가 등록된 element에서부터 가까운 부모 element를 찾기시작(element의 ref값으로 넘겨줘야함)
