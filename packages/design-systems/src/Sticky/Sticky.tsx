@@ -1,8 +1,9 @@
 import { useCallback, useState, useMemo, useRef } from "react";
 import { useEvent, useClosetParent } from "@project/react-hooks";
 import { ChildHandler, StickyHandler, StickyMode } from "./types";
-import TopSticky from "./TopSticky";
-import PARENT_SELECTOR from "./parentSelector";
+import StickyTop from "./StickyTop";
+import StickyBottom from "./StickyBottom";
+import { parentSelector } from "./utils";
 import "./Sticky.scss";
 
 export interface Props {
@@ -19,11 +20,13 @@ export interface Props {
   onUnStick?: () => void;
 }
 
-const Sticky = ({ children, top = 0, mode = "top", onStick, onUnStick }: Props) => {
+const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStick }: Props) => {
   const [isSticky, setIsSticky] = useState(false);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
-  const { parentNode, findParentFrom } = useClosetParent(`.${PARENT_SELECTOR}`);
+  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
+
+  console.log("parentNode:", parentNode);
 
   // child component에게 넘겨줄 ref
   // 스크롤 이벤트가 발생할시 할 일을 자식에게 위임
@@ -36,26 +39,30 @@ const Sticky = ({ children, top = 0, mode = "top", onStick, onUnStick }: Props) 
    * 1번과 같은 경우는 position: absolute로 바뀌어야함
    * 2번과 같은 경우는 position: fixed로 바뀌어야함
    */
-  const setStickyAndAbsolute = (pIsSticky: boolean, pIsAbsolute: boolean) => {
-    setIsSticky(pIsSticky);
-    setIsIsAbsolute(pIsAbsolute);
-  };
-
   const handler: StickyHandler = useMemo(
     () => ({
       stickToScreenTop() {
-        setStickyAndAbsolute(true, false);
+        setIsSticky(true);
+        setIsIsAbsolute(false);
         onStick?.();
       },
 
       // container bottom를 기준으로해서 sticky를 고정
       stickToContainerBottom() {
-        setStickyAndAbsolute(true, true);
+        setIsSticky(true);
+        setIsIsAbsolute(true);
+        onStick?.();
+      },
+
+      stickyToScreenBottom() {
+        setIsSticky(true);
+        setIsIsAbsolute(false);
         onStick?.();
       },
 
       unStick() {
-        setStickyAndAbsolute(false, false);
+        setIsSticky(false);
+        setIsIsAbsolute(false);
         onUnStick?.();
       },
     }),
@@ -63,6 +70,7 @@ const Sticky = ({ children, top = 0, mode = "top", onStick, onUnStick }: Props) 
   );
 
   const update = useCallback(() => {
+    // 자식컴포넌트에게 위임
     childRef.current?.update();
   }, []);
 
@@ -72,7 +80,7 @@ const Sticky = ({ children, top = 0, mode = "top", onStick, onUnStick }: Props) 
   const render = () => {
     if (mode === "top")
       return (
-        <TopSticky
+        <StickyTop
           ref={childRef}
           isAbsolute={isAbsolute}
           isSticky={isSticky}
@@ -81,8 +89,21 @@ const Sticky = ({ children, top = 0, mode = "top", onStick, onUnStick }: Props) 
           handler={handler}
         >
           {children}
-        </TopSticky>
+        </StickyTop>
       );
+
+    return (
+      <StickyBottom
+        ref={childRef}
+        isAbsolute={isAbsolute}
+        isSticky={isSticky}
+        parent={parentNode || document.body}
+        handler={handler}
+        bottom={bottom}
+      >
+        {children}
+      </StickyBottom>
+    );
   };
 
   return (

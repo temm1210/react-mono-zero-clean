@@ -1,4 +1,4 @@
-import parentSelector from "./parentSelector";
+import { parentSelector } from "./utils";
 import "./StickyContainer.scss";
 
 export interface Props {
