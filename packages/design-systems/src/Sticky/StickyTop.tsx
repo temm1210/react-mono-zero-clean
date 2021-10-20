@@ -4,7 +4,6 @@ import { unstable_batchedUpdates } from "react-dom";
 import cx from "clsx";
 import useCalculatePositions from "./hooks/useCalculatePositions";
 import { ChildHandler, StickyHandler } from "./types";
-// import "./Sticky.scss";
 
 export interface Props {
   children: React.ReactNode;
