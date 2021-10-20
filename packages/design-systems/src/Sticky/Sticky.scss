@@ -4,8 +4,10 @@
 
 .sticky__content--fixed {
   position: fixed;
+  z-index: 999999;
 }
 
 .sticky__content--absolute {
   position: absolute;
+  z-index: 999999;
 }

@@ -16,7 +16,6 @@ const useClosetParent = (parentSelector: string) => {
   const findParentFrom: FindParentFrom = useCallback(
     (node: HTMLElement | null) => {
       const stickyParent = node?.parentElement?.closest(parentSelector);
-      console.log("stickyParent:", stickyParent);
       setParentNode(stickyParent || null);
     },
     [parentSelector],
