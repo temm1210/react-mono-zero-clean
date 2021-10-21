@@ -1,9 +1,10 @@
 import { useCallback, useState, useMemo, useRef } from "react";
 import { useEvent, useClosetParent } from "@project/react-hooks";
-import { ChildHandler, StickyHandler, StickyMode } from "./types";
+import { ChildHandler, StatusHandler, StickyMode } from "./types";
+
+import { parentSelector } from "./utils";
 import StickyTop from "./StickyTop";
 import StickyBottom from "./StickyBottom";
-import { parentSelector } from "./utils";
 import "./Sticky.scss";
 
 export interface Props {
@@ -26,12 +27,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
 
   const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
 
-  console.log("parentNode:", parentNode);
-
-  // child component에게 넘겨줄 ref
-  // 스크롤 이벤트가 발생할시 할 일을 자식에게 위임
-  const childRef = useRef<ChildHandler>(null);
-
   /**
    * sticky상태는 다음과 같이 2가지로 다시 나뉨
    * 1) sticky element가 container bottom영역까지 도달하고 위로 서서히 사라질때
@@ -39,7 +34,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
    * 1번과 같은 경우는 position: absolute로 바뀌어야함
    * 2번과 같은 경우는 position: fixed로 바뀌어야함
    */
-  const handler: StickyHandler = useMemo(
+  const statusHandler: StatusHandler = useMemo(
     () => ({
       stickToScreenTop() {
         setIsSticky(true);
@@ -69,10 +64,16 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     [onStick, onUnStick],
   );
 
+  // child component에게 넘겨줄 ref
+  // 스크롤 이벤트가 발생할시 할 일을 자식에게 위임
+  const childRef = useRef<ChildHandler>(null);
+
   const update = useCallback(() => {
     // 자식컴포넌트에게 위임
     childRef.current?.update();
   }, []);
+
+  const parent = useMemo(() => parentNode || document.body, [parentNode]);
 
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);

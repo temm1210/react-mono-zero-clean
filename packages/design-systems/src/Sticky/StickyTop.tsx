@@ -3,7 +3,7 @@ import { forwardRef, useRef, useState, useImperativeHandle } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 import cx from "clsx";
 import useCalculatePositions from "./hooks/useCalculatePositions";
-import { ChildHandler, StickyHandler } from "./types";
+import { ChildHandler, StatusHandler } from "./types";
 
 export interface Props {
   children: React.ReactNode;
@@ -14,13 +14,13 @@ export interface Props {
   /** sticky상태에서의 absolute여부 */
   isAbsolute: boolean;
   /** sticky상태값을 update하는 함수모음 */
-  handler: StickyHandler;
+  statusHandler: StatusHandler;
   /** sticky엘리먼트의 상태 계산을위한 container element */
   parent: Element;
 }
 
 const TopSticky = forwardRef<ChildHandler, Props>(
-  ({ children, top, isSticky, isAbsolute, parent, handler }, updateRef) => {
+  ({ children, top, isSticky, isAbsolute, parent, statusHandler }, updateRef) => {
     const [width, setWidth] = useState<number>(0);
     const [height, setHeight] = useState<number>(0);
 
@@ -53,19 +53,19 @@ const TopSticky = forwardRef<ChildHandler, Props>(
             setWidth(lWidth);
             setHeight(lHeight);
 
-            handler.stickToScreenTop();
+            statusHandler.stickToScreenTop();
           });
         },
 
         stickToContainerBottom() {
           unstable_batchedUpdates(() => {
-            handler.stickToContainerBottom();
+            statusHandler.stickToContainerBottom();
           });
         },
 
         unStick() {
           unstable_batchedUpdates(() => {
-            handler.unStick();
+            statusHandler.unStick();
           });
         },
       };
