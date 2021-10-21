@@ -3,13 +3,13 @@ import { StickyMode } from "Sticky/types";
 
 export interface Props {
   containerRef: Element;
-  stickyRef: RefObject<Element | undefined>;
-  heightRef: RefObject<Element | undefined>;
+  stickyRef: RefObject<Element | null>;
+  heightRef: RefObject<Element | null>;
   top?: number;
   bottom?: number;
 }
 
-export type Return = () =>
+export type PositionsReturn = () =>
   | {
       isReachContainerBottomFrom: (mode: StickyMode) => boolean;
       isReachScreenTop: () => boolean;
@@ -18,10 +18,10 @@ export type Return = () =>
   | undefined;
 
 /**
- * scroll 위치에따라 sticky element의 상태값 계산
- * @returns {Return}
+ * scroll 위치에따라 sticky element의 상태, 위치값 계산
+ * @returns {PositionsReturn}
  */
-function useCalculatePositions({ containerRef, stickyRef, heightRef, top = 0, bottom = 0 }: Props): Return {
+function useCalculatePositions({ containerRef, stickyRef, heightRef, top = 0, bottom = 0 }: Props): PositionsReturn {
   const [bodyHeight, setBodyHeight] = useState(0);
 
   const assignRects = useCallback(() => {
@@ -33,10 +33,6 @@ function useCalculatePositions({ containerRef, stickyRef, heightRef, top = 0, bo
 
     return { containerRect, heightRect, stickyRect };
   }, [containerRef, stickyRef, heightRef]);
-
-  useEffect(() => {
-    console.log("render");
-  });
 
   /**
    * sticky element의 위치를 계산해주는 함수 모음
