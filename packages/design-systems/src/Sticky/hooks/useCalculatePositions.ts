@@ -9,11 +9,23 @@ export interface Props {
   bottom?: number;
 }
 
-function useCalculatePositions({ containerRef, stickyRef, heightRef, top = 0, bottom = 0 }: Props) {
+export type Return = () =>
+  | {
+      isReachContainerBottomFrom: (mode: StickyMode) => boolean;
+      isReachScreenTop: () => boolean;
+      isReachScreenBottom: () => boolean;
+    }
+  | undefined;
+
+/**
+ * scroll 위치에따라 sticky element의 상태값 계산
+ * @returns {Return}
+ */
+function useCalculatePositions({ containerRef, stickyRef, heightRef, top = 0, bottom = 0 }: Props): Return {
   const [bodyHeight, setBodyHeight] = useState(0);
 
+  // TODO: deps array check
   const assignRects = useCallback(() => {
-    // console.log("containerRef:", containerRef);
     const containerRect = containerRef.getBoundingClientRect();
     const stickyRect = stickyRef.current?.getBoundingClientRect();
     const heightRect = heightRef.current?.getBoundingClientRect();
