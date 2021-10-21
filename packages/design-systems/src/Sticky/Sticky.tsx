@@ -1,8 +1,8 @@
-import { useCallback, useState, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { useEvent, useClosetParent } from "@project/react-hooks";
-import { ChildHandler, StatusHandler, StickyMode } from "./types";
-
+import { ChildHandler, StickyMode } from "./types";
 import { parentSelector } from "./utils";
+import { useStatement } from "./hooks";
 import StickyTop from "./StickyTop";
 import StickyBottom from "./StickyBottom";
 import "./Sticky.scss";
@@ -22,47 +22,8 @@ export interface Props {
 }
 
 const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStick }: Props) => {
-  const [isSticky, setIsSticky] = useState(false);
-  const [isAbsolute, setIsIsAbsolute] = useState(false);
-
   const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
-
-  /**
-   * sticky상태는 다음과 같이 2가지로 다시 나뉨
-   * 1) sticky element가 container bottom영역까지 도달하고 위로 서서히 사라질때
-   * 2) sticky element가 계속 screen의 상단에 고정되어있을때
-   * 1번과 같은 경우는 position: absolute로 바뀌어야함
-   * 2번과 같은 경우는 position: fixed로 바뀌어야함
-   */
-  const statusHandler: StatusHandler = useMemo(
-    () => ({
-      stickToScreenTop() {
-        setIsSticky(true);
-        setIsIsAbsolute(false);
-        onStick?.();
-      },
-
-      // container bottom를 기준으로해서 sticky를 고정
-      stickToContainerBottom() {
-        setIsSticky(true);
-        setIsIsAbsolute(true);
-        onStick?.();
-      },
-
-      stickyToScreenBottom() {
-        setIsSticky(true);
-        setIsIsAbsolute(false);
-        onStick?.();
-      },
-
-      unStick() {
-        setIsSticky(false);
-        setIsIsAbsolute(false);
-        onUnStick?.();
-      },
-    }),
-    [onStick, onUnStick],
-  );
+  const { isSticky, isAbsolute, statusHandler } = useStatement({ onStick, onUnStick });
 
   // child component에게 넘겨줄 ref
   // 스크롤 이벤트가 발생할시 할 일을 자식에게 위임
@@ -86,8 +47,8 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
           isAbsolute={isAbsolute}
           isSticky={isSticky}
           top={top}
-          parent={parentNode || document.body}
-          handler={handler}
+          parent={parent}
+          statusHandler={statusHandler}
         >
           {children}
         </StickyTop>
@@ -98,8 +59,8 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
         ref={childRef}
         isAbsolute={isAbsolute}
         isSticky={isSticky}
-        parent={parentNode || document.body}
-        handler={handler}
+        parent={parent}
+        statusHandler={statusHandler}
         bottom={bottom}
       >
         {children}
