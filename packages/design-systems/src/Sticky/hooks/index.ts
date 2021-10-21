@@ -1,3 +1,2 @@
-export { default as useCalculatePositions } from "./useCalculatePositions";
-export { default as useStatement } from "./useStatement";
+export { default as usePositions } from "./usePositions";
 export { default as useUpdater } from "./useUpdater";

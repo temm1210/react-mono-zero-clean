@@ -24,7 +24,6 @@ export type Return = () =>
 function useCalculatePositions({ containerRef, stickyRef, heightRef, top = 0, bottom = 0 }: Props): Return {
   const [bodyHeight, setBodyHeight] = useState(0);
 
-  // TODO: deps array check
   const assignRects = useCallback(() => {
     const containerRect = containerRef.getBoundingClientRect();
     const stickyRect = stickyRef.current?.getBoundingClientRect();
@@ -34,6 +33,10 @@ function useCalculatePositions({ containerRef, stickyRef, heightRef, top = 0, bo
 
     return { containerRect, heightRect, stickyRect };
   }, [containerRef, stickyRef, heightRef]);
+
+  useEffect(() => {
+    console.log("render");
+  });
 
   /**
    * sticky element의 위치를 계산해주는 함수 모음
