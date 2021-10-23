@@ -9,7 +9,7 @@ export type Strategy = Record<StickyMode, StrategyUpdater>;
 /**
  * mode에 따라 실행할 update 함수를 정의
  */
-const useStrategy = (statusHandler: StatusHandler | null, positionHandler: PositionsReturn, mode: StickyMode) => {
+const useUpdateStrategy = (statusHandler: StatusHandler | null, positionHandler: PositionsReturn, mode: StickyMode) => {
   const [updater, setUpdater] = useState<Strategy | null>(null);
 
   useDeepCompareEffect(() => {
@@ -66,4 +66,4 @@ const useStrategy = (statusHandler: StatusHandler | null, positionHandler: Posit
   return updater ? updater[mode] : null;
 };
 
-export default useStrategy;
+export default useUpdateStrategy;
