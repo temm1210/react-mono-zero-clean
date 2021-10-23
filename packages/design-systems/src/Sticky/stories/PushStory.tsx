@@ -1,8 +1,7 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { Story } from "@storybook/react";
+import Placeholder from "./Placeholder";
 import Sticky, { Props as StickyProps } from "../Sticky";
 import StickyContainer from "../StickyContainer";
-import Placeholder from "./Placeholder";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Children = ({ backgroundColor }: any) => {

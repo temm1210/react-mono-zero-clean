@@ -3,6 +3,8 @@ import { Sticky, StickyContainer } from "../index";
 import BaseStory from "./BaseStory";
 import PushStory from "./PushStory";
 import BottomStory from "./BottomStory";
+import BaseWithoutContainerStory from "./BaseWithoutContainerStory";
+import StackStory from "./StackStory";
 
 export default {
   component: StickyContainer,
@@ -29,7 +31,13 @@ const Children = () => {
 
 export const Base = BaseStory.bind({});
 Base.args = {
-  top: 10,
+  top: 20,
+  children: <Children />,
+};
+
+export const BaseWithoutContainer = BaseWithoutContainerStory.bind({});
+BaseWithoutContainer.args = {
+  top: 30,
   children: <Children />,
 };
 
@@ -41,3 +49,7 @@ Bottom.args = {
 };
 
 export const Push = PushStory.bind({});
+export const Stack = StackStory.bind({});
+Stack.args = {
+  children: <Children />,
+};

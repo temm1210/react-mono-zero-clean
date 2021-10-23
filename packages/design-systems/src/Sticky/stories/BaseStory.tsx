@@ -2,16 +2,15 @@
 import { Story } from "@storybook/react";
 import Sticky, { Props as StickyProps } from "../Sticky";
 import StickyContainer from "../StickyContainer";
-
-const Placeholder = () => <div style={{ padding: "20px 0" }}>placeholder</div>;
+import Placeholder from "./Placeholder";
 
 const BaseStory: Story<StickyProps> = (args) => {
   const { children, ...rest } = args;
 
   return (
     <div>
+      <div style={{ flex: 1 }}>{Array(10).fill(null).map(Placeholder)}</div>
       <StickyContainer>
-        <div>{Array(8).fill(null).map(Placeholder)}</div>
         <div style={{ display: "flex", textAlign: "center" }}>
           <div style={{ flex: 1 }}>
             <Sticky {...rest}>{children}</Sticky>
