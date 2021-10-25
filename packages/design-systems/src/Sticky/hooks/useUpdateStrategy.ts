@@ -1,25 +1,33 @@
 import { useState } from "react";
 import { useDeepCompareEffect } from "@project/react-hooks";
-import { StatusHandler, StickyMode } from "../types";
-import { PositionsReturn } from "./usePositions";
+import { StickyMode } from "../types";
+import { StatusUpdateHandler } from "./useStatusUpdate";
+import { PositionUpdateHandlersFn } from "./usePositionUpdate";
 
 export type StrategyUpdater = () => void;
 export type Strategy = Record<StickyMode, StrategyUpdater>;
 
+export interface UpdateStrategyHandlers {
+  statusUpdateHandlers: StatusUpdateHandler | null;
+  positionUpdateHandlers: PositionUpdateHandlersFn;
+}
 /**
  * mode에 따라 실행할 update 함수를 정의
  */
-const useUpdateStrategy = (statusHandler: StatusHandler | null, positionHandler: PositionsReturn, mode: StickyMode) => {
+const useUpdateStrategy = (
+  mode: StickyMode,
+  { statusUpdateHandlers, positionUpdateHandlers }: UpdateStrategyHandlers,
+) => {
   const [updater, setUpdater] = useState<Strategy | null>(null);
 
   useDeepCompareEffect(() => {
     const getHandlersFn = () => {
-      const handler = positionHandler();
-      if (!handler || !statusHandler) return;
-      return { ...handler, ...statusHandler };
+      const handler = positionUpdateHandlers();
+      if (!handler || !statusUpdateHandlers) return;
+      return { ...handler, ...statusUpdateHandlers };
     };
 
-    setUpdater({
+    const update = {
       top() {
         const getHandlers = getHandlersFn();
         if (!getHandlers) return;
@@ -34,6 +42,7 @@ const useUpdateStrategy = (statusHandler: StatusHandler | null, positionHandler:
           }
           return stickToScreenTop();
         }
+
         // sticky 상태가 아닐때
         return unStick();
       },
@@ -60,8 +69,10 @@ const useUpdateStrategy = (statusHandler: StatusHandler | null, positionHandler:
         // sticky 상태가 아닐때
         return unStick();
       },
-    });
-  }, [positionHandler, mode]);
+    };
+
+    setUpdater(update);
+  }, [positionUpdateHandlers, mode]);
 
   return updater ? updater[mode] : null;
 };
