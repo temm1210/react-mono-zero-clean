@@ -1,28 +1,29 @@
 import { useState, useEffect } from "react";
 // eslint-disable-next-line camelcase
 import { unstable_batchedUpdates } from "react-dom";
-import { StatusHandler } from "../types";
 
-export interface StatusUpdateCallback {
-  onStick: () => void;
-  onUnStick: () => void;
+export interface StatusUpdateHandler {
+  stickToScreenTop: () => void;
+  stickToContainerBottom: () => void;
+  stickyToScreenBottom: () => void;
+  unStick: () => void;
 }
 export interface StatusUpdateInfo {
   isSticky: boolean;
   isAbsolute: boolean;
 }
 
-export type StatusUpdateStatusHandler = StatusHandler | null;
+export type StatusUpdateStatusHandler = StatusUpdateHandler | null;
 export type StatusUpdateResult = [StatusUpdateStatusHandler, StatusUpdateInfo];
 
 /**
  * sticky component의 기본 명세서
  */
-const useStatusUpdate = ({ onStick, onUnStick }: StatusUpdateCallback): StatusUpdateResult => {
+const useStatusUpdate = (): StatusUpdateResult => {
   const [isSticky, setIsSticky] = useState(false);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
-  const [handler, setHandler] = useState<StatusHandler | null>(null);
+  const [handler, setHandler] = useState<StatusUpdateStatusHandler>(null);
 
   useEffect(() => {
     setHandler({
@@ -33,8 +34,6 @@ const useStatusUpdate = ({ onStick, onUnStick }: StatusUpdateCallback): StatusUp
         unstable_batchedUpdates(() => {
           setIsSticky(true);
           setIsIsAbsolute(false);
-
-          onStick?.();
         });
       },
 
@@ -50,8 +49,6 @@ const useStatusUpdate = ({ onStick, onUnStick }: StatusUpdateCallback): StatusUp
         unstable_batchedUpdates(() => {
           setIsSticky(true);
           setIsIsAbsolute(false);
-
-          onStick?.();
         });
       },
 
@@ -59,12 +56,10 @@ const useStatusUpdate = ({ onStick, onUnStick }: StatusUpdateCallback): StatusUp
         unstable_batchedUpdates(() => {
           setIsSticky(false);
           setIsIsAbsolute(false);
-
-          onUnStick?.();
         });
       },
     });
-  }, [onStick, onUnStick]);
+  }, []);
 
   return [handler, { isSticky, isAbsolute }];
 };
