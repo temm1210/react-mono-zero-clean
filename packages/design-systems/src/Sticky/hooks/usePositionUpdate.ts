@@ -9,8 +9,6 @@ export interface Props {
   bottom: number;
 }
 
-export type PositionElement = (element: Element | null) => void;
-
 export interface PositionUpdateHandlers {
   isReachContainerBottomFrom: (mode: StickyMode) => boolean;
   isReachScreenTop: () => boolean;
