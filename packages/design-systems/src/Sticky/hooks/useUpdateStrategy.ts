@@ -23,6 +23,7 @@ const useUpdateStrategy = (
   useDeepCompareEffect(() => {
     const getHandlersFn = () => {
       const handler = positionUpdateHandlers();
+
       if (!handler || !statusUpdateHandlers) return;
       return { ...handler, ...statusUpdateHandlers };
     };
@@ -42,7 +43,6 @@ const useUpdateStrategy = (
           }
           return stickToScreenTop();
         }
-
         // sticky 상태가 아닐때
         return unStick();
       },

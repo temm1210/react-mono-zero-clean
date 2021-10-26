@@ -39,7 +39,6 @@ const usePositionUpdate = ({
     const heightRect = heightElement?.getBoundingClientRect();
 
     if (!stickyRect || !heightRect || !parentRect) return null;
-
     return { parentRect, heightRect, stickyRect };
   }, [parentElement, heightElement, stickyElement]);
 
