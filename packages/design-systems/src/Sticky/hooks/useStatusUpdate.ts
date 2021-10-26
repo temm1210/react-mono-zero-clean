@@ -17,7 +17,9 @@ export type StatusUpdateStatusHandler = StatusUpdateHandler | null;
 export type StatusUpdateResult = [StatusUpdateStatusHandler, StatusUpdateInfo];
 
 /**
- * sticky component의 기본 명세서
+ * sticky component의 상태값을 업데이트
+ * sticky component의 상태값 추가, 변경 이외에는 수정되면 안됨
+ * 오로지 상태값관련 역할만 담당
  */
 const useStatusUpdate = (): StatusUpdateResult => {
   const [isSticky, setIsSticky] = useState(false);

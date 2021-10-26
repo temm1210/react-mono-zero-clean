@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDeepCompareEffect } from "@project/react-hooks";
-import { StickyMode } from "../types";
 import { StatusUpdateHandler } from "./useStatusUpdate";
 import { PositionUpdateHandlersFn } from "./usePositionUpdate";
+import { StickyMode } from "../types";
 
 export type StrategyUpdater = () => void;
 export type Strategy = Record<StickyMode, StrategyUpdater>;

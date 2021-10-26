@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { StickyMode } from "Sticky/types";
+import { StickyMode } from "../types";
 
 export interface Props {
   parentElement: Element | null;
@@ -20,7 +20,8 @@ export type PositionUpdateHandlersFn = () => PositionUpdateHandlers | undefined;
 export type PositionUpdateReturn = PositionUpdateHandlersFn;
 
 /**
- * scroll 위치에따라 sticky element의 상태, 위치값 계산
+ * scroll 위치에따라 sticky component의 위치값 계산
+ * 오로지 component의 위치계산 역할만 담당
  * @returns {PositionsReturn}
  */
 const usePositionUpdate = ({
