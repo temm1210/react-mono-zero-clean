@@ -73,7 +73,7 @@ const usePositionUpdate = ({
   }, [top, bottom, assignRects, bodyHeight]);
 
   useEffect(() => {
-    setBodyHeight(document.body.getBoundingClientRect().height);
+    setBodyHeight(document.body.offsetHeight);
   }, []);
 
   return calculatePositionHandlers;

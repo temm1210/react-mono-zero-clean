@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useDeepCompareEffect } from "@project/react-hooks";
+import { useEffect, useState } from "react";
 import { StatusUpdateHandler } from "./useStatusUpdate";
 import { PositionUpdateHandlersFn } from "./usePositionUpdate";
 import { StickyMode } from "../types";
@@ -20,7 +19,7 @@ const useUpdateStrategy = (
 ) => {
   const [updater, setUpdater] = useState<Strategy | null>(null);
 
-  useDeepCompareEffect(() => {
+  useEffect(() => {
     const getHandlersFn = () => {
       const handler = positionUpdateHandlers();
 
@@ -72,7 +71,7 @@ const useUpdateStrategy = (
     };
 
     setUpdater(update);
-  }, [positionUpdateHandlers, mode]);
+  }, [positionUpdateHandlers, statusUpdateHandlers, mode]);
 
   return updater ? updater[mode] : null;
 };

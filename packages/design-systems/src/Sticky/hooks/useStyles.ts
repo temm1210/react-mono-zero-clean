@@ -29,6 +29,9 @@ export interface StylesValues {
 }
 export type Styles = Record<StickyMode, StylesValues>;
 
+/**
+ * style과 관련된 로직만 처리
+ */
 const useStyles = ({ mode, isSticky, isAbsolute, width, height, top, bottom }: Props) => {
   const stickyClassNames = cx(
     !isSticky && "sticky__content",
