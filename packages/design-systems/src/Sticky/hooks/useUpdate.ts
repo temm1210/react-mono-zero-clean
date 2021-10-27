@@ -8,7 +8,7 @@ import { StickyMode } from "../types";
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
 
 export type CallbackParameter = Record<keyof Rect, number>;
-export type Callback = (name: CallbackParameter) => void;
+export type Callback = (rect: CallbackParameter) => void;
 
 export type UpdateElement = (element: Element | null) => void;
 
