@@ -2,8 +2,7 @@
 import { useState } from "react";
 import { Story } from "@storybook/react";
 import Placeholder from "./Placeholder";
-import { CallbackParameter } from "../hooks/useUpdate";
-import Sticky, { Props as StickyProps } from "../Sticky";
+import Sticky, { CallbackParameter, Props as StickyProps } from "../Sticky";
 import StickyContainer from "../StickyContainer";
 
 const StackStory: Story<StickyProps> = (args) => {

@@ -20,12 +20,12 @@ export interface Props {
 }
 
 export type CalculateStickyStyle = () => Record<string, any> | undefined;
-export type HeightStyle = Record<string, any>;
+export type FakeStyle = Record<string, any>;
 
 export interface StylesValues {
   calculateStickyStyle: CalculateStickyStyle;
   stickyClassNames: string;
-  heightStyle: HeightStyle;
+  fakeStyle: FakeStyle;
 }
 export type Styles = Record<StickyMode, StylesValues>;
 
@@ -38,7 +38,7 @@ const useStyles = ({ mode, isSticky, isAbsolute, width, height, top, bottom }: P
     isSticky && (isAbsolute ? "sticky__content--absolute" : "sticky__content--fixed"),
   );
 
-  const heightStyle = { height };
+  const fakeStyle = { height };
 
   const calculateStickyStyle: Styles = {
     top: {
@@ -51,7 +51,7 @@ const useStyles = ({ mode, isSticky, isAbsolute, width, height, top, bottom }: P
         };
       },
       stickyClassNames,
-      heightStyle,
+      fakeStyle,
     },
     bottom: {
       calculateStickyStyle: () => {
@@ -62,7 +62,7 @@ const useStyles = ({ mode, isSticky, isAbsolute, width, height, top, bottom }: P
         };
       },
       stickyClassNames,
-      heightStyle,
+      fakeStyle,
     },
   };
 

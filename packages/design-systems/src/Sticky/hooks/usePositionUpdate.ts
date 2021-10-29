@@ -1,10 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { StickyMode } from "../types";
 
-export interface Props {
-  parentElement: Element | null;
-  heightElement: Element | null;
-  stickyElement: Element | null;
+export interface RectProps {
   top: number;
   bottom: number;
 }
@@ -14,9 +11,7 @@ export interface PositionUpdateHandlers {
   isReachScreenTop: () => boolean;
   isReachScreenBottom: () => boolean;
 }
-
 export type PositionUpdateHandlersFn = () => PositionUpdateHandlers | undefined;
-
 export type PositionUpdateReturn = PositionUpdateHandlersFn;
 
 /**
@@ -24,15 +19,12 @@ export type PositionUpdateReturn = PositionUpdateHandlersFn;
  * 오로지 component의 위치계산 역할만 담당
  * @returns {PositionsReturn}
  */
-const usePositionUpdate = ({
-  parentElement,
-  heightElement,
-  stickyElement,
-  top = 0,
-  bottom = 0,
-}: Props): PositionUpdateReturn => {
-  const [bodyHeight, setBodyHeight] = useState(0);
-
+const usePositionUpdate = (
+  parentElement: Element | null,
+  heightElement: Element | null,
+  stickyElement: Element | null,
+  { top = 0, bottom = 0 }: RectProps,
+): PositionUpdateReturn => {
   const assignRects = useCallback(() => {
     const parentRect = parentElement?.getBoundingClientRect();
     const stickyRect = stickyElement?.getBoundingClientRect();
@@ -50,8 +42,6 @@ const usePositionUpdate = ({
     if (!rects) return;
     const { stickyRect, parentRect, heightRect } = rects;
 
-    const isContainerBody = () => parentRect.height >= bodyHeight;
-
     // sticky영역이 고정되어있다가 움직이기 시작하는 시점
     const isReachContainerBottomFrom = (mode: StickyMode) => {
       // element가 상단에 붙었을때
@@ -61,20 +51,13 @@ const usePositionUpdate = ({
     };
 
     // sticky영역이 현재 viewport상단에 고정되는 시점
-    const isReachScreenTop = () => {
-      if (isContainerBody()) return true;
-      return heightRect.top < top;
-    };
+    const isReachScreenTop = () => heightRect.top < top;
 
     // sticky영역이 현재 viewport하단에 고정되는 시점
     const isReachScreenBottom = () => heightRect.bottom + bottom <= window.innerHeight;
 
     return { isReachContainerBottomFrom, isReachScreenTop, isReachScreenBottom };
-  }, [top, bottom, assignRects, bodyHeight]);
-
-  useEffect(() => {
-    setBodyHeight(document.body.offsetHeight);
-  }, []);
+  }, [top, bottom, assignRects]);
 
   return calculatePositionHandlers;
 };
