@@ -9,10 +9,11 @@
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "build": "yarn clean && yarn build:tsc",
-    "build:tsc": "yarn build:cjs && yarn build:es",
-    "build:cjs": "tsc -m commonjs --outDir ./dist/cjs",
-    "build:es": "tsc -m esNext --outDir ./dist/es",
+    "build": "yarn clean && yarn build:types && yarn build:babel",
+    "build:babel": "yarn build:cjs && yarn build:es",
+    "build:es": "cross-env BABEL_ENV=esm babel src --extensions .ts -d dist/es --source-maps",
+    "build:cjs": "cross-env BABEL_ENV=cjs babel src --extensions .ts -d dist/cjs --source-maps",
+    "build:types": "tsc --outDir ./dist",
     "start": "nodemon --watch src/**/*.ts --exec ts-node src/index.ts",
     "clean": "rimraf dist"
   },
