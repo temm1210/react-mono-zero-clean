@@ -32,6 +32,10 @@ const useStatusUpdate = (initIsSticky: boolean, { onStick, onUnStick }: Callback
   const [handler, setHandler] = useState<StatusUpdateStatusHandler>(null);
 
   useEffect(() => {
+    setIsSticky(initIsSticky);
+  }, [initIsSticky]);
+
+  useEffect(() => {
     setHandler({
       stickToScreenTop() {
         // https://github.com/facebook/react/issues/10231#issuecomment-316644950
