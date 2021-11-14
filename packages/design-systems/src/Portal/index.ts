@@ -7,7 +7,7 @@ export interface Props {
   children: React.ReactNode;
 }
 
-const ModalPortal = ({ portalClassName = "modal-portal__container", children }: Props) => {
+const Portal = ({ portalClassName = "portal__container", children }: Props) => {
   const portalContainerElement = useMemo(() => document.createElement("div"), []);
 
   useEffect(() => {
@@ -17,4 +17,4 @@ const ModalPortal = ({ portalClassName = "modal-portal__container", children }: 
   return createPortal(children, portalContainerElement);
 };
 
-export default ModalPortal;
+export default Portal;
