@@ -1,5 +1,6 @@
 const path = require("path");
 const postcssNormalize = require("postcss-normalize");
+const paths = require("./paths");
 
 module.exports = {
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
@@ -8,6 +9,9 @@ module.exports = {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'
     // You can change the configuration based on that.
     // 'PRODUCTION' is used when building the static version of storybook.
+
+    // storybook내에서 절대경로 설정
+    config.resolve.modules = [paths.appSrc, "node_modules"];
 
     // Make whatever fine-grained changes you need
     config.module.rules.push({
@@ -52,7 +56,7 @@ module.exports = {
         },
       ],
 
-      include: path.resolve(__dirname, "../"),
+      include: paths.appSrc,
     });
 
     return config;
