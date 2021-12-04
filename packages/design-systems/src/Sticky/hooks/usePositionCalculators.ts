@@ -5,28 +5,27 @@ export interface RectProps {
   bottom: number;
 }
 
-export type PositionHandler = () => boolean;
+export type PositionCalculator = () => boolean;
 
-export interface PositionUpdateHandlers {
-  isReachContainerBottomToTop: PositionHandler;
-  isReachContainerBottomToBottom: PositionHandler;
-  isReachScreenTop: PositionHandler;
-  isReachScreenBottom: PositionHandler;
+export interface PositionCalculators {
+  isReachContainerBottomToTop: PositionCalculator;
+  isReachContainerBottomToBottom: PositionCalculator;
+  isReachScreenTop: PositionCalculator;
+  isReachScreenBottom: PositionCalculator;
 }
-export type PositionUpdateHandlersFn = () => PositionUpdateHandlers | undefined;
-export type PositionUpdateReturn = PositionUpdateHandlersFn;
+export type PositionCalculatorsReturn = () => PositionCalculators | undefined;
 
 /**
  * scroll 위치에따라 sticky component의 위치값 계산
  * 오로지 component의 위치계산 역할만 담당
  * @returns {PositionsReturn}
  */
-const usePositionUpdate = (
+const usePositionCalculators = (
   parentElement: Element | null,
   heightElement: Element | null,
   stickyElement: Element | null,
   { top = 0, bottom = 0 }: RectProps,
-): PositionUpdateReturn => {
+): PositionCalculatorsReturn => {
   const assignRects = useCallback(() => {
     const parentRect = parentElement?.getBoundingClientRect();
     const stickyRect = stickyElement?.getBoundingClientRect();
@@ -70,4 +69,4 @@ const usePositionUpdate = (
   return calculatePositionHandlers;
 };
 
-export default usePositionUpdate;
+export default usePositionCalculators;

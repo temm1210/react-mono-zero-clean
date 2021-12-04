@@ -2,7 +2,7 @@ import { RefObject, useCallback, useLayoutEffect, useRef, useState } from "react
 import { useEvent, useClosetParent } from "@project/react-hooks";
 import { StickyMode } from "./types";
 import { parentSelector } from "./utils";
-import { usePositionUpdate, useStatusUpdate, useStyles, useUpdateByMode } from "./hooks";
+import { usePositionCalculators, useStatusUpdate, useStyles, useUpdateByMode } from "./hooks";
 import "./Sticky.scss";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
@@ -36,10 +36,15 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   const [statusUpdateHandlers, { isSticky, isAbsolute }] = useStatusUpdate(!parentNode);
 
   // scroll 위치에 따라 현재 엘리먼트의 위치값을 계산하는 handler
-  const positionUpdateHandlers = usePositionUpdate(parentNode || document.body, fakeRef.current, stickyRef.current, {
-    top,
-    bottom,
-  });
+  const positionUpdateHandlers = usePositionCalculators(
+    parentNode || document.body,
+    fakeRef.current,
+    stickyRef.current,
+    {
+      top,
+      bottom,
+    },
+  );
 
   // mode에따라 다른 update 함수를 return
   const updateHandler = useUpdateByMode(mode, { statusUpdateHandlers, positionUpdateHandlers });
