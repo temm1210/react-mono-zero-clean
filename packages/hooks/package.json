@@ -3,10 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "license": "MIT",
-  "source": "src/index.ts",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/es/",
+    "dist/cjs/"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "yarn clean && yarn build:types && yarn build:babel",

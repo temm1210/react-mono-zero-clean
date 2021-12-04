@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react";
 
-type ParentNode = Element | null;
-type FindParentFrom = (node: HTMLElement | null) => void;
+export type ParentNode = Element | null;
+export type FindParentFrom = (node: HTMLElement | null) => void;
 
-interface Return {
+export interface UseClosetParentReturn {
   parentNode: ParentNode;
   findParentFrom: FindParentFrom;
 }
@@ -21,7 +21,7 @@ const useClosetParent = (parentSelector: string) => {
     [parentSelector],
   );
 
-  return { parentNode, findParentFrom } as Return;
+  return { parentNode, findParentFrom } as UseClosetParentReturn;
 };
 
 export default useClosetParent;
