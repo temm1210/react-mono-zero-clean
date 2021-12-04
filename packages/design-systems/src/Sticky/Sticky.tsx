@@ -2,7 +2,7 @@ import { RefObject, useCallback, useLayoutEffect, useRef, useState } from "react
 import { useEvent, useClosetParent } from "@project/react-hooks";
 import { StickyMode } from "./types";
 import { parentSelector } from "./utils";
-import { usePositionUpdate, useStatusUpdate, useStyles, useUpdateStrategy } from "./hooks";
+import { usePositionUpdate, useStatusUpdate, useStyles, useUpdateByMode } from "./hooks";
 import "./Sticky.scss";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
@@ -42,7 +42,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   });
 
   // mode에따라 다른 update 함수를 return
-  const updateHandler = useUpdateStrategy(mode, { statusUpdateHandlers, positionUpdateHandlers });
+  const updateHandler = useUpdateByMode(mode, { statusUpdateHandlers, positionUpdateHandlers });
 
   const update = useCallback(() => {
     if (!updateHandler) return;

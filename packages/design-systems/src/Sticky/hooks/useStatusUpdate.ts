@@ -2,23 +2,21 @@ import { useState, useEffect } from "react";
 // eslint-disable-next-line camelcase
 import { unstable_batchedUpdates } from "react-dom";
 
-// export interface CallbackProps {
-//   onStick?: () => void;
-//   onUnStick?: () => void;
-// }
-export interface StatusUpdateHandler {
-  stickToScreenTop: () => void;
-  stickToContainerBottom: () => void;
-  stickyToScreenBottom: () => void;
-  unStick: () => void;
+export type StatusUpdateHandler = () => void;
+
+export interface StatusUpdateHandlers {
+  stickToScreenTop: StatusUpdateHandler;
+  stickToContainerBottom: StatusUpdateHandler;
+  stickyToScreenBottom: StatusUpdateHandler;
+  unStick: StatusUpdateHandler;
 }
 export interface StatusUpdateInfo {
   isSticky: boolean;
   isAbsolute: boolean;
 }
 
-export type StatusUpdateStatusHandler = StatusUpdateHandler | null;
-export type StatusUpdateResult = [StatusUpdateStatusHandler, StatusUpdateInfo];
+export type StatusUpdateHandlersReturn = StatusUpdateHandlers | null;
+export type StatusUpdateResult = [StatusUpdateHandlersReturn, StatusUpdateInfo];
 
 /**
  * sticky component의 상태값을 업데이트
@@ -29,7 +27,7 @@ const useStatusUpdate = (initIsSticky: boolean): StatusUpdateResult => {
   const [isSticky, setIsSticky] = useState(initIsSticky);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
-  const [handler, setHandler] = useState<StatusUpdateStatusHandler>(null);
+  const [handler, setHandler] = useState<StatusUpdateHandlersReturn>(null);
 
   useEffect(() => {
     setIsSticky(initIsSticky);

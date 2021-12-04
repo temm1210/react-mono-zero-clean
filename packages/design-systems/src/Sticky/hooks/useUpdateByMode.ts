@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StatusUpdateHandler } from "./useStatusUpdate";
+import { StatusUpdateHandlersReturn } from "./useStatusUpdate";
 import { PositionUpdateHandlersFn } from "./usePositionUpdate";
 import { StickyMode } from "../types";
 
@@ -7,7 +7,7 @@ export type Update = () => void;
 export type HandlerByMode = Record<StickyMode, Update>;
 
 export interface UpdateHandlersByMode {
-  statusUpdateHandlers: StatusUpdateHandler | null;
+  statusUpdateHandlers: StatusUpdateHandlersReturn;
   positionUpdateHandlers: PositionUpdateHandlersFn;
 }
 /**
