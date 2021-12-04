@@ -3,21 +3,18 @@ import { StatusUpdateHandler } from "./useStatusUpdate";
 import { PositionUpdateHandlersFn } from "./usePositionUpdate";
 import { StickyMode } from "../types";
 
-export type StrategyUpdater = () => void;
-export type Strategy = Record<StickyMode, StrategyUpdater>;
+export type Update = () => void;
+export type HandlerByMode = Record<StickyMode, Update>;
 
-export interface UpdateStrategyHandlers {
+export interface UpdateHandlersByMode {
   statusUpdateHandlers: StatusUpdateHandler | null;
   positionUpdateHandlers: PositionUpdateHandlersFn;
 }
 /**
  * mode에 따라 실행할 update 함수를 정의
  */
-const useUpdateStrategy = (
-  mode: StickyMode,
-  { statusUpdateHandlers, positionUpdateHandlers }: UpdateStrategyHandlers,
-) => {
-  const [updater, setUpdater] = useState<Strategy | null>(null);
+const useUpdateByMode = (mode: StickyMode, { statusUpdateHandlers, positionUpdateHandlers }: UpdateHandlersByMode) => {
+  const [updater, setUpdater] = useState<HandlerByMode | null>(null);
 
   useEffect(() => {
     const getHandlersFn = () => {
@@ -32,12 +29,12 @@ const useUpdateStrategy = (
         const getHandlers = getHandlersFn();
         if (!getHandlers) return;
 
-        const { isReachScreenTop, isReachContainerBottomFrom, stickToContainerBottom, stickToScreenTop, unStick } =
+        const { isReachScreenTop, isReachContainerBottomToTop, stickToContainerBottom, stickToScreenTop, unStick } =
           getHandlers;
 
         // sticky 상태일때
         if (isReachScreenTop()) {
-          if (isReachContainerBottomFrom(mode)) {
+          if (isReachContainerBottomToTop()) {
             return stickToContainerBottom();
           }
           return stickToScreenTop();
@@ -52,7 +49,7 @@ const useUpdateStrategy = (
 
         const {
           isReachScreenBottom,
-          isReachContainerBottomFrom,
+          isReachContainerBottomToBottom,
           stickToContainerBottom,
           stickyToScreenBottom,
           unStick,
@@ -60,7 +57,7 @@ const useUpdateStrategy = (
 
         // sticky 상태일때
         if (isReachScreenBottom()) {
-          if (isReachContainerBottomFrom(mode)) {
+          if (isReachContainerBottomToBottom()) {
             return stickToContainerBottom();
           }
           return stickyToScreenBottom();
@@ -71,9 +68,9 @@ const useUpdateStrategy = (
     };
 
     setUpdater(update);
-  }, [positionUpdateHandlers, statusUpdateHandlers, mode]);
+  }, [positionUpdateHandlers, statusUpdateHandlers]);
 
   return updater ? updater[mode] : null;
 };
 
-export default useUpdateStrategy;
+export default useUpdateByMode;

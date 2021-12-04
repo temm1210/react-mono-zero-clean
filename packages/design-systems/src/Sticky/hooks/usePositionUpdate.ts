@@ -1,5 +1,4 @@
 import { useCallback } from "react";
-import { StickyMode } from "../types";
 
 export interface RectProps {
   top: number;
@@ -7,7 +6,8 @@ export interface RectProps {
 }
 
 export interface PositionUpdateHandlers {
-  isReachContainerBottomFrom: (mode: StickyMode) => boolean;
+  isReachContainerBottomToTop: () => boolean;
+  isReachContainerBottomToBottom: () => boolean;
   isReachScreenTop: () => boolean;
   isReachScreenBottom: () => boolean;
 }
@@ -42,10 +42,16 @@ const usePositionUpdate = (
     if (!rects) return;
     const { stickyRect, parentRect, heightRect } = rects;
 
-    // sticky영역이 고정되어있다가 움직이기 시작하는 시점
-    const isReachContainerBottomFrom = (mode: StickyMode) => {
+    // sticky영역의 상단이 container의 bottom과 위치가 같을때
+    // sticky element가 서서히 위로 올라가기 시작하는 시점
+    const isReachContainerBottomToTop = () => {
       // element가 상단에 붙었을때
-      if (mode === "top") return stickyRect.height + top >= parentRect.bottom + bottom;
+      return stickyRect.height + top >= parentRect.bottom + bottom;
+    };
+
+    // sticky영역이 container의 bottom과 위치가 같을때
+    // sticky element가 서서히 위로 올라가기 시작하는 시점
+    const isReachContainerBottomToBottom = () => {
       // 하단에 붙었을때
       return parentRect.bottom + bottom <= window.innerHeight;
     };
@@ -56,7 +62,7 @@ const usePositionUpdate = (
     // sticky영역이 현재 viewport하단에 고정되는 시점
     const isReachScreenBottom = () => heightRect.bottom + bottom <= window.innerHeight;
 
-    return { isReachContainerBottomFrom, isReachScreenTop, isReachScreenBottom };
+    return { isReachContainerBottomToTop, isReachContainerBottomToBottom, isReachScreenTop, isReachScreenBottom };
   }, [top, bottom, assignRects]);
 
   return calculatePositionHandlers;
