@@ -32,19 +32,8 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   const stickyRef = useRef<HTMLDivElement | null>(null);
   const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
 
-  const handleOnStick = useCallback(() => {
-    onStick?.({ width, height, top, bottom });
-  }, [width, height, top, bottom, onStick]);
-
-  const handleUnStick = useCallback(() => {
-    onUnStick?.({ width, height, top, bottom });
-  }, [width, height, top, bottom, onUnStick]);
-
-  // 현재 엘리먼트의 상태값을 계산하는 handler
-  const [statusUpdateHandlers, { isSticky, isAbsolute }] = useStatusUpdate(!parentNode, {
-    onStick: handleOnStick,
-    onUnStick: handleUnStick,
-  });
+  // 현재 엘리먼트의 상태값을 업데이트하는 handler와 상태 결과값을 return
+  const [statusUpdateHandlers, { isSticky, isAbsolute }] = useStatusUpdate(!parentNode);
 
   // scroll 위치에 따라 현재 엘리먼트의 위치값을 계산하는 handler
   const positionUpdateHandlers = usePositionUpdate(parentNode || document.body, fakeRef.current, stickyRef.current, {
@@ -64,21 +53,41 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     return ref.current?.getBoundingClientRect();
   };
 
+  const handleOnStick = useCallback(
+    (_width: number, _height: number) => {
+      onStick?.({ width: _width, height: _height, top, bottom });
+    },
+    [top, bottom, onStick],
+  );
+
+  const handleUnStick = useCallback(
+    (_width: number, _height: number) => {
+      onUnStick?.({ width: _width, height: _height, top, bottom });
+    },
+    [top, bottom, onUnStick],
+  );
+
   // sticky상태에 따라 할 일 정의
   // paint전 스타일계산을 진행후 적용
   useLayoutEffect(() => {
     const stickyRect = getRect(stickyRef);
     const fakeRect = getRect(fakeRef);
+
     if (!stickyRect || !fakeRect) return;
 
-    const { height: lHeight } = stickyRect;
-    const { width: lWidth } = fakeRect;
+    const { height: _height } = stickyRect;
+    const { width: _width } = fakeRect;
 
-    if (isSticky) setHeight(lHeight);
-    else setHeight(0);
+    if (isSticky) {
+      setHeight(_height);
+      handleOnStick(_width, _height);
+    } else {
+      setHeight(0);
+      handleUnStick(_width, _height);
+    }
 
-    setWidth(lWidth);
-  }, [isSticky]);
+    setWidth(_width);
+  }, [isSticky, handleOnStick, handleUnStick]);
 
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);
