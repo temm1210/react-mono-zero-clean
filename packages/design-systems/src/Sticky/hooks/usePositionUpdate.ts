@@ -5,11 +5,13 @@ export interface RectProps {
   bottom: number;
 }
 
+export type PositionHandler = () => boolean;
+
 export interface PositionUpdateHandlers {
-  isReachContainerBottomToTop: () => boolean;
-  isReachContainerBottomToBottom: () => boolean;
-  isReachScreenTop: () => boolean;
-  isReachScreenBottom: () => boolean;
+  isReachContainerBottomToTop: PositionHandler;
+  isReachContainerBottomToBottom: PositionHandler;
+  isReachScreenTop: PositionHandler;
+  isReachScreenBottom: PositionHandler;
 }
 export type PositionUpdateHandlersFn = () => PositionUpdateHandlers | undefined;
 export type PositionUpdateReturn = PositionUpdateHandlersFn;
