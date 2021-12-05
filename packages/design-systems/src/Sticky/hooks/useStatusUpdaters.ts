@@ -23,7 +23,7 @@ export type StatusUpdateResult = [StatusUpdateHandlersReturn, StatusUpdateInfo];
  * sticky component의 상태값 추가, 변경 이외에는 수정되면 안됨
  * 오로지 상태값관련 역할만 담당
  */
-const useStatusUpdate = (initIsSticky: boolean): StatusUpdateResult => {
+const useStatusUpdaters = (initIsSticky: boolean): StatusUpdateResult => {
   const [isSticky, setIsSticky] = useState(initIsSticky);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
@@ -76,4 +76,4 @@ const useStatusUpdate = (initIsSticky: boolean): StatusUpdateResult => {
   return [handler, { isSticky, isAbsolute }];
 };
 
-export default useStatusUpdate;
+export default useStatusUpdaters;
