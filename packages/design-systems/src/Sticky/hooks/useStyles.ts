@@ -19,15 +19,15 @@ export interface Props {
   bottom: number;
 }
 
-export type CalculateStickyStyle = () => Record<string, any> | undefined;
+export type StickyStyle = () => Record<string, any> | undefined;
 export type FakeStyle = Record<string, any>;
 
 export interface StylesValues {
-  calculateStickyStyle: CalculateStickyStyle;
+  calculateStickyStyle: StickyStyle;
   stickyClassNames: string;
   fakeStyle: FakeStyle;
 }
-export type Styles = Record<StickyMode, StylesValues>;
+export type CalculateStickyStyle = Record<StickyMode, StylesValues>;
 
 /**
  * style과 관련된 로직만 처리
@@ -40,7 +40,7 @@ const useStyles = ({ mode, isSticky, isAbsolute, width, height, top, bottom }: P
 
   const fakeStyle = { height };
 
-  const calculateStickyStyle: Styles = {
+  const calculateStickyStyleByMode: CalculateStickyStyle = {
     top: {
       calculateStickyStyle: () => {
         if (!isSticky) return;
@@ -66,7 +66,7 @@ const useStyles = ({ mode, isSticky, isAbsolute, width, height, top, bottom }: P
     },
   };
 
-  return calculateStickyStyle[mode];
+  return calculateStickyStyleByMode[mode];
 };
 
 export default useStyles;

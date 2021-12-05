@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
 import { StatusUpdateHandlersReturn } from "./useStatusUpdate";
-import { PositionUpdateHandlersFn } from "./usePositionUpdate";
+import { PositionCalculatorsReturn } from "./usePositionCalculators";
 import { StickyMode } from "../types";
 
-export type Update = () => void;
-export type HandlerByMode = Record<StickyMode, Update>;
+export type UpdateHandler = () => void;
+export type UseUpdateByModeHandlers = Record<StickyMode, UpdateHandler>;
 
 export interface UpdateHandlersByMode {
   statusUpdateHandlers: StatusUpdateHandlersReturn;
-  positionUpdateHandlers: PositionUpdateHandlersFn;
+  positionUpdateHandlers: PositionCalculatorsReturn;
 }
 /**
  * mode에 따라 실행할 update 함수를 정의
  */
 const useUpdateByMode = (mode: StickyMode, { statusUpdateHandlers, positionUpdateHandlers }: UpdateHandlersByMode) => {
-  const [updater, setUpdater] = useState<HandlerByMode | null>(null);
+  const [updater, setUpdater] = useState<UseUpdateByModeHandlers | null>(null);
 
   useEffect(() => {
     const getHandlersFn = () => {
