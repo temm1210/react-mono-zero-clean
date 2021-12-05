@@ -1,4 +1,4 @@
-# mono repo + zero config (not CRA)
+# mono repo + zero config
 
 ## 시작방법
 
@@ -9,7 +9,7 @@
 ## 폴더구조
 
 1. `app` : 실제 프로젝트에 해당하는 패키지
-2. `design-systems` : 패키지들이 공통으로 사용하는 컴포넌트
+2. `design-systems` : 공통으로 사용하는 컴포넌트의 모음
 3. `hooks` : 패키지들이 공통으로 사용하는 custom hooks(참조링크: [react-use](https://github.com/streamich/react-use))
 4. `react-dev-utils` : app package에서 react초기 설정을위한 패키지(참조링크: [react-dev-utils](https://github.com/facebook/create-react-app/tree/main/packages/react-dev-utils))
 5. `react-router-utils` : react-router을 쉽게 사용하기위한 패키지
