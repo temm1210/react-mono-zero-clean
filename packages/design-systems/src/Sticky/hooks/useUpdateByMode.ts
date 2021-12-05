@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StatusUpdateHandlersReturn } from "./useStatusUpdate";
+import { StatusUpdateHandlersReturn } from "./useStatusUpdaters";
 import { PositionCalculatorsReturn } from "./usePositionCalculators";
 import { StickyMode } from "../types";
 
