@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { MutableRefObject, PropsWithChildren } from "react";
 import { FindParentFrom } from "@project/react-hooks/dist/useClosetParent";
-import { StickyMode } from "./types";
+import { StickyMode } from "../../types";
 
 export interface StickyRenderModeRefProps {
   fakeRef: MutableRefObject<any | null>;
