@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import cx from "clsx";
-import { StickyMode } from "../types";
+import { StickyMode } from "../../types";
 
 export interface Props {
   /** 상단에 붙을지 하단에 붙을지 결정 */

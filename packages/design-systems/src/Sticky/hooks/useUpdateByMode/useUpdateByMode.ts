@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { StatusUpdateHandlersReturn } from "./useStatusUpdaters";
-import { PositionCalculatorsReturn } from "./usePositionCalculators";
-import { StickyMode } from "../types";
+import { StatusUpdateHandlersReturn } from "../useStatusUpdaters";
+import { PositionCalculatorsReturn } from "../usePositionCalculators";
+import { StickyMode } from "../../types";
 
 export type UpdateHandler = () => void;
 export type UseUpdateByModeHandlers = Record<StickyMode, UpdateHandler>;

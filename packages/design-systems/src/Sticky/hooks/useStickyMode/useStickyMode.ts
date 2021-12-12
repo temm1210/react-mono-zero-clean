@@ -1,8 +1,8 @@
 import { useRef } from "react";
 import { useClosetParent } from "@project/react-hooks";
-import usePositionCalculators, { PositionCalculator } from "./usePositionCalculators";
-import { StickyMode } from "../types";
-import { parentSelector } from "../utils";
+import usePositionCalculators, { PositionCalculator } from "../usePositionCalculators";
+import { StickyMode } from "../../types";
+import { parentSelector } from "../../utils";
 
 interface StickyModeProps {
   top: number;
@@ -21,6 +21,9 @@ export interface StickyModeValue {
 
 export type UseStickyModeReturn = Record<StickyMode, StickyModeValue>;
 
+/**
+ * Sticky의 mode에 따라 실행해야할 기능들을 return함
+ */
 const useStickyMode = ({ top = 0, bottom = 0 }: StickyModeProps): UseStickyModeReturn => {
   const fakeRef = useRef<HTMLDivElement | null>(null);
   const stickyRef = useRef<HTMLDivElement | null>(null);
