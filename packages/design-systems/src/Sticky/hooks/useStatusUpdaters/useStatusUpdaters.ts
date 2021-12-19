@@ -16,14 +16,19 @@ export interface StatusUpdateInfo {
 }
 
 export type StatusUpdateHandlersReturn = StatusUpdateHandlers | null;
-export type StatusUpdateResult = [StatusUpdateHandlersReturn, StatusUpdateInfo];
+export type UseStatusUpdateReturn = [StatusUpdateHandlersReturn, StatusUpdateInfo];
 
+export interface UseStatusUpdatersProps {
+  initIsSticky: boolean;
+  onStick?: () => void;
+  onUnStick?: () => void;
+}
 /**
  * sticky component의 상태값을 업데이트
  * sticky component의 상태값 추가, 변경 이외에는 수정되면 안됨
  * 오로지 상태값관련 역할만 담당
  */
-const useStatusUpdaters = (initIsSticky: boolean): StatusUpdateResult => {
+const useStatusUpdaters = ({ initIsSticky, onStick, onUnStick }: UseStatusUpdatersProps): UseStatusUpdateReturn => {
   const [isSticky, setIsSticky] = useState(initIsSticky);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
@@ -42,7 +47,7 @@ const useStatusUpdaters = (initIsSticky: boolean): StatusUpdateResult => {
         unstable_batchedUpdates(() => {
           setIsSticky(true);
           setIsIsAbsolute(false);
-          // onStick?.();
+          onStick?.();
         });
       },
 
@@ -67,7 +72,7 @@ const useStatusUpdaters = (initIsSticky: boolean): StatusUpdateResult => {
         unstable_batchedUpdates(() => {
           setIsSticky(false);
           setIsIsAbsolute(false);
-          // onUnStick?.();
+          onUnStick?.();
         });
       },
     });
