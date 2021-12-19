@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MutableRefObject, PropsWithChildren, useMemo } from "react";
+import { MutableRefObject, ReactNode, useMemo } from "react";
 import { FindParentFrom } from "@project/react-hooks/dist/useClosetParent";
 import { StickyMode } from "../../types";
 
@@ -16,9 +16,10 @@ interface StickyModeStyleProps {
   calculateStickyStyle: CalculateStickyStyle;
   stickyClassNames: string;
   fakeStyle: FakeStyle;
+  children: ReactNode;
 }
 
-export type StickyRenderModeProps = PropsWithChildren<StickyModeStyleProps>;
+export type StickyRenderModeProps = StickyModeStyleProps;
 export type StickyModeComponent = (props: StickyRenderModeProps) => JSX.Element;
 
 export type StickyRenderModeReturn = (refs: StickyRenderModeRefProps) => (mode: StickyMode) => StickyModeComponent;
