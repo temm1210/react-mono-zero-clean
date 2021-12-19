@@ -48,11 +48,11 @@ const useStickyMode = ({ top = 0, bottom = 0 }: StickyModeProps): UseStickyModeR
       unStick: () => statusUpdateHandlers?.unStick(),
     },
     bottom: {
-      isStick: () => true,
-      isReachContainerBottomToMode: () => true,
-      stickyToContainerBottom: () => true,
-      stickyToModeOfScreen: () => true,
-      unStick: () => true,
+      isStick: () => positionCalculators?.isReachScreenBottom() || false,
+      isReachContainerBottomToMode: () => positionCalculators?.isReachContainerBottomToBottom() || false,
+      stickyToContainerBottom: () => statusUpdateHandlers?.stickToContainerBottom(),
+      stickyToModeOfScreen: () => statusUpdateHandlers?.stickyToScreenBottom(),
+      unStick: () => statusUpdateHandlers?.unStick(),
     },
   };
 };
