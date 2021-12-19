@@ -1,8 +1,9 @@
 import { useRef } from "react";
 import { useClosetParent } from "@project/react-hooks";
 import usePositionCalculators, { PositionCalculator } from "../usePositionCalculators";
-import { StickyMode } from "../../types";
+import useStatusUpdaters from "../useStatusUpdaters";
 import { parentSelector } from "../../utils";
+import { StickyMode } from "../../types";
 
 interface StickyModeProps {
   top: number;
@@ -35,13 +36,16 @@ const useStickyMode = ({ top = 0, bottom = 0 }: StickyModeProps): UseStickyModeR
     bottom,
   })();
 
+  // 현재 엘리먼트의 상태값을 업데이트하는 handler와 상태 결과값을 return
+  const [statusUpdateHandlers, { isSticky, isAbsolute }] = useStatusUpdaters(!parentNode);
+
   return {
     top: {
-      isStick: () => true,
+      isStick: () => positionCalculators?.isReachScreenTop() || false,
       isReachContainerBottom: () => positionCalculators?.isReachContainerBottomToTop() || false,
-      stickyToContainerBottom: () => true,
-      stickyToModeOfScreen: () => true,
-      unStick: () => true,
+      stickyToContainerBottom: () => statusUpdateHandlers?.stickToContainerBottom(),
+      stickyToModeOfScreen: () => statusUpdateHandlers?.stickToScreenTop(),
+      unStick: () => statusUpdateHandlers?.unStick(),
     },
     bottom: {
       isStick: () => true,
