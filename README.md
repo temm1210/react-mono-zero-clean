@@ -4,7 +4,7 @@
 
 1. `yarn install`
 2. `yarn build`
-3. `yarn storybook`(design-systems packages에있는 storybook 실행) or `yarn start-app`(개발중)
+3. `yarn storybook`(design-systems packages에있는 storybook 실행)
 
 ## 폴더구조
 

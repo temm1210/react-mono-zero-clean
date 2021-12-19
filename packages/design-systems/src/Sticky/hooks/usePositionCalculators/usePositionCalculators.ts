@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 export interface RectProps {
   top: number;
   bottom: number;
@@ -13,7 +11,7 @@ export interface PositionCalculators {
   isReachScreenTop: PositionCalculator;
   isReachScreenBottom: PositionCalculator;
 }
-export type PositionCalculatorsReturn = () => PositionCalculators | undefined;
+export type PositionCalculatorsReturn = () => PositionCalculators;
 
 /**
  * scroll 위치에따라 sticky component의 위치값 계산
@@ -26,45 +24,41 @@ const usePositionCalculators = (
   stickyElement: Element | null,
   { top = 0, bottom = 0 }: RectProps,
 ): PositionCalculatorsReturn => {
-  const assignRects = useCallback(() => {
+  const calculatePositionHandlers = () => {
     const parentRect = parentElement?.getBoundingClientRect();
     const stickyRect = stickyElement?.getBoundingClientRect();
     const heightRect = heightElement?.getBoundingClientRect();
 
-    if (!stickyRect || !heightRect || !parentRect) return null;
-    return { parentRect, heightRect, stickyRect };
-  }, [parentElement, heightElement, stickyElement]);
-
-  /**
-   * sticky element의 위치를 계산해주는 함수 모음
-   */
-  const calculatePositionHandlers = useCallback(() => {
-    const rects = assignRects();
-    if (!rects) return;
-    const { stickyRect, parentRect, heightRect } = rects;
-
     // sticky영역의 상단이 container의 bottom과 위치가 같을때
     // sticky element가 서서히 위로 올라가기 시작하는 시점
+    // top mode
     const isReachContainerBottomToTop = () => {
-      // element가 상단에 붙었을때
+      if (!stickyRect || !parentRect) return false;
       return stickyRect.height + top >= parentRect.bottom + bottom;
     };
 
     // sticky영역이 container의 bottom과 위치가 같을때
     // sticky element가 서서히 위로 올라가기 시작하는 시점
+    // bottom mode
     const isReachContainerBottomToBottom = () => {
-      // 하단에 붙었을때
+      if (!stickyRect || !parentRect) return false;
       return parentRect.bottom + bottom <= window.innerHeight;
     };
 
     // sticky영역이 현재 viewport상단에 고정되는 시점
-    const isReachScreenTop = () => heightRect.top < top;
+    const isReachScreenTop = () => {
+      if (!heightRect) return false;
+      return heightRect.top < top;
+    };
 
     // sticky영역이 현재 viewport하단에 고정되는 시점
-    const isReachScreenBottom = () => heightRect.bottom + bottom <= window.innerHeight;
+    const isReachScreenBottom = () => {
+      if (!heightRect) return false;
+      return heightRect.bottom + bottom <= window.innerHeight;
+    };
 
     return { isReachContainerBottomToTop, isReachContainerBottomToBottom, isReachScreenTop, isReachScreenBottom };
-  }, [top, bottom, assignRects]);
+  };
 
   return calculatePositionHandlers;
 };
