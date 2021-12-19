@@ -56,7 +56,7 @@ const useStatusUpdaters = ({ initIsSticky, onStick, onUnStick }: UseStatusUpdate
         unstable_batchedUpdates(() => {
           setIsSticky(true);
           setIsIsAbsolute(true);
-          // onStick?.();
+          onStick?.();
         });
       },
 
@@ -64,7 +64,7 @@ const useStatusUpdaters = ({ initIsSticky, onStick, onUnStick }: UseStatusUpdate
         unstable_batchedUpdates(() => {
           setIsSticky(true);
           setIsIsAbsolute(false);
-          // onStick?.();
+          onStick?.();
         });
       },
 
@@ -76,7 +76,7 @@ const useStatusUpdaters = ({ initIsSticky, onStick, onUnStick }: UseStatusUpdate
         });
       },
     });
-  }, []);
+  }, [onStick, onUnStick]);
 
   return [handler, { isSticky, isAbsolute }];
 };
