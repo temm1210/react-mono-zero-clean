@@ -1,14 +1,9 @@
-import { RefObject, useCallback, useLayoutEffect, useRef, useState } from "react";
-import { useEvent, useClosetParent } from "@project/react-hooks";
+import { useCallback, useLayoutEffect, useState } from "react";
+import { useEvent } from "@project/react-hooks";
 import { StickyMode } from "./types";
-import { parentSelector } from "./utils";
-import { usePositionCalculators, useStatusUpdaters, useStyles, useUpdateByMode } from "./hooks";
+import { useStickyMode, useStyles } from "./hooks";
+import { Callback, CallbackParameter } from "./hooks/useStickyMode";
 import "./Sticky.scss";
-
-export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
-
-export type CallbackParameter = Record<keyof Rect, number>;
-export type Callback = (rect: CallbackParameter) => void;
 
 export interface Props {
   children: React.ReactNode;
@@ -28,74 +23,54 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
-  const fakeRef = useRef<HTMLDivElement | null>(null);
-  const stickyRef = useRef<HTMLDivElement | null>(null);
-  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
+  // sticky 상태 일때 실행할 callback
+  const handleOnStick = useCallback((rect: CallbackParameter) => {
+    const { width: pWidth, height: pHeight } = rect;
+    setWidth(pWidth);
+    setHeight(pHeight);
+  }, []);
 
-  // 현재 엘리먼트의 상태값을 업데이트하는 handler와 상태 결과값을 return
-  const [statusUpdateHandlers, { isSticky, isAbsolute }] = useStatusUpdaters(!parentNode);
+  // unSticky 상태일떄 실행할 callback
+  const handleOnUnStick = useCallback((rect: CallbackParameter) => {
+    const { width: pWidth } = rect;
+    setWidth(pWidth);
+    setHeight(0);
+  }, []);
 
-  // scroll 위치에 따라 현재 엘리먼트의 위치값을 계산하는 handler
-  const positionUpdateHandlers = usePositionCalculators(
-    parentNode || document.body,
-    fakeRef.current,
-    stickyRef.current,
-    {
-      top,
-      bottom,
-    },
-  );
+  // TODO: position값과 handler 분리해서 parameter로 보내는 방법 check
+  const { stickyModeMapper, isAbsolute, isSticky } = useStickyMode({
+    top,
+    bottom,
+    onStick: handleOnStick,
+    onUnStick: handleOnUnStick,
+  });
 
-  // mode에따라 다른 update 함수를 return
-  const updateHandler = useUpdateByMode(mode, { statusUpdateHandlers, positionUpdateHandlers });
+  const stickyMode = stickyModeMapper[mode];
 
-  const update = useCallback(() => {
-    if (!updateHandler) return;
-    updateHandler();
-  }, [updateHandler]);
+  // scroll event에 등록할 handler
+  const update = () => {
+    const { isStick, unStick, isReachContainerBottomToMode, stickyToContainerBottom, stickyToModeOfScreen } =
+      stickyMode;
 
-  const getRect = (ref: RefObject<Element | null>) => {
-    return ref.current?.getBoundingClientRect();
-  };
-
-  const handleOnStick = useCallback(
-    (_width: number, _height: number) => {
-      onStick?.({ width: _width, height: _height, top, bottom });
-    },
-    [top, bottom, onStick],
-  );
-
-  const handleUnStick = useCallback(
-    (_width: number, _height: number) => {
-      onUnStick?.({ width: _width, height: _height, top, bottom });
-    },
-    [top, bottom, onUnStick],
-  );
-
-  // sticky상태에 따라 할 일 정의
-  // paint전 스타일계산을 진행후 적용
-  useLayoutEffect(() => {
-    const stickyRect = getRect(stickyRef);
-    const fakeRect = getRect(fakeRef);
-
-    if (!stickyRect || !fakeRect) return;
-
-    const { height: _height } = stickyRect;
-    const { width: _width } = fakeRect;
-
-    if (isSticky) {
-      setHeight(_height);
-      handleOnStick(_width, _height);
-    } else {
-      setHeight(0);
-      handleUnStick(_width, _height);
+    if (isStick()) {
+      if (isReachContainerBottomToMode()) {
+        return stickyToContainerBottom();
+      }
+      return stickyToModeOfScreen();
     }
-
-    setWidth(_width);
-  }, [isSticky, handleOnStick, handleUnStick]);
+    return unStick();
+  };
 
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);
+
+  useLayoutEffect(() => {
+    if (isSticky) {
+      onStick?.({ width, height, top, bottom });
+    } else {
+      onUnStick?.({ width, height, top, bottom });
+    }
+  }, [bottom, height, isSticky, onStick, onUnStick, top, width]);
 
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
     mode,
@@ -107,17 +82,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     bottom,
   });
 
-  return (
-    <div ref={findParentFrom} className="sticky-wrap">
-      {/* fake element */}
-      {mode === "top" && <div ref={fakeRef} className="sticky__fake" style={fakeStyle} />}
-      <div ref={stickyRef} className={stickyClassNames} style={calculateStickyStyle()}>
-        {children}
-      </div>
-      {/* fake element */}
-      {mode === "bottom" && <div ref={fakeRef} className="sticky__fake" style={fakeStyle} />}
-    </div>
-  );
+  return stickyMode.render({ fakeStyle, stickyClassNames, calculateStickyStyle, children });
 };
 
 export default Sticky;
