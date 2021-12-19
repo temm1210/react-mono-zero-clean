@@ -41,11 +41,7 @@ const useStickyMode = ({ top = 0, bottom = 0, onStick, onUnStick }: StickyModePr
   const stickyRef = useRef<HTMLDivElement | null>(null);
   const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
 
-  // scroll 위치에 따라 현재 엘리먼트의 위치값을 계산하는 handler
-  const positionCalculators = usePositionCalculators(parentNode || document.body, fakeRef.current, stickyRef.current, {
-    top,
-    bottom,
-  });
+  const renderByMode = stickyRenderMode({ fakeRef, stickyRef, findParentFrom });
 
   const getRect = (ref: RefObject<Element | null>) => {
     return ref.current?.getBoundingClientRect();
@@ -80,29 +76,37 @@ const useStickyMode = ({ top = 0, bottom = 0, onStick, onUnStick }: StickyModePr
     onUnStick: handleUnStick,
   });
 
-  const renderByMode = stickyRenderMode({ fakeRef, stickyRef, findParentFrom });
+  // scroll 위치에 따라 현재 엘리먼트의 위치값을 계산하는 handler
+  const calculatePositionHandlers = usePositionCalculators(
+    parentNode || document.body,
+    fakeRef.current,
+    stickyRef.current,
+    {
+      top,
+      bottom,
+    },
+  );
 
-  console.log("test:", positionCalculators()?.isReachScreenTop());
   const stickyModeMapper = useMemo(
     () => ({
       top: {
-        isStick: () => positionCalculators()?.isReachScreenTop() || false,
-        isReachContainerBottomToMode: () => positionCalculators()?.isReachContainerBottomToTop() || false,
+        isStick: () => calculatePositionHandlers().isReachScreenTop() || false,
+        isReachContainerBottomToMode: () => calculatePositionHandlers().isReachContainerBottomToTop() || false,
         stickyToContainerBottom: () => statusUpdateHandlers?.stickToContainerBottom(),
         stickyToModeOfScreen: () => statusUpdateHandlers?.stickToScreenTop(),
         unStick: () => statusUpdateHandlers?.unStick(),
         render: renderByMode("top"),
       },
       bottom: {
-        isStick: () => positionCalculators()?.isReachScreenBottom() || false,
-        isReachContainerBottomToMode: () => positionCalculators()?.isReachContainerBottomToBottom() || false,
+        isStick: () => calculatePositionHandlers().isReachScreenBottom() || false,
+        isReachContainerBottomToMode: () => calculatePositionHandlers().isReachContainerBottomToBottom() || false,
         stickyToContainerBottom: () => statusUpdateHandlers?.stickToContainerBottom(),
         stickyToModeOfScreen: () => statusUpdateHandlers?.stickyToScreenBottom(),
         unStick: () => statusUpdateHandlers?.unStick(),
         render: renderByMode("bottom"),
       },
     }),
-    [positionCalculators, renderByMode, statusUpdateHandlers],
+    [calculatePositionHandlers, renderByMode, statusUpdateHandlers],
   );
 
   return { stickyModeMapper, isSticky, isAbsolute };

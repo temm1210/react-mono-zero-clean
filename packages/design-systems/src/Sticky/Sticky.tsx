@@ -45,12 +45,12 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     onUnStick: handleOnUnStick,
   });
 
-  const stickyMode = stickyModeMapper[mode];
+  const stickyMapper = stickyModeMapper[mode];
 
   // scroll event에 등록할 handler
   const update = () => {
     const { isStick, unStick, isReachContainerBottomToMode, stickyToContainerBottom, stickyToModeOfScreen } =
-      stickyMode;
+      stickyMapper;
 
     if (isStick()) {
       if (isReachContainerBottomToMode()) {
@@ -64,6 +64,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);
 
+  // TODO: sticky event handler는 useStickyMode에서 처리하도록 check
   useLayoutEffect(() => {
     if (isSticky) {
       onStick?.({ width, height, top, bottom });
@@ -72,6 +73,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     }
   }, [bottom, height, isSticky, onStick, onUnStick, top, width]);
 
+  // TODO: style위치 check
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
     mode,
     isSticky,
@@ -82,7 +84,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     bottom,
   });
 
-  return stickyMode.render({ fakeStyle, stickyClassNames, calculateStickyStyle, children });
+  return stickyMapper.render({ fakeStyle, stickyClassNames, calculateStickyStyle, children });
 };
 
 export default Sticky;
