@@ -31,6 +31,8 @@ const usePositionCalculators = (
     const stickyRect = stickyElement?.getBoundingClientRect();
     const heightRect = heightElement?.getBoundingClientRect();
 
+    console.log("여기");
+
     if (!stickyRect || !heightRect || !parentRect) return null;
     return { parentRect, heightRect, stickyRect };
   }, [parentElement, heightElement, stickyElement]);
