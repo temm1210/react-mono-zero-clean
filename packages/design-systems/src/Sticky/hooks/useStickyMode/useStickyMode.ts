@@ -14,7 +14,7 @@ export type StatusHandler = () => void;
 
 export interface StickyModeValue {
   isStick: PositionCalculator;
-  isReachContainerBottom: PositionCalculator;
+  isReachContainerBottomToMode: PositionCalculator;
   stickyToContainerBottom: StatusHandler;
   stickyToModeOfScreen: StatusHandler;
   unStick: StatusHandler;
@@ -42,14 +42,14 @@ const useStickyMode = ({ top = 0, bottom = 0 }: StickyModeProps): UseStickyModeR
   return {
     top: {
       isStick: () => positionCalculators?.isReachScreenTop() || false,
-      isReachContainerBottom: () => positionCalculators?.isReachContainerBottomToTop() || false,
+      isReachContainerBottomToMode: () => positionCalculators?.isReachContainerBottomToTop() || false,
       stickyToContainerBottom: () => statusUpdateHandlers?.stickToContainerBottom(),
       stickyToModeOfScreen: () => statusUpdateHandlers?.stickToScreenTop(),
       unStick: () => statusUpdateHandlers?.unStick(),
     },
     bottom: {
       isStick: () => true,
-      isReachContainerBottom: () => true,
+      isReachContainerBottomToMode: () => true,
       stickyToContainerBottom: () => true,
       stickyToModeOfScreen: () => true,
       unStick: () => true,
