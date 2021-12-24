@@ -20,15 +20,13 @@ export type UseStatusUpdateReturn = [StatusUpdateHandlersReturn, StatusUpdateInf
 
 export interface UseStatusUpdatersProps {
   initIsSticky: boolean;
-  onStick?: () => void;
-  onUnStick?: () => void;
 }
 /**
  * sticky component의 상태값을 업데이트
  * sticky component의 상태값 추가, 변경 이외에는 수정되면 안됨
  * 오로지 상태값관련 역할만 담당
  */
-const useStatusUpdaters = ({ initIsSticky, onStick, onUnStick }: UseStatusUpdatersProps): UseStatusUpdateReturn => {
+const useStatusUpdaters = ({ initIsSticky }: UseStatusUpdatersProps): UseStatusUpdateReturn => {
   const [isSticky, setIsSticky] = useState(initIsSticky);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
@@ -47,7 +45,6 @@ const useStatusUpdaters = ({ initIsSticky, onStick, onUnStick }: UseStatusUpdate
         unstable_batchedUpdates(() => {
           setIsSticky(true);
           setIsIsAbsolute(false);
-          onStick?.();
         });
       },
 
@@ -56,7 +53,6 @@ const useStatusUpdaters = ({ initIsSticky, onStick, onUnStick }: UseStatusUpdate
         unstable_batchedUpdates(() => {
           setIsSticky(true);
           setIsIsAbsolute(true);
-          onStick?.();
         });
       },
 
@@ -64,7 +60,6 @@ const useStatusUpdaters = ({ initIsSticky, onStick, onUnStick }: UseStatusUpdate
         unstable_batchedUpdates(() => {
           setIsSticky(true);
           setIsIsAbsolute(false);
-          onStick?.();
         });
       },
 
@@ -72,11 +67,10 @@ const useStatusUpdaters = ({ initIsSticky, onStick, onUnStick }: UseStatusUpdate
         unstable_batchedUpdates(() => {
           setIsSticky(false);
           setIsIsAbsolute(false);
-          onUnStick?.();
         });
       },
     });
-  }, [onStick, onUnStick]);
+  }, []);
 
   return [handler, { isSticky, isAbsolute }];
 };
