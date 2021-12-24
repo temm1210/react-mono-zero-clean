@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useEvent } from "@project/react-hooks";
 import { StickyMode } from "./types";
 import { useStickyMode, useStyles } from "./hooks";
@@ -23,19 +23,29 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
-  // sticky 상태 일때 실행할 callback
-  const handleOnStick = useCallback((rect: CallbackParameter) => {
-    const { width: pWidth, height: pHeight } = rect;
-    setWidth(pWidth);
-    setHeight(pHeight);
-  }, []);
+  // 상대가 sticky로 변할 때 실행할 callback
+  const handleOnStick = useCallback(
+    (rect: CallbackParameter) => {
+      const { width: pWidth, height: pHeight } = rect;
 
-  // unSticky 상태일떄 실행할 callback
-  const handleOnUnStick = useCallback((rect: CallbackParameter) => {
-    const { width: pWidth } = rect;
-    setWidth(pWidth);
-    setHeight(0);
-  }, []);
+      setWidth(pWidth);
+      setHeight(pHeight);
+      onStick?.(rect);
+    },
+    [onStick],
+  );
+
+  // 상태가 unSticky로 변할 때 실행할 callback
+  const handleOnUnStick = useCallback(
+    (rect: CallbackParameter) => {
+      const { width: pWidth } = rect;
+
+      setWidth(pWidth);
+      setHeight(0);
+      onUnStick?.(rect);
+    },
+    [onUnStick],
+  );
 
   // TODO: position값과 handler 분리해서 parameter로 보내는 방법 check
   const { stickyModeMapper, isAbsolute, isSticky } = useStickyMode({
@@ -63,15 +73,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
 
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);
-
-  // TODO: sticky event handler는 useStickyMode에서 처리하도록 check
-  useLayoutEffect(() => {
-    if (isSticky) {
-      onStick?.({ width, height, top, bottom });
-    } else {
-      onUnStick?.({ width, height, top, bottom });
-    }
-  }, [bottom, height, isSticky, onStick, onUnStick, top, width]);
 
   // TODO: style위치 check
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
