@@ -23,13 +23,14 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
 
+  const setWidthHeight = (pWidth: number, pHeight: number) => {
+    setWidth(pWidth);
+    setHeight(pHeight);
+  };
   // 상대가 sticky로 변할 때 실행할 callback
   const handleOnStick = useCallback(
     (rect: CallbackParameter) => {
-      const { width: pWidth, height: pHeight } = rect;
-
-      setWidth(pWidth);
-      setHeight(pHeight);
+      setWidthHeight(rect.width, rect.height);
       onStick?.(rect);
     },
     [onStick],
@@ -38,16 +39,12 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   // 상태가 unSticky로 변할 때 실행할 callback
   const handleOnUnStick = useCallback(
     (rect: CallbackParameter) => {
-      const { width: pWidth } = rect;
-
-      setWidth(pWidth);
-      setHeight(0);
+      setWidthHeight(rect.width, 0);
       onUnStick?.(rect);
     },
     [onUnStick],
   );
 
-  // TODO: position값과 handler 분리해서 parameter로 보내는 방법 check
   const { stickyModeMapper, isAbsolute, isSticky } = useStickyMode({
     top,
     bottom,
@@ -74,7 +71,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);
 
-  // TODO: style위치 check
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
     mode,
     isSticky,
