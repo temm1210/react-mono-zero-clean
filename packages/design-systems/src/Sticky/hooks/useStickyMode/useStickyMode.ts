@@ -71,7 +71,6 @@ const useStickyMode = ({ top = 0, bottom = 0, onStick, onUnStick }: StickyModePr
       if (!stickyRect || !fakeRect) return;
 
       const rect = { width: fakeRect.width, height: stickyRect.height, top, bottom };
-
       callback?.(rect);
     },
     [bottom, top],
