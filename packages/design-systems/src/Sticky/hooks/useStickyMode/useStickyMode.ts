@@ -63,27 +63,28 @@ const useStickyMode = ({ top = 0, bottom = 0, onStick, onUnStick }: StickyModePr
     return ref.current?.getBoundingClientRect();
   };
 
-  const getStickyHandlerParameters = useCallback(() => {
-    const stickyRect = getRect(stickyRef);
-    const fakeRect = getRect(fakeRef);
+  const handleStick = useCallback(
+    (callback?: Callback) => {
+      const stickyRect = getRect(stickyRef);
+      const fakeRect = getRect(fakeRef);
 
-    if (!stickyRect || !fakeRect) return;
-    return { width: fakeRect.width, height: stickyRect.height, top, bottom };
-  }, [bottom, top]);
+      if (!stickyRect || !fakeRect) return;
+
+      const rect = { width: fakeRect.width, height: stickyRect.height, top, bottom };
+      callback?.(rect);
+    },
+    [bottom, top],
+  );
 
   // sticky가 활성화 됐을때 실행할 callback
   const handleOnStick = useCallback(() => {
-    const rect = getStickyHandlerParameters();
-    if (!rect) return;
-    onStick?.(rect);
-  }, [getStickyHandlerParameters, onStick]);
+    handleStick(onStick);
+  }, [handleStick, onStick]);
 
   // sticky가 비 활성화 됐을때 실행할 callback
   const handleUnStick = useCallback(() => {
-    const rect = getStickyHandlerParameters();
-    if (!rect) return;
-    onUnStick?.(rect);
-  }, [getStickyHandlerParameters, onUnStick]);
+    handleStick(onUnStick);
+  }, [handleStick, onUnStick]);
 
   useLayoutEffect(() => {
     if (isSticky) {

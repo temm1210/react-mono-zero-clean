@@ -1,6 +1,6 @@
 import { Story } from "@storybook/react";
 import Placeholder from "./Placeholder";
-import Sticky, { Props as StickyProps } from "../Sticky";
+import { Sticky, Props as StickyProps } from "..";
 import StickyContainer from "../StickyContainer";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

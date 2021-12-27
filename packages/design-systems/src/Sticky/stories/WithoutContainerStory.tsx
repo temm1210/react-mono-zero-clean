@@ -1,9 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { Story } from "@storybook/react";
 import Placeholder from "./Placeholder";
-import Sticky, { Props as StickyProps } from "../Sticky";
+import { Sticky, Props as StickyProps } from "..";
 
-const BaseWithoutContainerStory: Story<StickyProps> = (args) => {
+const WithoutContainerStory: Story<StickyProps> = (args) => {
   const { children, ...rest } = args;
 
   return (
@@ -19,4 +19,4 @@ const BaseWithoutContainerStory: Story<StickyProps> = (args) => {
   );
 };
 
-export default BaseWithoutContainerStory;
+export default WithoutContainerStory;
