@@ -84,4 +84,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   return stickyMapper.render({ fakeStyle, stickyClassNames, calculateStickyStyle, children });
 };
 
+export type { CallbackParameter };
+export type { Callback };
 export default Sticky;

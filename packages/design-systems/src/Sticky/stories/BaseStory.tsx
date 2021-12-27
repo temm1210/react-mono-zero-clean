@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { Story } from "@storybook/react";
-import Sticky, { Props as StickyProps } from "../Sticky";
+import { Sticky, Props as StickyProps } from "..";
 import StickyContainer from "../StickyContainer";
 import Placeholder from "./Placeholder";
 
