@@ -3,9 +3,8 @@ import { Sticky, StickyContainer } from "../index";
 import BaseStory from "./BaseStory";
 import PushStory from "./PushStory";
 import BottomStory from "./BottomStory";
-import BaseWithoutContainerStory from "./BaseWithoutContainerStory";
+import WithoutContainerStory from "./WithoutContainerStory";
 import StackStory from "./StackStory";
-import BottomWithoutContainerStory from "./BottomWithoutContainerStory";
 
 export default {
   component: StickyContainer,
@@ -36,13 +35,13 @@ Base.args = {
   children: <Children />,
 };
 
-export const BaseWithoutContainer = BaseWithoutContainerStory.bind({});
+export const BaseWithoutContainer = WithoutContainerStory.bind({});
 BaseWithoutContainer.args = {
   top: 30,
   children: <Children />,
 };
 
-export const BottomWithoutContainer = BaseWithoutContainerStory.bind({});
+export const BottomWithoutContainer = WithoutContainerStory.bind({});
 BottomWithoutContainer.args = {
   mode: "bottom",
   bottom: 20,
