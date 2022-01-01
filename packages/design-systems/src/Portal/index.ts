@@ -11,10 +11,14 @@ const Portal = ({ className = "portal__container", children }: Props) => {
   const containerElement = useMemo(() => document.createElement("div"), []);
 
   useEffect(() => {
-    const parent = document.body;
     containerElement.classList.add(className);
 
+    const parent = document.body;
+
     parent.appendChild(containerElement);
+    return () => {
+      parent.removeChild(containerElement);
+    };
   }, [containerElement, className]);
 
   return createPortal(children, containerElement);
