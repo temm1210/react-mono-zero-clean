@@ -1,4 +1,3 @@
-import React from "react";
 import Portal from "Portal";
 
 export interface Props {
@@ -9,7 +8,7 @@ export interface Props {
 
 const Modal = ({ isOpen, children }: Props) => {
   console.log("isOpen:", isOpen);
-  return <Portal portalClassName="modal-portal__container">{children}</Portal>;
+  return <>{isOpen && <Portal className="modal-portal__container">testset{children}</Portal>}</>;
 };
 
 export default Modal;
