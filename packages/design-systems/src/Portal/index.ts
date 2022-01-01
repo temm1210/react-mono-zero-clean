@@ -3,18 +3,25 @@ import { createPortal } from "react-dom";
 
 export interface Props {
   /** portal할 부모 element의 class name */
-  portalClassName?: string;
+  className?: string;
   children: React.ReactNode;
 }
 
-const Portal = ({ portalClassName = "portal__container", children }: Props) => {
-  const portalContainerElement = useMemo(() => document.createElement("div"), []);
+const Portal = ({ className = "portal__container", children }: Props) => {
+  const containerElement = useMemo(() => document.createElement("div"), []);
 
   useEffect(() => {
-    portalContainerElement.classList.add(portalClassName);
-  }, [portalContainerElement, portalClassName]);
+    containerElement.classList.add(className);
 
-  return createPortal(children, portalContainerElement);
+    const parent = document.body;
+
+    parent.appendChild(containerElement);
+    return () => {
+      parent.removeChild(containerElement);
+    };
+  }, [containerElement, className]);
+
+  return createPortal(children, containerElement);
 };
 
 export default Portal;

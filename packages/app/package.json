@@ -42,8 +42,7 @@
     "webpack-merge": "^5.7.3"
   },
   "scripts": {
-    "start": "ts-node ./config/scripts/start.ts",
-    "build": "webpack --config ./config/webpacks/webpack.prod.ts"
+    "start": "ts-node ./config/scripts/start.ts"
   },
   "browserslist": {
     "production": [

@@ -7,13 +7,23 @@ const BaseStory: Story<ModalProps> = (args) => {
   const { children } = args;
   const [isOpen, setIsOpen] = useState(false);
 
-  const onOpenClick = () => {
+  const openModal = () => {
     setIsOpen(true);
   };
+
+  const closeModal = () => {
+    setIsOpen(false);
+  };
+
+  console.log(isOpen);
   return (
     <div>
-      <button type="button" onClick={onOpenClick}>
-        modal open
+      <button type="button" onClick={openModal}>
+        open modal
+      </button>
+
+      <button type="button" onClick={closeModal}>
+        close modal
       </button>
       <Modal isOpen={isOpen}>{children}</Modal>
     </div>
