@@ -13,5 +13,4 @@
 3. `hooks` : 패키지들이 공통으로 사용하는 custom hooks(참조링크: [react-use](https://github.com/streamich/react-use))
 4. `react-dev-utils` : app package에서 react초기 설정을위한 패키지(참조링크: [react-dev-utils](https://github.com/facebook/create-react-app/tree/main/packages/react-dev-utils))
 5. `react-router-utils` : react-router을 쉽게 사용하기위한 패키지
-6. `service` : 서버와 통신하기위한 레이어
-7. `utils` : 패키지들이 공통으로 사용하는 util 패키지
+6. `utils` : 패키지들이 공통으로 사용하는 util 패키지
