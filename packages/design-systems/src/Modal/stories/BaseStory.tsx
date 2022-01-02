@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Story } from "@storybook/react";
 import Modal, { Props as ModalProps } from "../Modal";
+import "./story.scss";
 
 const BaseStory: Story<ModalProps> = (args) => {
   const { children } = args;
@@ -34,7 +35,7 @@ const BaseStory: Story<ModalProps> = (args) => {
         open modal2
       </button>
 
-      <Modal isOpen={isOpen} onClose={closeModal}>
+      <Modal isOpen={isOpen} onClose={closeModal} overlayClassName="custom-overlay">
         {children}
         <button type="button" onClick={closeModal}>
           close modal
