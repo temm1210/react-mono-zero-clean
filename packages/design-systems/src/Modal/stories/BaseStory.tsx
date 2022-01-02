@@ -24,26 +24,30 @@ const BaseStory: Story<ModalProps> = (args) => {
     setIsOpen2(false);
   };
 
-  console.log(isOpen);
   return (
     <div>
       <button type="button" onClick={openModal}>
         open modal
       </button>
 
-      <button type="button" onClick={closeModal}>
-        close modal
-      </button>
-
       <button type="button" onClick={openModal2}>
         open modal2
       </button>
 
-      <button type="button" onClick={closeModal2}>
-        close modal2
-      </button>
-      <Modal isOpen={isOpen}>{children}</Modal>
-      <Modal isOpen={isOpen2}>{children}</Modal>
+      <Modal isOpen={isOpen}>
+        {children}
+        <button type="button" onClick={closeModal}>
+          close modal
+        </button>
+      </Modal>
+      <Modal isOpen={isOpen2}>
+        {children}
+        <button type="button" onClick={closeModal2}>
+          close modal2
+        </button>
+      </Modal>
+
+      <div style={{ height: "600px" }}>modal scroll</div>
     </div>
   );
 };

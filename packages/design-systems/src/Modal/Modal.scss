@@ -1,0 +1,29 @@
+.modal-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-content {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  .modal-content__body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    transition: transform 0.25s ease-in-out;
+  }
+
+  .modal-content__body--open {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .modal-content__body--close {
+    transform: translate3d(0, 100%, 0);
+  }
+}
