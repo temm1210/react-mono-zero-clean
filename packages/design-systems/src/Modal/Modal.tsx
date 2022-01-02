@@ -10,11 +10,13 @@ export interface Props {
   isOpen: boolean;
   /** Modal을 close하는 함수 */
   onClose: () => void;
+  /** Modal의 overlay className(overlay style지정) */
+  overlayClassName?: string;
   /** Modal의 portal class name */
   portalName?: string;
 }
 
-const Modal = ({ isOpen, children, onClose, portalName = "modal-portal" }: Props) => {
+const Modal = ({ isOpen, children, onClose, overlayClassName, portalName = "modal-portal" }: Props) => {
   const [isEndAnimation, setIsEndAnimation] = useState(false);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
@@ -35,23 +37,25 @@ const Modal = ({ isOpen, children, onClose, portalName = "modal-portal" }: Props
 
   useEvent("transitionend", onTransitionEnd);
 
-  const contentClassNames = cx(
-    "modal-content__body",
-    isEndAnimation && isOpen ? "modal-content__body--open" : "modal-content__body--close",
-  );
-
   const onClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === contentRef.current) {
       onClose();
     }
   };
 
+  const contentClassNames = cx(
+    "modal-content__body",
+    isEndAnimation && isOpen ? "modal-content__body--open" : "modal-content__body--close",
+  );
+
+  const overlayClassNames = cx("modal-content", overlayClassName);
+
   return (
     <>
       {(isOpen || isEndAnimation) && (
         <Portal className={portalName}>
           <div className="modal-container">
-            <div className="modal-content" onClick={onClick}>
+            <div className={overlayClassNames} onClick={onClick}>
               <div ref={contentRef} className={contentClassNames}>
                 {children}
               </div>
