@@ -49,7 +49,7 @@ export type HandleSubmit<F> = (onSubmit: OnSubmit<F>) => (e: React.MouseEvent<HT
 export type Errors<F> = {
   [key in keyof F]: ErrorState;
 };
-// K는 useForm<T> 에서 T에 해당됨
+
 export interface UseFormReturn<F = Record<string, any>> {
   register: Register;
   handleSubmit: HandleSubmit<F>;
