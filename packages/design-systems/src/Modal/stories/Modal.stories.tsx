@@ -7,11 +7,7 @@ export default {
   title: "Design Systems/Modal",
 } as Meta;
 
-const Children = () => {
-  return <div style={{ backgroundColor: "#2ecc71" }}>Modal Content</div>;
-};
-
 export const Base = BaseStory.bind({});
 Base.args = {
-  children: <Children />,
+  overlayColor: "rgba(0, 0, 0, 0.4)",
 };
