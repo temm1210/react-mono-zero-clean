@@ -16,6 +16,15 @@ export interface Props {
   portalName?: string;
 }
 
+const CloseIcon = () => {
+  return (
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+      <path d="M13 14L26 27" stroke="#202327" stroke-width="2" stroke-linecap="round" />
+      <path d="M26 14L13 27" stroke="#202327" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  );
+};
+
 const Modal = ({ isOpen, children, onClose, overlayClassName, portalName = "modal-portal" }: Props) => {
   const [isEndAnimation, setIsEndAnimation] = useState(false);
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -57,7 +66,10 @@ const Modal = ({ isOpen, children, onClose, overlayClassName, portalName = "moda
           <div className="modal-container">
             <div className={overlayClassNames} onClick={onClick}>
               <div ref={contentRef} className={contentClassNames}>
-                {children}
+                <div>
+                  <CloseIcon />
+                  {children}
+                </div>
               </div>
             </div>
           </div>
