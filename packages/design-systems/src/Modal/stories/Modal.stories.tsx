@@ -5,13 +5,24 @@ import Modal from "../Modal";
 export default {
   component: Modal,
   title: "Design Systems/Modal",
+  parameters: {
+    docs: {
+      inlineStories: false,
+      iframeHeight: 400,
+    },
+  },
+  // isOpen과, portalName은 storybook control에서 조작금지
+  argTypes: {
+    isOpen: {
+      control: false,
+    },
+    portalName: {
+      control: false,
+    },
+  },
 } as Meta;
-
-const Children = () => {
-  return <div style={{ backgroundColor: "#2ecc71" }}>Modal Content</div>;
-};
 
 export const Base = BaseStory.bind({});
 Base.args = {
-  children: <Children />,
+  overlayColor: "rgba(0, 0, 0, 0.4)",
 };

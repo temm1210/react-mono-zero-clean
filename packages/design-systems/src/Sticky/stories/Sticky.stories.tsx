@@ -1,4 +1,5 @@
 import { Meta } from "@storybook/react";
+import { Title, Subtitle, Description, Primary, ArgsTable, PRIMARY_STORY } from "@storybook/addon-docs";
 import { Sticky, StickyContainer } from "../index";
 import BaseStory from "./BaseStory";
 import PushStory from "./PushStory";
@@ -10,6 +11,21 @@ export default {
   component: StickyContainer,
   subcomponents: { Sticky },
   title: "Design Systems/Sticky",
+  parameters: {
+    docs: {
+      inlineStories: false,
+      iframeHeight: 400,
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+          <Primary />
+          <ArgsTable story={PRIMARY_STORY} />
+        </>
+      ),
+    },
+  },
 } as Meta;
 
 const Children = () => {

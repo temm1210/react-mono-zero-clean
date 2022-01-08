@@ -1,28 +1,25 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { useState } from "react";
 import { Story } from "@storybook/react";
 import Modal, { Props as ModalProps } from "../Modal";
-import "./story.scss";
 
-const BaseStory: Story<ModalProps> = (args) => {
-  const { children } = args;
-  const [isOpen, setIsOpen] = useState(false);
-  const [isOpen2, setIsOpen2] = useState(false);
+const CloseIcon = () => {
+  return (
+    <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
+      <path d="M13 14L26 27" stroke="#202327" stroke-width="1" stroke-linecap="round" />
+      <path d="M26 14L13 27" stroke="#202327" stroke-width="1" stroke-linecap="round" />
+    </svg>
+  );
+};
+
+const BaseStory: Story<ModalProps> = ({ overlayColor }) => {
+  const [isOpen2, setIsOpen] = useState(false);
 
   const openModal = () => {
     setIsOpen(true);
   };
 
-  const openModal2 = () => {
-    setIsOpen2(true);
-  };
-
   const closeModal = () => {
     setIsOpen(false);
-  };
-
-  const closeModal2 = () => {
-    setIsOpen2(false);
   };
 
   return (
@@ -31,24 +28,18 @@ const BaseStory: Story<ModalProps> = (args) => {
         open modal
       </button>
 
-      <button type="button" onClick={openModal2}>
-        open modal2
-      </button>
-
-      <Modal isOpen={isOpen} onClose={closeModal} overlayClassName="custom-overlay">
-        {children}
-        <button type="button" onClick={closeModal}>
-          close modal
-        </button>
-      </Modal>
-      <Modal isOpen={isOpen2} onClose={closeModal2}>
-        {children}
-        <button type="button" onClick={closeModal2}>
-          close modal2
-        </button>
+      <Modal isOpen={isOpen2} onClose={closeModal} overlayColor={overlayColor}>
+        <div style={{ backgroundColor: "white" }}>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ display: "inline-block", paddingRight: "5px", cursor: "pointer" }} onClick={closeModal}>
+              <CloseIcon />
+            </div>
+          </div>
+          <div style={{ padding: "5px" }}>Modal Content</div>
+        </div>
       </Modal>
 
-      <div style={{ height: "600px" }}>modal scroll</div>
+      <div style={{ height: "600px" }} />
     </div>
   );
 };
