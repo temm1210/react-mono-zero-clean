@@ -12,7 +12,7 @@ const CloseIcon = () => {
 };
 
 const BaseStory: Story<ModalProps> = ({ overlayColor }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen2, setIsOpen] = useState(false);
 
   const openModal = () => {
     setIsOpen(true);
@@ -28,7 +28,7 @@ const BaseStory: Story<ModalProps> = ({ overlayColor }) => {
         open modal
       </button>
 
-      <Modal isOpen={isOpen} onClose={closeModal} overlayColor={overlayColor}>
+      <Modal isOpen={isOpen2} onClose={closeModal} overlayColor={overlayColor}>
         <div style={{ backgroundColor: "white" }}>
           <div style={{ textAlign: "right" }}>
             <div style={{ display: "inline-block", paddingRight: "5px", cursor: "pointer" }} onClick={closeModal}>
