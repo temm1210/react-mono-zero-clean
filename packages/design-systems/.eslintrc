@@ -6,6 +6,7 @@
     "jsx-a11y/no-static-element-interactions": "off",
     "no-underscore-dangle": "off",
     "no-param-reassign": "off",
-    "react/jsx-props-no-spreading": "off"
+    "react/jsx-props-no-spreading": "off",
+    "react/prop-types": "off"
   }
 }
