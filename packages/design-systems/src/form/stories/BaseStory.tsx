@@ -1,5 +1,5 @@
 import { Story } from "@storybook/react";
-import useForm from "../useForm";
+import useForm from "../hooks/useForm";
 
 export interface FormState {
   name: string;
