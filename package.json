@@ -11,8 +11,7 @@
     "start-app": "yarn workspace @project/app start",
     "storybook": "yarn workspace @project/design-systems storybook",
     "build": "lerna run build",
-    "lint-fix": "eslint --fix",
-    "format": "prettier --write ./packages/**"
+    "build-storybook": "build-storybook"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
