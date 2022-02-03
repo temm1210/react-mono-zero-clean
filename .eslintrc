@@ -15,12 +15,7 @@
     "plugin:prettier/recommended"
   ],
   "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "endOfLine": "auto"
-      }
-    ],
+    "prettier/prettier": "off",
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],
     "no-console": "off",
     "import/no-unresolved": "off",
