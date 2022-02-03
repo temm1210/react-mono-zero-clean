@@ -7,7 +7,11 @@ function checkBrowsers(dir) {
   const current = browserslist.loadConfig({ path: dir });
 
   if (!current) {
-    console.log(chalk.red(`Must have ${chalk.bold.red("browserslist")} in ${chalk.bold.red("package.json")} ${"\n"}Please check it`));
+    console.log(
+      chalk.red(
+        `Must have ${chalk.bold.red("browserslist")} in ${chalk.bold.red("package.json")} ${"\n"}Please check it`,
+      ),
+    );
     process.exit(0);
   }
 

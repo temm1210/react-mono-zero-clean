@@ -58,15 +58,17 @@ function createWebpackCompiler(config, devSocket, webpack, urls, appName) {
   });
 
   // 타입체크후
-  forkTsCheckerWebpackPlugin.getCompilerHooks(webpackCompiler).issues.tap("afterTypeScriptCheck", (diagnostics, lints) => {
-    const allMsgs = [...diagnostics, ...lints];
-    const format = (message) => `${message.file}\n${typescriptFormatter(message)}`;
+  forkTsCheckerWebpackPlugin
+    .getCompilerHooks(webpackCompiler)
+    .issues.tap("afterTypeScriptCheck", (diagnostics, lints) => {
+      const allMsgs = [...diagnostics, ...lints];
+      const format = (message) => `${message.file}\n${typescriptFormatter(message)}`;
 
-    tsMessagesResolver({
-      errors: allMsgs.filter((msg) => msg.severity === "error").map(format),
-      warnings: allMsgs.filter((msg) => msg.severity === "warning").map(format),
+      tsMessagesResolver({
+        errors: allMsgs.filter((msg) => msg.severity === "error").map(format),
+        warnings: allMsgs.filter((msg) => msg.severity === "warning").map(format),
+      });
     });
-  });
 
   // 컴파일이 끝난후 실행되는 Hook
   webpackCompiler.hooks.done.tap("done", async (stats) => {

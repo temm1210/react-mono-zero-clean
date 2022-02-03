@@ -27,7 +27,9 @@ function formatter(issue) {
     : "";
   // issueOrigins[origin]
   return [
-    messageColor.bold(`${issueOrigins} ${severity.toLowerCase()} in `) + fileAndNumberColor(`${file}(${line},${character})`) + messageColor(":"),
+    messageColor.bold(`${issueOrigins} ${severity.toLowerCase()} in `) +
+      fileAndNumberColor(`${file}(${line},${character})`) +
+      messageColor(":"),
     `${message}  ${messageColor.underline(`TS${code}`)}`,
     "",
     frame,

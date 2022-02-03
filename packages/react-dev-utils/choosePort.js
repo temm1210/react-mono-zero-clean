@@ -22,7 +22,9 @@ function choosePort(host, defaultPort, appName) {
         }
         // 출력할 error메세지 작성
         const message =
-          process.platform !== "win32" && defaultPort < 1024 ? `Admin permissions are required to run a server on a port below 1024.` : `Something is already running on port ${defaultPort}.`;
+          process.platform !== "win32" && defaultPort < 1024
+            ? `Admin permissions are required to run a server on a port below 1024.`
+            : `Something is already running on port ${defaultPort}.`;
         if (isInteractive) {
           clearConsole();
           //  해당 port로 실행되고 있는 앱이 있는지 확인후 메세지 return
@@ -31,7 +33,9 @@ function choosePort(host, defaultPort, appName) {
           const question = {
             type: "confirm",
             name: "shouldChangePort",
-            message: chalk.yellow(message + `${existingProcess ? ` Probably:\n  ${existingProcess}` : ""}`) + "\n\nWould you like to run the app on another port instead?",
+            message:
+              chalk.yellow(message + `${existingProcess ? ` Probably:\n  ${existingProcess}` : ""}`) +
+              "\n\nWould you like to run the app on another port instead?",
             initial: true,
           };
 
@@ -51,7 +55,12 @@ function choosePort(host, defaultPort, appName) {
         }
       }),
     (err) => {
-      throw new Error(chalk.red(`Could not find an open port at ${chalk.bold(host)}.`) + "\n" + ("Network error message: " + err.message || err) + "\n");
+      throw new Error(
+        chalk.red(`Could not find an open port at ${chalk.bold(host)}.`) +
+          "\n" +
+          ("Network error message: " + err.message || err) +
+          "\n",
+      );
     },
   );
 }

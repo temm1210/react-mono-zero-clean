@@ -23,7 +23,10 @@ function getProcessIdOnPort(port) {
 }
 
 function getDirectoryOfProcessById(processId) {
-  return execSync("lsof -p " + processId + ' | awk \'$4=="cwd" {for (i=9; i<=NF; i++) printf "%s ", $i}\'', execOptions).trim();
+  return execSync(
+    "lsof -p " + processId + ' | awk \'$4=="cwd" {for (i=9; i<=NF; i++) printf "%s ", $i}\'',
+    execOptions,
+  ).trim();
 }
 
 function getProcessCommand(processId, appName) {

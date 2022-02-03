@@ -15,7 +15,8 @@
     "lint": "eslint ./packages/**/*.{js,ts,tsx}",
     "lint:fix": "yarn lint --fix",
     "prepare": "husky install",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "format": "prettier --write ./packages"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
