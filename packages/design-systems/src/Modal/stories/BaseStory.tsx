@@ -5,8 +5,8 @@ import Modal, { Props as ModalProps } from "../Modal";
 const CloseIcon = () => {
   return (
     <svg width="24" height="24" viewBox="0 0 32 32" fill="none">
-      <path d="M13 14L26 27" stroke="#202327" stroke-width="1" stroke-linecap="round" />
-      <path d="M26 14L13 27" stroke="#202327" stroke-width="1" stroke-linecap="round" />
+      <path d="M13 14L26 27" stroke="#202327" strokeWidth="1" strokeLinecap="round" />
+      <path d="M26 14L13 27" stroke="#202327" strokeWidth="1" strokeLinecap="round" />
     </svg>
   );
 };

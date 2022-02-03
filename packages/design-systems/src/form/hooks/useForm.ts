@@ -118,14 +118,12 @@ const useForm = <F, N extends keyof F = keyof F>(): UseFormReturn<F> => {
   };
 
   // 전달된 validation을 실제 value에 적용후 결과를 return
-  const validate =
-    <D extends FormMappingData>(validationName: keyof ErrorState) =>
-    (data: D) => {
-      const strategy = generateErrorStrategy(data);
-      const result = strategy[validationName]();
+  const validate = <D extends FormMappingData>(validationName: keyof ErrorState) => (data: D) => {
+    const strategy = generateErrorStrategy(data);
+    const result = strategy[validationName]();
 
-      return result;
-    };
+    return result;
+  };
 
   // 각각의 error상태(required, minLength, maxLength)에따라 validate실행
   const updateByValidation = (data: Dictionary<FormMappingData>): FormMappingData => {
@@ -147,10 +145,8 @@ const useForm = <F, N extends keyof F = keyof F>(): UseFormReturn<F> => {
     errors: data.errors,
   });
 
-  const omitMapValues =
-    <D extends Record<string, any>, K extends keyof D>(data: D) =>
-    (key: K) =>
-      mapValues(omit<D, K>(key))(data);
+  const omitMapValues = <D extends Record<string, any>, K extends keyof D>(data: D) => (key: K) =>
+    mapValues(omit<D, K>(key))(data);
 
   const handleSubmit: HandleSubmit<F> = (onSubmit) => (e) => {
     e.preventDefault();
