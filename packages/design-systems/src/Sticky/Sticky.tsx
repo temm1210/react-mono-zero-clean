@@ -55,7 +55,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   const stickyMapper = stickyModeMapper[mode];
 
   // scroll event에 등록할 handler
-  const update = () => {
+  const update = useCallback(() => {
     const { isStick, unStick, isReachContainerBottomToMode, stickyToContainerBottom, stickyToModeOfScreen } =
       stickyMapper;
 
@@ -66,7 +66,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
       return stickyToModeOfScreen();
     }
     return unStick();
-  };
+  }, [stickyMapper]);
 
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);

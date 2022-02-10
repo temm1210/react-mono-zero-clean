@@ -27,7 +27,7 @@ export interface UseStatusUpdatersProps {
  * 오로지 상태값관련 역할만 담당
  */
 const useStatusUpdaters = ({ initIsSticky }: UseStatusUpdatersProps): UseStatusUpdateReturn => {
-  const [isSticky, setIsSticky] = useState(initIsSticky);
+  const [isSticky, setIsSticky] = useState(false);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
   const [handler, setHandler] = useState<StatusUpdateHandlersReturn>(null);
