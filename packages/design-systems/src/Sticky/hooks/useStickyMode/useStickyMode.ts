@@ -1,10 +1,10 @@
-import { RefObject, useMemo, useRef, useCallback, useLayoutEffect } from "react";
+import { useMemo, useCallback, useLayoutEffect, useEffect } from "react";
 import { useClosetParent } from "@project/react-hooks";
+import stickyRenderMode, { StickyModeComponent } from "./stickyRenderMode";
 import usePositionCalculators, { PositionCalculator } from "../usePositionCalculators";
 import useStatusUpdaters, { StatusUpdateInfo } from "../useStatusUpdaters";
 import { parentSelector } from "../../utils";
 import { StickyMode } from "../../types";
-import stickyRenderMode, { StickyModeComponent } from "./stickyRenderMode";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
 
@@ -37,44 +37,35 @@ export interface UseStickyModeReturn extends StatusUpdateInfo {
  * Sticky의 mode에 따라 실행해야할 기능들을 return함
  */
 const useStickyMode = ({ top = 0, bottom = 0, onStick, onUnStick }: StickyModeProps): UseStickyModeReturn => {
-  const fakeRef = useRef<HTMLDivElement | null>(null);
-  const stickyRef = useRef<HTMLDivElement | null>(null);
-  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
-
-  const renderByMode = stickyRenderMode({ fakeRef, stickyRef, findParentFrom });
-
-  // 현재 엘리먼트의 상태값을 업데이트하는 handler와 상태 결과값을 return
-  const [statusUpdateHandlers, { isSticky, isAbsolute }] = useStatusUpdaters({
-    initIsSticky: !parentNode,
-  });
-
   // scroll 위치에 따라 현재 엘리먼트의 위치값을 계산하는 handler
-  const calculatePositionHandlers = usePositionCalculators(
-    parentNode || document.body,
-    fakeRef.current,
-    stickyRef.current,
-    {
+  const [[setParentRef], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
+    usePositionCalculators({
       top,
       bottom,
-    },
-  );
+    });
 
-  const getRect = (ref: RefObject<Element | null>) => {
-    return ref.current?.getBoundingClientRect();
-  };
+  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
+
+  useEffect(() => {
+    setParentRef(parentNode || document.body);
+  }, [parentNode, setParentRef]);
+
+  // 현재 엘리먼트의 상태값을 업데이트하는 handler와 상태 결과값을 return
+  const [statusUpdateHandlers, { isSticky, isAbsolute }] = useStatusUpdaters({ initIsSticky: !parentNode });
 
   const handleStick = useCallback(
     (callback?: Callback) => {
-      const stickyRect = getRect(stickyRef);
-      const fakeRect = getRect(fakeRef);
-
-      if (!stickyRect || !fakeRect) return;
-
       const rect = { width: fakeRect.width, height: stickyRect.height, top, bottom };
       callback?.(rect);
     },
-    [bottom, top],
+    [bottom, fakeRect.width, stickyRect.height, top],
   );
+
+  const renderByMode = stickyRenderMode({
+    fakeRef,
+    stickyRef,
+    parentRef: findParentFrom,
+  });
 
   // sticky가 활성화 됐을때 실행할 callback
   const handleOnStick = useCallback(() => {

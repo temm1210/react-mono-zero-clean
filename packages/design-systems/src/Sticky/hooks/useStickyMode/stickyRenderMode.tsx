@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { MutableRefObject, ReactNode, useMemo } from "react";
-import { FindParentFrom } from "@project/react-hooks/dist/useClosetParent";
 import { StickyMode } from "../../types";
 
+type StickyRenderRef = MutableRefObject<any | null> | ((e: HTMLElement | null) => void);
 export interface StickyRenderModeRefProps {
-  fakeRef: MutableRefObject<any | null>;
-  stickyRef: MutableRefObject<any | null>;
-  findParentFrom: FindParentFrom;
+  fakeRef: StickyRenderRef;
+  stickyRef: StickyRenderRef;
+  parentRef: StickyRenderRef;
 }
 
 export type CalculateStickyStyle = () => Record<string, any> | undefined;
@@ -23,15 +23,17 @@ export type StickyRenderModeProps = StickyModeStyleProps;
 export type StickyModeComponent = (props: StickyRenderModeProps) => JSX.Element;
 
 export type StickyRenderModeReturn = (refs: StickyRenderModeRefProps) => (mode: StickyMode) => StickyModeComponent;
-// curry 함수컴포넌트
+
+// rendering만 담당
+// 상태값을 가지면안됨
 const stickyRenderMode: StickyRenderModeReturn =
-  ({ fakeRef, stickyRef, findParentFrom }) =>
+  ({ fakeRef, stickyRef, parentRef }) =>
   (mode) =>
   ({ calculateStickyStyle, stickyClassNames, fakeStyle, children }) => {
     const modeMapper = useMemo(
       () => ({
         top: (
-          <div ref={findParentFrom} className="sticky-wrap">
+          <div ref={parentRef} className="sticky-wrap">
             {/* fake element */}
             <div ref={fakeRef} className="sticky__fake" style={fakeStyle} />
             <div ref={stickyRef} className={stickyClassNames} style={calculateStickyStyle()}>
@@ -41,7 +43,7 @@ const stickyRenderMode: StickyRenderModeReturn =
         ),
 
         bottom: (
-          <div ref={findParentFrom} className="sticky-wrap">
+          <div ref={parentRef} className="sticky-wrap">
             <div ref={stickyRef} className={stickyClassNames} style={calculateStickyStyle()}>
               {children}
             </div>
