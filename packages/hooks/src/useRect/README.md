@@ -20,7 +20,7 @@ function Component(object:Object) => {
 ```typescript
 type Rect = Pick<DOMRectReadOnly, "top" | "left" | "right" | "bottom" | "height" | "width">;
 
-export type UseRectRef<E> = (element: E) => void;
+export type UseRectRef<E> = (element: E | null) => void;
 export type UseRectResult<E> = [UseRectRef<E>, Rect];
 
 useRect<E>(): UseRectResult<E>

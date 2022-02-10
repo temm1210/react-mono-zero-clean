@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 type Rect = Pick<DOMRectReadOnly, "top" | "left" | "right" | "bottom" | "height" | "width">;
 
-export type UseRectRef<E> = (element: E) => void;
+export type UseRectRef<E> = (element: E | null) => void;
 export type UseRectResult<E> = [UseRectRef<E>, Rect];
 
 const defaultState: Rect = {
