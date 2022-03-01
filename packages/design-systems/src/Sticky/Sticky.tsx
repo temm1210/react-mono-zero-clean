@@ -68,7 +68,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     bottom,
   });
 
-  return StickyView({
+  const props = {
     mode,
     fakeHeightRef,
     stickyRef,
@@ -76,8 +76,9 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     fakeStyle,
     stickyClassNames,
     calculateStickyStyle,
-    children,
-  });
+  };
+
+  return <StickyView {...props}>{children}</StickyView>;
 };
 
 export default Sticky;
