@@ -1,7 +1,7 @@
 import { useMemo, useCallback, useLayoutEffect, useEffect } from "react";
 import { useClosetParent } from "@project/react-hooks";
 import stickyRenderMode, { StickyModeComponent } from "./stickyRenderMode";
-import usePositionCalculators, { PositionCalculator } from "../usePositionCalculators";
+import usePositionCalculators, { UsePositionCalculatorHandler } from "../usePositionCalculators";
 import useStatusUpdaters, { StatusUpdateInfo } from "../useStatusUpdaters";
 import { parentSelector } from "../../utils";
 import { StickyMode } from "../../types";
@@ -21,8 +21,8 @@ interface StickyModeProps {
 export type StatusHandler = () => void;
 
 export interface StickyModeValue {
-  isStick: PositionCalculator;
-  isReachContainerBottomToMode: PositionCalculator;
+  isStick: UsePositionCalculatorHandler;
+  isReachContainerBottomToMode: UsePositionCalculatorHandler;
   stickyToContainerBottom: StatusHandler;
   stickyToModeOfScreen: StatusHandler;
   unStick: StatusHandler;
