@@ -4,7 +4,7 @@ import { StickyMode } from "../../types";
 
 type StickyRenderRef = MutableRefObject<any | null> | ((e: HTMLElement | null) => void);
 export interface StickyRenderModeRefProps {
-  fakeRef: StickyRenderRef;
+  fakeHeightRef: StickyRenderRef;
   stickyRef: StickyRenderRef;
   parentRef: StickyRenderRef;
 }
@@ -27,7 +27,7 @@ export type StickyRenderModeReturn = (refs: StickyRenderModeRefProps) => (mode: 
 // rendering만 담당
 // 상태값을 가지면안됨
 const stickyRenderMode: StickyRenderModeReturn =
-  ({ fakeRef, stickyRef, parentRef }) =>
+  ({ fakeHeightRef, stickyRef, parentRef }) =>
   (mode) =>
   ({ calculateStickyStyle, stickyClassNames, fakeStyle, children }) => {
     const modeMapper = useMemo(
@@ -35,7 +35,7 @@ const stickyRenderMode: StickyRenderModeReturn =
         top: (
           <div ref={parentRef} className="sticky-wrap">
             {/* fake element */}
-            <div ref={fakeRef} className="sticky__fake" style={fakeStyle} />
+            <div ref={fakeHeightRef} className="sticky__fake" style={fakeStyle} />
             <div ref={stickyRef} className={stickyClassNames} style={calculateStickyStyle()}>
               {children}
             </div>
@@ -48,7 +48,7 @@ const stickyRenderMode: StickyRenderModeReturn =
               {children}
             </div>
             {/* fake element */}
-            <div ref={fakeRef} className="sticky__fake" style={fakeStyle} />
+            <div ref={fakeHeightRef} className="sticky__fake" style={fakeStyle} />
           </div>
         ),
       }),

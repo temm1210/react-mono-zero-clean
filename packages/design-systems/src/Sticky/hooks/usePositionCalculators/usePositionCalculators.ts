@@ -1,26 +1,30 @@
 import { useRect } from "@project/react-hooks";
 import { UseClientRect, UseRectRef } from "@project/react-hooks/src/useRect";
 
-export interface RectProps {
+export type UsePositionCalculatorHandler = () => boolean;
+
+export interface UsePositionCalculatorHandlers {
+  isReachContainerBottomToTop: UsePositionCalculatorHandler;
+  isReachContainerBottomToBottom: UsePositionCalculatorHandler;
+  isReachScreenTop: UsePositionCalculatorHandler;
+  isReachScreenBottom: UsePositionCalculatorHandler;
+}
+
+export type UsePositionCalculatorRect = [UseRectRef, UseClientRect];
+
+export type UsePositionCalculatorRectReturns = [
+  UsePositionCalculatorRect,
+  UsePositionCalculatorRect,
+  UsePositionCalculatorRect,
+];
+
+export interface UsePositionCalculatorRectProps {
   top: number;
   bottom: number;
 }
-
-export type PositionCalculator = () => boolean;
-
-export interface PositionCalculators {
-  isReachContainerBottomToTop: PositionCalculator;
-  isReachContainerBottomToBottom: PositionCalculator;
-  isReachScreenTop: PositionCalculator;
-  isReachScreenBottom: PositionCalculator;
-}
-
-type PositionCalculatorsUseRect = [UseRectRef, UseClientRect];
-export type PositionCalculatorsReturn = [
-  PositionCalculatorsUseRect,
-  PositionCalculatorsUseRect,
-  PositionCalculatorsUseRect,
-  { calculatePositionHandlers: () => PositionCalculators },
+export type UsePositionCalculatorReturn = [
+  ...UsePositionCalculatorRectReturns,
+  { calculatePositionHandlers: () => UsePositionCalculatorHandlers },
 ];
 
 /**
@@ -28,7 +32,10 @@ export type PositionCalculatorsReturn = [
  * 오로지 component의 위치계산 역할만 담당
  * @returns {PositionsReturn}
  */
-const usePositionCalculators = ({ top = 0, bottom = 0 }: RectProps): PositionCalculatorsReturn => {
+const usePositionCalculator = ({
+  top = 0,
+  bottom = 0,
+}: UsePositionCalculatorRectProps): UsePositionCalculatorReturn => {
   const [parentRef, getParentRect] = useRect();
   const [stickyRef, getStickyRect] = useRect();
   const [heightRef, getHeightRect] = useRect();
@@ -77,4 +84,4 @@ const usePositionCalculators = ({ top = 0, bottom = 0 }: RectProps): PositionCal
   ];
 };
 
-export default usePositionCalculators;
+export default usePositionCalculator;

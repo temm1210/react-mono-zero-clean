@@ -12,7 +12,7 @@
     "storybook": "yarn workspace @project/design-systems storybook",
     "build": "lerna run build",
     "build-storybook": "build-storybook",
-    "lint": "eslint ./packages/**/*.{js,ts,tsx}",
+    "lint": "eslint --quiet",
     "lint:fix": "yarn lint --fix",
     "prepare": "husky install",
     "lint-staged": "lint-staged",

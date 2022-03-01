@@ -47,18 +47,24 @@ const Children = () => {
 
 export const Base = BaseStory.bind({});
 Base.args = {
+  onStick: (rect) => console.log("onSticky:", rect),
+  onUnStick: (rect) => console.log("onUnSticky:", rect),
   top: 20,
   children: <Children />,
 };
 
 export const BaseWithoutContainer = WithoutContainerStory.bind({});
 BaseWithoutContainer.args = {
+  onStick: (rect) => console.log("onSticky:", rect),
+  onUnStick: (rect) => console.log("onUnSticky:", rect),
   top: 30,
   children: <Children />,
 };
 
 export const BottomWithoutContainer = WithoutContainerStory.bind({});
 BottomWithoutContainer.args = {
+  onStick: (rect) => console.log("onSticky:", rect),
+  onUnStick: (rect) => console.log("onUnSticky:", rect),
   mode: "bottom",
   bottom: 20,
   children: <Children />,
@@ -66,6 +72,8 @@ BottomWithoutContainer.args = {
 
 export const Bottom = BottomStory.bind({});
 Bottom.args = {
+  onStick: (rect) => console.log("onSticky:", rect),
+  onUnStick: (rect) => console.log("onUnSticky:", rect),
   mode: "bottom",
   bottom: 20,
   children: <Children />,

@@ -1,8 +1,8 @@
 import { useMemo, useCallback, useLayoutEffect, useEffect } from "react";
 import { useClosetParent } from "@project/react-hooks";
 import stickyRenderMode, { StickyModeComponent } from "./stickyRenderMode";
-import usePositionCalculators, { PositionCalculator } from "../usePositionCalculators";
-import useStatusUpdaters, { StatusUpdateInfo } from "../useStatusUpdaters";
+import usePositionCalculators, { UsePositionCalculatorHandler } from "../usePositionCalculators";
+import useStatusUpdaters, { UseStatusState } from "../useStatusUpdaters";
 import { parentSelector } from "../../utils";
 import { StickyMode } from "../../types";
 
@@ -21,8 +21,8 @@ interface StickyModeProps {
 export type StatusHandler = () => void;
 
 export interface StickyModeValue {
-  isStick: PositionCalculator;
-  isReachContainerBottomToMode: PositionCalculator;
+  isStick: UsePositionCalculatorHandler;
+  isReachContainerBottomToMode: UsePositionCalculatorHandler;
   stickyToContainerBottom: StatusHandler;
   stickyToModeOfScreen: StatusHandler;
   unStick: StatusHandler;
@@ -30,15 +30,15 @@ export interface StickyModeValue {
 }
 
 export type UseStickyMode = Record<StickyMode, StickyModeValue>;
-export interface UseStickyModeReturn extends StatusUpdateInfo {
+export interface UseStickyModeReturn extends UseStatusState {
   stickyModeMapper: UseStickyMode;
 }
 /**
- * Sticky의 mode에 따라 실행해야할 기능들을 return함
+ * ! Deprecated Sticky의 mode에 따라 실행해야할 기능들을 return함
  */
 const useStickyMode = ({ top = 0, bottom = 0, onStick, onUnStick }: StickyModeProps): UseStickyModeReturn => {
   // scroll 위치에 따라 현재 엘리먼트의 위치값을 계산하는 handler
-  const [[setParentRef], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
+  const [[setParentRef], [stickyRef, stickyRect], [fakeHeightRef, useFakeHeightRect], { calculatePositionHandlers }] =
     usePositionCalculators({
       top,
       bottom,
@@ -55,14 +55,14 @@ const useStickyMode = ({ top = 0, bottom = 0, onStick, onUnStick }: StickyModePr
 
   const handleStick = useCallback(
     (callback?: Callback) => {
-      const rect = { width: fakeRect.width, height: stickyRect.height, top, bottom };
+      const rect = { width: useFakeHeightRect.width, height: stickyRect.height, top, bottom };
       callback?.(rect);
     },
-    [bottom, fakeRect.width, stickyRect.height, top],
+    [bottom, useFakeHeightRect.width, stickyRect.height, top],
   );
 
   const renderByMode = stickyRenderMode({
-    fakeRef,
+    fakeHeightRef,
     stickyRef,
     parentRef: findParentFrom,
   });
