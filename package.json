@@ -11,6 +11,7 @@
     "start-app": "yarn workspace @project/app start",
     "storybook": "yarn workspace @project/design-systems storybook",
     "build": "lerna run build",
+    "compile": "lerna run compile",
     "build-storybook": "build-storybook",
     "lint": "eslint ./packages/**/*.{js,ts,tsx}",
     "lint:fix": "yarn lint --fix",
@@ -60,7 +61,8 @@
   },
   "lint-staged": {
     "*.{js,css,ts,tsx}": [
-      "yarn lint:fix"
+      "yarn lint:fix",
+      "bash -c 'yarn compile'"
     ]
   },
   "browserslist": [
