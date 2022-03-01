@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import cx from "clsx";
-import { StickyMode } from "../../StickyView";
+import { StickyMode, StickyViewCalculateStickyStyle, StickyViewFakeStyle } from "../../StickyView";
 
 export interface Props {
   /** 상단에 붙을지 하단에 붙을지 결정 */
@@ -19,15 +19,12 @@ export interface Props {
   bottom: number;
 }
 
-export type StickyStyle = () => Record<string, any> | undefined;
-export type FakeStyle = Record<string, any>;
-
-export interface StylesValues {
-  calculateStickyStyle: StickyStyle;
+export interface UseStyleStyleMode {
+  calculateStickyStyle: StickyViewCalculateStickyStyle;
   stickyClassNames: string;
-  fakeStyle: FakeStyle;
+  fakeStyle: StickyViewFakeStyle;
 }
-export type CalculateStickyStyle = Record<StickyMode, StylesValues>;
+export type UseStyleCalculateStyleMode = Record<StickyMode, UseStyleStyleMode>;
 
 /**
  * style과 관련된 로직만 처리
@@ -40,7 +37,7 @@ const useStyles = ({ mode, isSticky, isAbsolute, width, height, top, bottom }: P
 
   const fakeStyle = { height };
 
-  const calculateStickyStyleByMode: CalculateStickyStyle = {
+  const calculateStickyStyleByMode: UseStyleCalculateStyleMode = {
     top: {
       calculateStickyStyle: () => {
         if (!isSticky) return;

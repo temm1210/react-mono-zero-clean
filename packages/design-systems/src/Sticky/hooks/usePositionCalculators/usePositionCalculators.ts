@@ -30,7 +30,6 @@ export type UsePositionCalculatorReturn = [
 /**
  * scroll 위치에따라 sticky component의 위치값 계산
  * 오로지 component의 위치계산 역할만 담당
- * @returns {PositionsReturn}
  */
 const usePositionCalculator = ({
   top = 0,
