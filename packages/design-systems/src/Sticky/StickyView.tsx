@@ -5,7 +5,7 @@ export type StickyMode = "top" | "bottom";
 
 type StickyViewRef = MutableRefObject<any | null> | ((e: HTMLElement | null) => void);
 export interface StickyViewRefProps {
-  fakeHeightRef: StickyViewRef;
+  fakeRef: StickyViewRef;
   stickyRef: StickyViewRef;
   parentRef: StickyViewRef;
 }
@@ -28,7 +28,7 @@ export interface StickyViewProps extends StickyViewStyleProps, StickyViewRefProp
  * 상태값을 가지면안됨
  */
 const StickyView = ({
-  fakeHeightRef,
+  fakeRef,
   stickyRef,
   parentRef,
   mode,
@@ -41,7 +41,7 @@ const StickyView = ({
     top: (
       <div ref={parentRef} className="sticky-wrap">
         {/* fake element */}
-        <div ref={fakeHeightRef} className="sticky__fake" style={fakeStyle} />
+        <div ref={fakeRef} className="sticky__fake" style={fakeStyle} />
         <div ref={stickyRef} className={stickyClassNames} style={calculateStickyStyle()}>
           {children}
         </div>
@@ -54,7 +54,7 @@ const StickyView = ({
           {children}
         </div>
         {/* fake element */}
-        <div ref={fakeHeightRef} className="sticky__fake" style={fakeStyle} />
+        <div ref={fakeRef} className="sticky__fake" style={fakeStyle} />
       </div>
     ),
   };
