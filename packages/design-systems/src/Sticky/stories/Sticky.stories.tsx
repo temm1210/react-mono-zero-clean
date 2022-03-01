@@ -8,8 +8,8 @@ import WithoutContainerStory from "./WithoutContainerStory";
 import StackStory from "./StackStory";
 
 export default {
-  component: StickyContainer,
-  subcomponents: { Sticky },
+  component: Sticky,
+  subcomponents: { StickyContainer },
   title: "Design Systems/Sticky",
   parameters: {
     docs: {

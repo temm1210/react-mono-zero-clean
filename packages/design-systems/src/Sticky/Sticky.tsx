@@ -1,13 +1,11 @@
 import { useCallback, useState, useEffect, useLayoutEffect } from "react";
 import { useClosetParent } from "@project/react-hooks";
 import { parentSelector } from "./utils";
-import { StickyMode } from "./types";
 import { useStyles, useStickyOperation } from "./hooks";
-import { stickyRenderMode } from "./hooks/useStickyMode";
+import StickyView, { StickyMode } from "./StickyView";
 import "./Sticky.scss";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
-
 export type CallbackParameter = Record<keyof Rect, number>;
 export type Callback = (rect: CallbackParameter) => void;
 
@@ -34,11 +32,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
       top,
       bottom,
     });
-  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
-
-  useEffect(() => {
-    setParentRef(parentNode || document.body);
-  }, [parentNode, setParentRef]);
 
   const setWidthHeight = (pWidth: number, pHeight: number) => {
     setWidth(pWidth);
@@ -66,14 +59,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     handleOnUnStick();
   }, [handleOnStick, handleOnUnStick, isSticky]);
 
-  const renderByMode = stickyRenderMode({
-    fakeHeightRef,
-    stickyRef,
-    parentRef: findParentFrom,
-  });
-
-  const render = renderByMode(mode);
-
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
     mode,
     isSticky,
@@ -84,7 +69,22 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     bottom,
   });
 
-  return render({ fakeStyle, stickyClassNames, calculateStickyStyle, children });
+  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
+
+  useEffect(() => {
+    setParentRef(parentNode || document.body);
+  }, [parentNode, setParentRef]);
+
+  return StickyView({
+    mode,
+    fakeHeightRef,
+    stickyRef,
+    parentRef: findParentFrom,
+    fakeStyle,
+    stickyClassNames,
+    calculateStickyStyle,
+    children,
+  });
 };
 
 export default Sticky;
