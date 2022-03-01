@@ -2,21 +2,21 @@ import { useState, useEffect } from "react";
 // eslint-disable-next-line camelcase
 import { unstable_batchedUpdates } from "react-dom";
 
-export type StatusUpdateHandler = () => void;
+export type UseStatusUpdateHandler = () => void;
 
-export interface StatusUpdateHandlers {
-  stickToScreenTop: StatusUpdateHandler;
-  stickToContainerBottom: StatusUpdateHandler;
-  stickyToScreenBottom: StatusUpdateHandler;
-  unStick: StatusUpdateHandler;
+export interface UseStatusUpdateHandlers {
+  stickToScreenTop: UseStatusUpdateHandler;
+  stickToContainerBottom: UseStatusUpdateHandler;
+  stickyToScreenBottom: UseStatusUpdateHandler;
+  unStick: UseStatusUpdateHandler;
 }
-export interface StatusUpdateInfo {
+export interface UseStatusState {
   isSticky: boolean;
   isAbsolute: boolean;
 }
 
-export type StatusUpdateHandlersReturn = StatusUpdateHandlers | null;
-export type UseStatusUpdateReturn = [StatusUpdateHandlersReturn, StatusUpdateInfo];
+export type UseStatusUpdateHandlersReturn = UseStatusUpdateHandlers | null;
+export type UseStatusUpdateReturn = [UseStatusUpdateHandlersReturn, UseStatusState];
 
 export interface UseStatusUpdatersProps {
   initIsSticky: boolean;
@@ -30,7 +30,7 @@ const useStatusUpdaters = ({ initIsSticky }: UseStatusUpdatersProps): UseStatusU
   const [isSticky, setIsSticky] = useState(false);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
-  const [handler, setHandler] = useState<StatusUpdateHandlersReturn>(null);
+  const [handler, setHandler] = useState<UseStatusUpdateHandlersReturn>(null);
 
   useEffect(() => {
     setIsSticky(initIsSticky);

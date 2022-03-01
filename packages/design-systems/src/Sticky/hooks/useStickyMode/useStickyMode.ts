@@ -2,7 +2,7 @@ import { useMemo, useCallback, useLayoutEffect, useEffect } from "react";
 import { useClosetParent } from "@project/react-hooks";
 import stickyRenderMode, { StickyModeComponent } from "./stickyRenderMode";
 import usePositionCalculators, { UsePositionCalculatorHandler } from "../usePositionCalculators";
-import useStatusUpdaters, { StatusUpdateInfo } from "../useStatusUpdaters";
+import useStatusUpdaters, { UseStatusState } from "../useStatusUpdaters";
 import { parentSelector } from "../../utils";
 import { StickyMode } from "../../types";
 
@@ -30,7 +30,7 @@ export interface StickyModeValue {
 }
 
 export type UseStickyMode = Record<StickyMode, StickyModeValue>;
-export interface UseStickyModeReturn extends StatusUpdateInfo {
+export interface UseStickyModeReturn extends UseStatusState {
   stickyModeMapper: UseStickyMode;
 }
 /**

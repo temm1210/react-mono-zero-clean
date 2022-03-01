@@ -1,47 +1,50 @@
-import { useMemo, useCallback, useEffect, useLayoutEffect } from "react";
-import { useClosetParent } from "@project/react-hooks";
-import { parentSelector } from "Sticky/utils";
+import { useEvent } from "@project/react-hooks";
+import { useMemo, useCallback, useLayoutEffect } from "react";
 import { usePositionCalculators, useStatusUpdaters } from "..";
-import stickyRenderMode from "../useStickyMode/stickyRenderMode";
+import { UsePositionCalculatorRectReturns } from "../usePositionCalculators";
+import { UseStatusState } from "../useStatusUpdaters";
+import { StickyMode } from "../../types";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
 
 export type CallbackParameter = Record<keyof Rect, number>;
 export type Callback = (rect: CallbackParameter) => void;
 
-export interface useStickyOperationProps {
+export interface UseStickyOperationProps {
+  mode: StickyMode;
   top: number;
   bottom: number;
   onStick?: Callback;
   onUnStick?: Callback;
 }
 
-function useStickyOperation({ top, bottom, onStick, onUnStick }: useStickyOperationProps) {
-  const [[setParentRef], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
-    usePositionCalculators({
-      top,
-      bottom,
-    });
+export type UseStickyOperationReturn = [...UsePositionCalculatorRectReturns, UseStatusState];
 
-  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
-  const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters({ initIsSticky: !parentNode });
-
-  useEffect(() => {
-    setParentRef(parentNode || document.body);
-  }, [parentNode, setParentRef]);
-
-  const renderByMode = stickyRenderMode({
-    fakeRef,
-    stickyRef,
-    parentRef: findParentFrom,
+function useStickyOperation({
+  top,
+  bottom,
+  mode,
+  onStick,
+  onUnStick,
+}: UseStickyOperationProps): UseStickyOperationReturn {
+  const [
+    [parentRef, parentRect],
+    [stickyRef, stickyRect],
+    [fakeHeightRef, fakeHeightRect],
+    { calculatePositionHandlers },
+  ] = usePositionCalculators({
+    top,
+    bottom,
   });
+
+  const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters({ initIsSticky: !parentRect });
 
   const handleStick = useCallback(
     (callback?: Callback) => {
-      const rect = { width: fakeRect.width, height: stickyRect.height, top, bottom };
+      const rect = { width: fakeHeightRect.width, height: stickyRect.height, top, bottom };
       callback?.(rect);
     },
-    [bottom, fakeRect.width, stickyRect.height, top],
+    [bottom, fakeHeightRect.width, stickyRect.height, top],
   );
 
   // sticky가 활성화 됐을때 실행할 callback
@@ -69,7 +72,6 @@ function useStickyOperation({ top, bottom, onStick, onUnStick }: useStickyOperat
         stickyToContainerBottom: () => statusUpdaters?.stickToContainerBottom(),
         stickyToModeOfScreen: () => statusUpdaters?.stickToScreenTop(),
         unStick: () => statusUpdaters?.unStick(),
-        render: renderByMode("top"),
       },
       bottom: {
         isStick: () => calculatePositionHandlers().isReachScreenBottom(),
@@ -77,13 +79,31 @@ function useStickyOperation({ top, bottom, onStick, onUnStick }: useStickyOperat
         stickyToContainerBottom: () => statusUpdaters?.stickToContainerBottom(),
         stickyToModeOfScreen: () => statusUpdaters?.stickyToScreenBottom(),
         unStick: () => statusUpdaters?.unStick(),
-        render: renderByMode("bottom"),
       },
     }),
-    [calculatePositionHandlers, renderByMode, statusUpdaters],
+    [calculatePositionHandlers, statusUpdaters],
   );
 
-  return { stickyModeMapper, isSticky, isAbsolute };
+  const stickyMapper = stickyModeMapper[mode];
+
+  // scroll event에 등록할 handler
+  const update = useCallback(() => {
+    const { isStick, unStick, isReachContainerBottomToMode, stickyToContainerBottom, stickyToModeOfScreen } =
+      stickyMapper;
+
+    if (isStick()) {
+      if (isReachContainerBottomToMode()) {
+        return stickyToContainerBottom();
+      }
+      return stickyToModeOfScreen();
+    }
+    return unStick();
+  }, [stickyMapper]);
+
+  useEvent("scroll", update, { passive: true });
+  useEvent("resize", update);
+
+  return [[parentRef, parentRect], [stickyRef, stickyRect], [fakeHeightRef, fakeHeightRect], { isSticky, isAbsolute }];
 }
 
 export default useStickyOperation;

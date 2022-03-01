@@ -89,13 +89,15 @@
 // export type { Callback };
 // export default Sticky;
 
-import { useCallback, useState } from "react";
-import { useEvent } from "@project/react-hooks";
+import { useCallback, useState, useEffect } from "react";
+import { useClosetParent } from "@project/react-hooks";
+import { parentSelector } from "./utils";
 import { StickyMode } from "./types";
 import { useStyles } from "./hooks";
 import { Callback, CallbackParameter } from "./hooks/useStickyMode";
-import "./Sticky.scss";
 import useStickyOperation from "./hooks/useStickyOperation";
+import stickyRenderMode from "./hooks/useStickyMode/stickyRenderMode";
+import "./Sticky.scss";
 
 export interface Props {
   children: React.ReactNode;
@@ -137,38 +139,30 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     [onUnStick],
   );
 
-  // const { stickyModeMapper, isAbsolute, isSticky } = useStickyMode({
-  //   top,
-  //   bottom,
-  //   onStick: handleOnStick,
-  //   onUnStick: handleOnUnStick,
-  // });
+  const [[setParentRef], [stickyRef, stickyRect], [fakeHeightRef, fakeHeightRect], { isSticky, isAbsolute }] =
+    useStickyOperation({
+      mode,
+      top,
+      bottom,
+      onStick: handleOnStick,
+      onUnStick: handleOnUnStick,
+    });
+  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
 
-  const { stickyModeMapper, isAbsolute, isSticky } = useStickyOperation({
-    top,
-    bottom,
-    onStick: handleOnStick,
-    onUnStick: handleOnUnStick,
+  console.log("stickyRect:", stickyRect);
+  console.log("fakeHeightRect:", fakeHeightRect);
+
+  useEffect(() => {
+    setParentRef(parentNode || document.body);
+  }, [parentNode, setParentRef]);
+
+  const renderByMode = stickyRenderMode({
+    fakeHeightRef,
+    stickyRef,
+    parentRef: findParentFrom,
   });
 
-  const stickyMapper = stickyModeMapper[mode];
-
-  // scroll event에 등록할 handler
-  const update = useCallback(() => {
-    const { isStick, unStick, isReachContainerBottomToMode, stickyToContainerBottom, stickyToModeOfScreen } =
-      stickyMapper;
-
-    if (isStick()) {
-      if (isReachContainerBottomToMode()) {
-        return stickyToContainerBottom();
-      }
-      return stickyToModeOfScreen();
-    }
-    return unStick();
-  }, [stickyMapper]);
-
-  useEvent("scroll", update, { passive: true });
-  useEvent("resize", update);
+  const render = renderByMode(mode);
 
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
     mode,
@@ -180,7 +174,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     bottom,
   });
 
-  return stickyMapper.render({ fakeStyle, stickyClassNames, calculateStickyStyle, children });
+  return render({ fakeStyle, stickyClassNames, calculateStickyStyle, children });
 };
 
 export type { CallbackParameter };
