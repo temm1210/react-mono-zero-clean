@@ -1,8 +1,9 @@
 import { useCallback, useState, useEffect, useLayoutEffect } from "react";
 import { useClosetParent } from "@project/react-hooks";
 import { parentSelector } from "./utils";
-import { useStyles, useStickyOperation } from "./hooks";
+import { useStickyOperation, useStyles } from "./hooks";
 import StickyView, { StickyMode } from "./StickyView";
+
 import "./Sticky.scss";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;

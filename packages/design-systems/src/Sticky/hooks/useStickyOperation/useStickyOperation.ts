@@ -1,8 +1,7 @@
 import { useEvent } from "@project/react-hooks";
 import { useMemo, useCallback } from "react";
-import { usePositionCalculators, useStatusUpdaters } from "..";
-import { UsePositionCalculatorRectReturns } from "../usePositionCalculators";
-import { UseStatusState } from "../useStatusUpdaters";
+import usePositionCalculators, { UsePositionCalculatorRectReturns } from "./usePositionCalculators";
+import useStatusUpdaters, { UseStatusState } from "./useStatusUpdaters";
 import { StickyMode } from "../../StickyView";
 
 export interface UseStickyOperationProps {
