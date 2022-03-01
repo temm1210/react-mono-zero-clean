@@ -33,31 +33,30 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
       bottom,
     });
 
-  const setWidthHeight = (pWidth: number, pHeight: number) => {
-    setWidth(pWidth);
-    setHeight(pHeight);
-  };
+  // sticky status state가 변할 때 실행할 callback
+  const handleOnStickyStateUpdate = useCallback(
+    (pWidth: number, pHeight: number, callback?: Callback) => {
+      const rect = { width: pWidth, height: pHeight, top, bottom };
 
-  // 상태가 sticky로 변할 때 실행할 callback
-  const handleOnStick = useCallback(() => {
-    const rect = { width: fakeHeightRect.width, height: stickyRect.height, top, bottom };
-    setWidthHeight(rect.width, rect.height);
-    onStick?.(rect);
-  }, [bottom, fakeHeightRect.width, onStick, stickyRect.height, top]);
-
-  // 상태가 unSticky로 변할 때 실행할 callback
-  const handleOnUnStick = useCallback(() => {
-    const rect = { width: fakeHeightRect.width, height: stickyRect.height, top, bottom };
-    setWidthHeight(rect.width, 0);
-    onUnStick?.(rect);
-  }, [bottom, fakeHeightRect.width, onUnStick, stickyRect.height, top]);
+      setWidth(pWidth);
+      setHeight(pHeight);
+      callback?.(rect);
+    },
+    [bottom, top],
+  );
 
   useLayoutEffect(() => {
     if (isSticky) {
-      return handleOnStick();
+      return handleOnStickyStateUpdate(fakeHeightRect.width, stickyRect.height, onStick);
     }
-    handleOnUnStick();
-  }, [handleOnStick, handleOnUnStick, isSticky]);
+    return handleOnStickyStateUpdate(fakeHeightRect.width, 0, onUnStick);
+  }, [handleOnStickyStateUpdate, isSticky, stickyRect.height, fakeHeightRect.width, onUnStick, onStick]);
+
+  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
+
+  useEffect(() => {
+    setParentRef(parentNode || document.body);
+  }, [parentNode, setParentRef]);
 
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
     mode,
@@ -68,12 +67,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     top,
     bottom,
   });
-
-  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
-
-  useEffect(() => {
-    setParentRef(parentNode || document.body);
-  }, [parentNode, setParentRef]);
 
   return StickyView({
     mode,
