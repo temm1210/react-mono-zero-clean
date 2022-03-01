@@ -3,7 +3,7 @@ import { useMemo, useCallback } from "react";
 import { usePositionCalculators, useStatusUpdaters } from "..";
 import { UsePositionCalculatorRectReturns } from "../usePositionCalculators";
 import { UseStatusState } from "../useStatusUpdaters";
-import { StickyMode } from "../../types";
+import { StickyMode } from "../../StickyView";
 
 export interface UseStickyOperationProps {
   mode: StickyMode;

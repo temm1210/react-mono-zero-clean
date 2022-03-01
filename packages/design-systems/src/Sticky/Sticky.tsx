@@ -1,13 +1,11 @@
 import { useCallback, useState, useEffect, useLayoutEffect } from "react";
 import { useClosetParent } from "@project/react-hooks";
 import { parentSelector } from "./utils";
-import { StickyMode } from "./types";
 import { useStyles, useStickyOperation } from "./hooks";
-import StickyView from "./StickyView";
+import StickyView, { StickyMode } from "./StickyView";
 import "./Sticky.scss";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
-
 export type CallbackParameter = Record<keyof Rect, number>;
 export type Callback = (rect: CallbackParameter) => void;
 

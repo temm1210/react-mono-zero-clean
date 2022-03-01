@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { MutableRefObject, ReactNode } from "react";
-import { StickyMode } from "./types";
+
+export type StickyMode = "top" | "bottom";
 
 type StickyViewRef = MutableRefObject<any | null> | ((e: HTMLElement | null) => void);
 export interface StickyViewRefProps {
