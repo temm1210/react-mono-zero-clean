@@ -26,12 +26,11 @@ export interface Props {
 const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStick }: Props) => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
-  const [[setParentRef], [stickyRef, stickyRect], [fakeHeightRef, fakeHeightRect], { isSticky, isAbsolute }] =
-    useStickyOperation({
-      mode,
-      top,
-      bottom,
-    });
+  const [[setParentRef], [stickyRef, stickyRect], [fakeRef, fakeRect], { isSticky, isAbsolute }] = useStickyOperation({
+    mode,
+    top,
+    bottom,
+  });
 
   // sticky status state가 변할 때 실행할 callback
   const handleOnStickyStateUpdate = useCallback(
@@ -47,10 +46,10 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
 
   useLayoutEffect(() => {
     if (isSticky) {
-      return handleOnStickyStateUpdate(fakeHeightRect.width, stickyRect.height, onStick);
+      return handleOnStickyStateUpdate(fakeRect.width, stickyRect.height, onStick);
     }
-    return handleOnStickyStateUpdate(fakeHeightRect.width, 0, onUnStick);
-  }, [handleOnStickyStateUpdate, isSticky, stickyRect.height, fakeHeightRect.width, onUnStick, onStick]);
+    return handleOnStickyStateUpdate(fakeRect.width, 0, onUnStick);
+  }, [handleOnStickyStateUpdate, isSticky, stickyRect.height, fakeRect.width, onUnStick, onStick]);
 
   const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
 
@@ -70,7 +69,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
 
   const props = {
     mode,
-    fakeHeightRef,
+    fakeRef,
     stickyRef,
     parentRef: findParentFrom,
     fakeStyle,

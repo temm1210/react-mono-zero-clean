@@ -17,15 +17,11 @@ export type UseStickyOperationReturn = [...UsePositionCalculatorRectReturns, Use
  * Sticky의 동작과 관련된 최상위 custom hook
  */
 function useStickyOperation({ top, bottom, mode }: UseStickyOperationProps): UseStickyOperationReturn {
-  const [
-    [parentRef, parentRect],
-    [stickyRef, stickyRect],
-    [fakeHeightRef, fakeHeightRect],
-    { calculatePositionHandlers },
-  ] = usePositionCalculators({
-    top,
-    bottom,
-  });
+  const [[parentRef, parentRect], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
+    usePositionCalculators({
+      top,
+      bottom,
+    });
   const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters({ initIsSticky: !parentRect });
 
   const stickyModeMapper = useMemo(
@@ -67,7 +63,7 @@ function useStickyOperation({ top, bottom, mode }: UseStickyOperationProps): Use
   useEvent("scroll", update, { passive: true });
   useEvent("resize", update);
 
-  return [[parentRef, parentRect], [stickyRef, stickyRect], [fakeHeightRef, fakeHeightRect], { isSticky, isAbsolute }];
+  return [[parentRef, parentRect], [stickyRef, stickyRect], [fakeRef, fakeRect], { isSticky, isAbsolute }];
 }
 
 export default useStickyOperation;
