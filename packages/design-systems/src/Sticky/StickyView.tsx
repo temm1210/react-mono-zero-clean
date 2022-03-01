@@ -10,13 +10,13 @@ export interface StickyViewRefProps {
   parentRef: StickyViewRef;
 }
 
-export type CalculateStickyStyle = () => Record<string, any> | undefined;
-export type FakeStyle = Record<string, any>;
+export type StickyViewCalculateStickyStyle = () => Record<string, any> | undefined;
+export type StickyViewFakeStyle = Record<string, any>;
 
 interface StickyViewStyleProps {
-  calculateStickyStyle: CalculateStickyStyle;
+  calculateStickyStyle: StickyViewCalculateStickyStyle;
   stickyClassNames: string;
-  fakeStyle: FakeStyle;
+  fakeStyle: StickyViewFakeStyle;
   children: ReactNode;
 }
 export interface StickyViewProps extends StickyViewStyleProps, StickyViewRefProps {
