@@ -34,11 +34,11 @@ export interface UseStickyModeReturn extends UseStatusState {
   stickyModeMapper: UseStickyMode;
 }
 /**
- * Sticky의 mode에 따라 실행해야할 기능들을 return함
+ * ! Deprecated Sticky의 mode에 따라 실행해야할 기능들을 return함
  */
 const useStickyMode = ({ top = 0, bottom = 0, onStick, onUnStick }: StickyModeProps): UseStickyModeReturn => {
   // scroll 위치에 따라 현재 엘리먼트의 위치값을 계산하는 handler
-  const [[setParentRef], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
+  const [[setParentRef], [stickyRef, stickyRect], [fakeHeightRef, useFakeHeightRect], { calculatePositionHandlers }] =
     usePositionCalculators({
       top,
       bottom,
@@ -55,14 +55,14 @@ const useStickyMode = ({ top = 0, bottom = 0, onStick, onUnStick }: StickyModePr
 
   const handleStick = useCallback(
     (callback?: Callback) => {
-      const rect = { width: fakeRect.width, height: stickyRect.height, top, bottom };
+      const rect = { width: useFakeHeightRect.width, height: stickyRect.height, top, bottom };
       callback?.(rect);
     },
-    [bottom, fakeRect.width, stickyRect.height, top],
+    [bottom, useFakeHeightRect.width, stickyRect.height, top],
   );
 
   const renderByMode = stickyRenderMode({
-    fakeRef,
+    fakeHeightRef,
     stickyRef,
     parentRef: findParentFrom,
   });

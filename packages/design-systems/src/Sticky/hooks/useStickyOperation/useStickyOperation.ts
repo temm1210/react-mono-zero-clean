@@ -1,32 +1,22 @@
 import { useEvent } from "@project/react-hooks";
-import { useMemo, useCallback, useLayoutEffect } from "react";
+import { useMemo, useCallback } from "react";
 import { usePositionCalculators, useStatusUpdaters } from "..";
 import { UsePositionCalculatorRectReturns } from "../usePositionCalculators";
 import { UseStatusState } from "../useStatusUpdaters";
 import { StickyMode } from "../../types";
 
-export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
-
-export type CallbackParameter = Record<keyof Rect, number>;
-export type Callback = (rect: CallbackParameter) => void;
-
 export interface UseStickyOperationProps {
   mode: StickyMode;
   top: number;
   bottom: number;
-  onStick?: Callback;
-  onUnStick?: Callback;
 }
-
 export type UseStickyOperationReturn = [...UsePositionCalculatorRectReturns, UseStatusState];
 
-function useStickyOperation({
-  top,
-  bottom,
-  mode,
-  onStick,
-  onUnStick,
-}: UseStickyOperationProps): UseStickyOperationReturn {
+/**
+ * Sticky component의 기본 로직을 만들고 상태를 업데이트하는 custom hook
+ * Sticky의 동작과 관련된 최상위 custom hook
+ */
+function useStickyOperation({ top, bottom, mode }: UseStickyOperationProps): UseStickyOperationReturn {
   const [
     [parentRef, parentRect],
     [stickyRef, stickyRect],
@@ -36,33 +26,7 @@ function useStickyOperation({
     top,
     bottom,
   });
-
   const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters({ initIsSticky: !parentRect });
-
-  const handleStick = useCallback(
-    (callback?: Callback) => {
-      const rect = { width: fakeHeightRect.width, height: stickyRect.height, top, bottom };
-      callback?.(rect);
-    },
-    [bottom, fakeHeightRect.width, stickyRect.height, top],
-  );
-
-  // sticky가 활성화 됐을때 실행할 callback
-  const handleOnStick = useCallback(() => {
-    handleStick(onStick);
-  }, [handleStick, onStick]);
-
-  // sticky가 비 활성화 됐을때 실행할 callback
-  const handleUnStick = useCallback(() => {
-    handleStick(onUnStick);
-  }, [handleStick, onUnStick]);
-
-  useLayoutEffect(() => {
-    if (isSticky) {
-      return handleOnStick();
-    }
-    handleUnStick();
-  }, [handleOnStick, handleUnStick, isSticky]);
 
   const stickyModeMapper = useMemo(
     () => ({
