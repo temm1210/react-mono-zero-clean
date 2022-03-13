@@ -18,6 +18,8 @@ export interface Props {
 
 const Modal = ({ isOpen, children, onClose, overlayColor, portalName = "modal-portal" }: Props) => {
   const [isEndAnimation, setIsEndAnimation] = useState(false);
+
+  const overlayRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   const onTransitionEnd = useCallback(() => {
@@ -53,7 +55,7 @@ const Modal = ({ isOpen, children, onClose, overlayColor, portalName = "modal-po
       {(isOpen || isEndAnimation) && (
         <Portal className={portalName}>
           <div className="modal-container">
-            <div style={{ backgroundColor: overlayColor }} className="modal-overlay" onClick={onClick}>
+            <div ref={overlayRef} style={{ backgroundColor: overlayColor }} className="modal-overlay" onClick={onClick}>
               <div ref={contentRef} className={contentClassNames}>
                 {children}
               </div>
