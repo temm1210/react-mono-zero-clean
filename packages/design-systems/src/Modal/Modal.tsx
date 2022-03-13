@@ -1,6 +1,5 @@
 import { useEffect, useState, useCallback, MouseEvent, useRef } from "react";
 import Portal from "Portal";
-import cx from "clsx";
 import { useEvent } from "@project/react-hooks";
 import "./Modal.scss";
 
@@ -18,6 +17,8 @@ export interface Props {
 
 const Modal = ({ isOpen, children, onClose, overlayColor, portalName = "modal-portal" }: Props) => {
   const [isEndAnimation, setIsEndAnimation] = useState(false);
+
+  const overlayRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   const onTransitionEnd = useCallback(() => {
@@ -38,23 +39,29 @@ const Modal = ({ isOpen, children, onClose, overlayColor, portalName = "modal-po
   useEvent("transitionend", onTransitionEnd);
 
   const onClick = (e: MouseEvent<HTMLDivElement>) => {
-    if (e.target === contentRef.current) {
+    if (e.target === overlayRef.current) {
       onClose();
     }
   };
 
-  const contentClassNames = cx(
-    "modal-content",
-    isEndAnimation && isOpen ? "modal-content--open" : "modal-content--close",
-  );
+  const transformStyle =
+    isOpen && isEndAnimation
+      ? {
+          transition: "transform 0.25s ease-in-out",
+          transform: `translate3d(0, calc(50vh - 50%), 0)`,
+        }
+      : {
+          transition: "transform 0.25s ease-in-out",
+          transform: "translate3d(0, 100vh, 0)",
+        };
 
   return (
     <>
       {(isOpen || isEndAnimation) && (
         <Portal className={portalName}>
           <div className="modal-container">
-            <div style={{ backgroundColor: overlayColor }} className="modal-overlay" onClick={onClick}>
-              <div ref={contentRef} className={contentClassNames}>
+            <div ref={overlayRef} style={{ backgroundColor: overlayColor }} className="modal-overlay" onClick={onClick}>
+              <div ref={contentRef} className="modal-content" style={transformStyle}>
                 {children}
               </div>
             </div>
