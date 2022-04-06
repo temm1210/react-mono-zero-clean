@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-// eslint-disable-next-line camelcase
-import { unstable_batchedUpdates } from "react-dom";
 
 export type UseStatusUpdateHandler = () => void;
 
@@ -42,32 +40,27 @@ const useStatusUpdaters = ({ initIsSticky }: UseStatusUpdatersProps): UseStatusU
         // https://github.com/facebook/react/issues/10231#issuecomment-316644950
         // scroll event는 react batch작업이 이루어지지 않음
         // 따라서 강제로 batch 실행(unstable_batchedUpdates)
-        unstable_batchedUpdates(() => {
-          setIsSticky(true);
-          setIsIsAbsolute(false);
-        });
+        // unstable_batchedUpdates(() => {
+        // react 18이후 auto batch
+        setIsSticky(true);
+        setIsIsAbsolute(false);
+        // });
       },
 
       // container bottom를 기준으로해서 sticky를 고정
       stickToContainerBottom() {
-        unstable_batchedUpdates(() => {
-          setIsSticky(true);
-          setIsIsAbsolute(true);
-        });
+        setIsSticky(true);
+        setIsIsAbsolute(true);
       },
 
       stickyToScreenBottom() {
-        unstable_batchedUpdates(() => {
-          setIsSticky(true);
-          setIsIsAbsolute(false);
-        });
+        setIsSticky(true);
+        setIsIsAbsolute(false);
       },
 
       unStick() {
-        unstable_batchedUpdates(() => {
-          setIsSticky(false);
-          setIsIsAbsolute(false);
-        });
+        setIsSticky(false);
+        setIsIsAbsolute(false);
       },
     });
   }, []);
