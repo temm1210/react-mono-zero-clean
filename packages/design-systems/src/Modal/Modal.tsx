@@ -3,7 +3,11 @@ import Portal from "Portal";
 import { useEvent } from "@project/react-hooks";
 import "./Modal.scss";
 
-export interface Props {
+export interface ModalContainerRect {
+  width?: string;
+  height?: string;
+}
+export interface ModalProps {
   children: React.ReactNode;
   /** Modal의 open여부 */
   isOpen: boolean;
@@ -13,9 +17,10 @@ export interface Props {
   overlayColor?: string;
   /** Modal의 portal class name */
   portalName?: string;
+  container?: ModalContainerRect;
 }
 
-const Modal = ({ isOpen, children, onClose, overlayColor, portalName = "modal-portal" }: Props) => {
+const Modal = ({ isOpen, children, onClose, overlayColor, portalName = "modal-portal" }: ModalProps) => {
   const [isEndAnimation, setIsEndAnimation] = useState(false);
 
   const overlayRef = useRef<HTMLDivElement | null>(null);

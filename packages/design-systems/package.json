@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "sideEffects": false,
   "devDependencies": {
+    "@types/react": "^17.0.43",
+    "@types/react-dom": "^17.0.14",
     "@babel/core": "^7.15.4",
     "@storybook/addon-actions": "^6.3.7",
     "@storybook/addon-essentials": "^6.3.7",
@@ -11,7 +13,6 @@
     "@storybook/builder-webpack5": "^6.3.7",
     "@storybook/manager-webpack5": "^6.3.7",
     "@storybook/react": "^6.3.7",
-    "@types/react": "^17.0.19",
     "babel-loader": "^8.2.2",
     "css-loader": "^6.2.0",
     "postcss": "^8.3.6",
@@ -24,8 +25,8 @@
     "typescript": "^4.4.2"
   },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "dependencies": {
     "@project/react-hooks": "1.0.0",
