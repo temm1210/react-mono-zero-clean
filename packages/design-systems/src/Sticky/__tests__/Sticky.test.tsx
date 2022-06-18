@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import Sticky from "../Sticky";
 
-describe("App tests", () => {
-  it("should contains the heading 1", () => {
+describe("Sticky tests", () => {
+  it("should contains test text", () => {
     render(<Sticky>test</Sticky>);
 
     const heading = screen.getByText(/test/i);
