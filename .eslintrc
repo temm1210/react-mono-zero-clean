@@ -12,6 +12,7 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended",
     "plugin:import/typescript",
+    "plugin:jest/recommended",
     "plugin:prettier/recommended"
   ],
   "rules": {
