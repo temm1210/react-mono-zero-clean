@@ -26,7 +26,9 @@ describe("useClosetParent", () => {
         <div ref={result.current.findParentFrom} />
       </div>,
     );
+    expect(result.current.parentNode).toBeNull();
 
+    render(<div ref={result.current.findParentFrom} />);
     expect(result.current.parentNode).toBeNull();
   });
 });
