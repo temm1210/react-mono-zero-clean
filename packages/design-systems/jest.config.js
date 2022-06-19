@@ -1,13 +1,10 @@
 module.exports = {
-  collectCoverageFrom: ["src/**/{!(*.d.ts),}.{ts,js,.tsx,.jsx}"],
-  coveragePathIgnorePatterns: ["/node_modules/", "package.json", "@types/"],
+  collectCoverage: true,
+  collectCoverageFrom: ["src/**/*.{js,jsx,ts,tsx}"],
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
-  },
-  moduleNameMapper: {
-    "^.+\\.(css|less|scss)$": "babel-jest",
   },
 };
