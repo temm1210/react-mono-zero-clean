@@ -24,4 +24,19 @@ describe("useDeepCompareEffect", () => {
     expect(mockEffectNormal).toHaveBeenCalledTimes(2);
     expect(mockEffectDeep).toHaveBeenCalledTimes(1);
   });
+
+  it("object의 값이 변하면 다시 호출되어야 한다.", () => {
+    const { rerender: renderEffect } = renderHook(() => useEffect(mockEffectNormal, [option]));
+    const { rerender: renderEffectDeep } = renderHook(() => useDeepCompareEffect(mockEffectDeep, [option]));
+
+    expect(mockEffectNormal).toHaveBeenCalledTimes(1);
+    expect(mockEffectDeep).toHaveBeenCalledTimes(1);
+
+    option = { id: 2 };
+    renderEffect();
+    renderEffectDeep();
+
+    expect(mockEffectNormal).toHaveBeenCalledTimes(2);
+    expect(mockEffectDeep).toHaveBeenCalledTimes(2);
+  });
 });
