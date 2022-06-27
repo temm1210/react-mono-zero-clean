@@ -1,10 +1,16 @@
 module.exports = {
-  collectCoverageFrom: ["src/**/{!(*.d.ts),}.{ts,js,tsx,jsx}"],
-  coveragePathIgnorePatterns: ["/node_modules/", "package.json", "@types/"],
+  preset: "ts-jest",
+  verbose: true,
+  clearMocks: true,
+  testMatch: ["<rootDir>/src/**/*.test.(ts|tsx)"],
+  // collectCoverageFrom: ["src/**/{!(*.d.ts),}.{ts,js,tsx,jsx}"],
+  coveragePathIgnorePatterns: ["/node_modules/", "package.json", "dist/", "@types/"],
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
   setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
-  transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+  globals: {
+    "ts-jest": {
+      isolatedModules: true,
+    },
   },
 };
