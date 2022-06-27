@@ -15,7 +15,7 @@ type DependencyRef = DependencyList | undefined;
 const useDeepCompareEffect = (effect: EffectCallback, dependencies: DependencyList) => {
   if (dependencies.every(isPrimitive)) {
     throw Error(
-      "`useDeepCompareEffect` should not be used with primitive dependencies. Use not primitive dependencies.",
+      "'useDeepCompareEffect' should not be used with primitive dependencies. Use not primitive dependencies.",
     );
   }
 
