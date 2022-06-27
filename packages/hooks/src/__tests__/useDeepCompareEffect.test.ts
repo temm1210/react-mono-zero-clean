@@ -39,4 +39,14 @@ describe("useDeepCompareEffect", () => {
     expect(mockEffectNormal).toHaveBeenCalledTimes(2);
     expect(mockEffectDeep).toHaveBeenCalledTimes(2);
   });
+  it("dependency list에 원시타입만 있을경우 error를 발생시킨다.", () => {
+    const dependencyString = "string";
+    const dependencyNumber = 1;
+
+    expect(() =>
+      renderHook(() => useDeepCompareEffect(mockEffectDeep, [dependencyString, dependencyNumber])),
+    ).toThrowError(
+      "'useDeepCompareEffect' should not be used with primitive dependencies. Use not primitive dependencies.",
+    );
+  });
 });
