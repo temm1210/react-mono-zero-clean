@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, MouseEvent, useRef } from "react";
 import Portal from "Portal";
-import { useEvent } from "@project/react-hooks";
+import { useEventListener } from "@project/react-hooks";
 import "./Modal.scss";
 
 export interface ModalContainerRect {
@@ -41,7 +41,7 @@ const Modal = ({ isOpen, children, onClose, overlayColor, portalName = "modal-po
     };
   }, [isOpen]);
 
-  useEvent("transitionend", onTransitionEnd);
+  useEventListener("transitionend", onTransitionEnd);
 
   const onClick = (e: MouseEvent<HTMLDivElement>) => {
     if (e.target === overlayRef.current) {

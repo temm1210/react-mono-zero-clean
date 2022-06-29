@@ -1,4 +1,4 @@
-# `useEvent`
+# `useEventListener`
 
 주어진 listener를 event에 등록하고 제거해주는 hook
 
@@ -9,9 +9,9 @@
 function Element() => {
   const containerRef = useRef<HTMLDivElement>(null)
 
-  useEvent("scroll", handleUpdate, { passive: true });
-  useEvent("resize", handleUpdate);
-  useEvent("click", handleUpdate, undefined, containerRef.current);
+  useEventListener("scroll", handleUpdate, { passive: true });
+  useEventListener("resize", handleUpdate);
+  useEventListener("click", handleUpdate, undefined, containerRef.current);
 
   return <div ref={containerRef}>Element</div>
 };
@@ -21,7 +21,7 @@ function Element() => {
 ## API
 
 ```typescript
-useEvent(eventName: ListenerEventType, listener: Listener, options?: ListenerOptions, context: Context = window,): void
+useEventListener(eventName: ListenerEventType, listener: Listener, options?: ListenerOptions, context: Context = window,): void
 ```
 
 - paremeters
