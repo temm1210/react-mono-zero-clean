@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { renderHook } from "@testing-library/react";
-import useEvent, {
-  UseEventListenerOptions,
-  UseEventListener,
-  UseEventContext,
-  UseEventListenerEventType,
-} from "../useEvent";
+import useEventListener, { ListenerOptions, Listener, ListenerContext, ListenerEventType } from "../useEventListener";
 
 interface Props {
-  eventType: UseEventListenerEventType;
-  listener: UseEventListener;
-  options?: UseEventListenerOptions;
-  context: UseEventContext;
+  eventType: ListenerEventType;
+  listener: Listener;
+  options?: ListenerOptions;
+  context: ListenerContext;
 }
 
 const props: Props[] = [
@@ -29,7 +24,7 @@ const props: Props[] = [
   },
 ];
 
-describe("useEvent", () => {
+describe("useEventListener", () => {
   beforeEach(() => {
     jest.spyOn(window, "addEventListener");
     jest.spyOn(window, "removeEventListener");
@@ -39,7 +34,7 @@ describe("useEvent", () => {
   });
   it("mount/unmount시 window.addEventListener/window.removeEventListener가 eventType, listener, option를 인자로 가지고 호출된다.", () => {
     const { unmount } = renderHook(() =>
-      useEvent(props[0].eventType, props[0].listener, props[0].options, props[0].context),
+      useEventListener(props[0].eventType, props[0].listener, props[0].options, props[0].context),
     );
 
     expect(window.addEventListener).toHaveBeenCalledTimes(1);
@@ -61,7 +56,7 @@ describe("useEvent", () => {
 
   it("mount/unmount시 context.addEventListener/context.removeEventListener가 eventType, listener, option를 인자로 가지고 호출된다.", () => {
     const { unmount } = renderHook(() =>
-      useEvent(props[1].eventType, props[1].listener, props[1].options, props[1].context),
+      useEventListener(props[1].eventType, props[1].listener, props[1].options, props[1].context),
     );
 
     expect(window.addEventListener).toHaveBeenCalledTimes(0);
@@ -92,7 +87,7 @@ describe("useEvent", () => {
   });
   it("dependency list가 변경될 시addEventListener/removeEventListener는 다시 호출된다.", () => {
     const { rerender } = renderHook(
-      ({ eventType, listener, options, context }: Props) => useEvent(eventType, listener, options, context),
+      ({ eventType, listener, options, context }: Props) => useEventListener(eventType, listener, options, context),
       {
         initialProps: {
           eventType: props[0].eventType,

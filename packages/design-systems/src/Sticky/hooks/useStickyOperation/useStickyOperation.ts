@@ -1,4 +1,4 @@
-import { useEvent } from "@project/react-hooks";
+import { useEventListener } from "@project/react-hooks";
 import { useMemo, useCallback } from "react";
 import usePositionCalculators, { UsePositionCalculatorRectReturns } from "./usePositionCalculators";
 import useStatusUpdaters, { UseStatusState } from "./useStatusUpdaters";
@@ -59,8 +59,8 @@ function useStickyOperation({ top, bottom, mode }: UseStickyOperationProps): Use
     return unStick();
   }, [stickyMapper]);
 
-  useEvent("scroll", update, { passive: true });
-  useEvent("resize", update);
+  useEventListener("scroll", update, { passive: true });
+  useEventListener("resize", update);
 
   return [[parentRef, parentRect], [stickyRef, stickyRect], [fakeRef, fakeRect], { isSticky, isAbsolute }];
 }
