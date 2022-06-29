@@ -1,6 +1,6 @@
 import useDeepCompareEffect from "../useDeepCompareEffect";
 
-export type UseEventContext = Window | HTMLElement | null;
+export type UseEventContext = Window | HTMLElement;
 export type UseEventWindowEventListener = Window["addEventListener"];
 
 export type UseEventListenerEventType = keyof WindowEventMap;
@@ -23,8 +23,6 @@ const useEvent = (
   // useEffect를 쓸때 dependencies로 object로 넘겨줄시 원하지않는 결과가 나올수있음
   // ex.값은 변하지 않았는데 오브젝트가 새로할당돼서 effect가 실행되는경우
   useDeepCompareEffect(() => {
-    if (!context) return;
-
     if (context === window) {
       window.addEventListener(eventName, listener, options);
     } else {
@@ -33,7 +31,7 @@ const useEvent = (
 
     return () => {
       if (context === window) {
-        window.removeEventListener(eventName, listener);
+        window.removeEventListener(eventName, listener, options);
       } else {
         context.removeEventListener(eventName, listener, options);
       }
