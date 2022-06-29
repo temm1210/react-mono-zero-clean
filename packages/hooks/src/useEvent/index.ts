@@ -8,14 +8,14 @@ export type UseEventListener = Parameters<UseEventWindowEventListener>[1];
 export type UseEventListenerOptions = Parameters<UseEventWindowEventListener>[2];
 
 /**
- *  주어진 listener를 eventName에 등록하고 제거해주는 hook
- * @param eventName 실제 등록할 Event의 종류(click, scroll..)
+ *  주어진 listener를 eventType에 등록하고 제거해주는 hook
+ * @param eventType 실제 등록할 Event의 종류(click, scroll..)
  * @param listener Event가 발생했을때 실행할 listener
  * @param options  listener함수가 실행될때 적용할 options
  * @param context Event에 등록할 대상(기본값 Window)
  */
 const useEvent = (
-  eventName: UseEventListenerEventType,
+  eventType: UseEventListenerEventType,
   listener: UseEventListener,
   options?: UseEventListenerOptions,
   context: UseEventContext = window,
@@ -24,19 +24,19 @@ const useEvent = (
   // ex.값은 변하지 않았는데 오브젝트가 새로할당돼서 effect가 실행되는경우
   useDeepCompareEffect(() => {
     if (context === window) {
-      window.addEventListener(eventName, listener, options);
+      window.addEventListener(eventType, listener, options);
     } else {
-      context.addEventListener(eventName, listener, options);
+      context.addEventListener(eventType, listener, options);
     }
 
     return () => {
       if (context === window) {
-        window.removeEventListener(eventName, listener, options);
+        window.removeEventListener(eventType, listener, options);
       } else {
-        context.removeEventListener(eventName, listener, options);
+        context.removeEventListener(eventType, listener, options);
       }
     };
-  }, [context, eventName, listener, options]);
+  }, [context, eventType, listener, options]);
 };
 
 export default useEvent;
