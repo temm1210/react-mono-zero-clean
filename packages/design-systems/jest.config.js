@@ -3,7 +3,7 @@ module.exports = {
   coveragePathIgnorePatterns: ["/node_modules/", "package.json", "@types/"],
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
-  setupFilesAfterEnv: ["<rootDir>/src/setupTests.ts"],
+  setupFilesAfterEnv: ["<rootDir>/setupTests.ts"],
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },
