@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Story } from "@storybook/react";
-import Modal, { Props as ModalProps } from "../Modal";
+import Modal, { ModalProps } from "../Modal";
 
 const CloseIcon = () => {
   return (
