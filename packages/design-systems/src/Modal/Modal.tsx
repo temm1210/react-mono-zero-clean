@@ -24,7 +24,6 @@ const Modal = ({ isOpen, children, onClose, overlayColor, portalName = "modal-po
   const [isEndAnimation, setIsEndAnimation] = useState(false);
 
   const overlayRef = useRef<HTMLDivElement | null>(null);
-  const contentRef = useRef<HTMLDivElement | null>(null);
 
   const onTransitionEnd = useCallback(() => {
     setIsEndAnimation(isOpen);
@@ -66,7 +65,7 @@ const Modal = ({ isOpen, children, onClose, overlayColor, portalName = "modal-po
         <Portal className={portalName}>
           <div className="modal-container">
             <div ref={overlayRef} style={{ backgroundColor: overlayColor }} className="modal-overlay" onClick={onClick}>
-              <div ref={contentRef} className="modal-content" style={transformStyle}>
+              <div className="modal-content" style={transformStyle}>
                 {children}
               </div>
             </div>
