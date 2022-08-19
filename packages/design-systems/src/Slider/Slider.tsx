@@ -1,12 +1,18 @@
-function Slider() {
+export interface SliderProps {
+  min?: number;
+  max?: number;
+  defaultValue?: number;
+}
+
+function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
   return (
     <div className="slider">
       <div
         role="slider"
         aria-label="horizontal slider"
-        aria-valuenow={20}
-        aria-valuemax={100}
-        aria-valuemin={0}
+        aria-valuenow={defaultValue}
+        aria-valuemax={max}
+        aria-valuemin={min}
         aria-orientation="horizontal"
         tabIndex={0}
       />
