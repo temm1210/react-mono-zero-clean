@@ -1,9 +1,7 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable jsx-a11y/role-has-required-aria-props */
 function Slider() {
   return (
     <div className="slider">
-      <div role="slider" />
+      <div role="slider" aria-label="slider" aria-valuenow={20} aria-valuemax={100} aria-valuemin={0} />
     </div>
   );
 }
