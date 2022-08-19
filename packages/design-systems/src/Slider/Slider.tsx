@@ -1,6 +1,9 @@
 export interface SliderProps {
+  /** 도달할 수 있는 최소값 */
   min?: number;
+  /** 도달할 수 있는 최대값 */
   max?: number;
+  /** 초기값 */
   defaultValue?: number;
 }
 
