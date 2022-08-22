@@ -3,9 +3,8 @@ import { useState, useEffect } from "react";
 export type UseStatusUpdateHandler = () => void;
 
 export interface UseStatusUpdateHandlers {
-  stickToScreenTop: UseStatusUpdateHandler;
+  stickToScreenMode: UseStatusUpdateHandler;
   stickToContainerBottom: UseStatusUpdateHandler;
-  stickyToScreenBottom: UseStatusUpdateHandler;
   unStick: UseStatusUpdateHandler;
 }
 export interface UseStatusState {
@@ -19,17 +18,21 @@ export type UseStatusUpdateReturn = [UseStatusUpdateHandlersReturn, UseStatusSta
 /**
  * sticky component의 상태값을 업데이트
  * sticky component의 상태값 추가, 변경 이외에는 수정되면 안됨
- * 오로지 sticky 상태값 관련 역할만 담당
+ * 오로지 sticky 상태값관련 역할만 담당
  */
-const useStatusUpdaters = (): UseStatusUpdateReturn => {
+const useStatusUpdaters = (initIsSticky: boolean): UseStatusUpdateReturn => {
   const [isSticky, setIsSticky] = useState(false);
   const [isAbsolute, setIsIsAbsolute] = useState(false);
 
   const [handler, setHandler] = useState<UseStatusUpdateHandlersReturn>(null);
 
   useEffect(() => {
+    setIsSticky(initIsSticky);
+  }, [initIsSticky]);
+
+  useEffect(() => {
     setHandler({
-      stickToScreenTop() {
+      stickToScreenMode() {
         // https://github.com/facebook/react/issues/10231#issuecomment-316644950
         // scroll event는 react batch작업이 이루어지지 않음
         // 따라서 강제로 batch 실행(unstable_batchedUpdates)
@@ -44,11 +47,6 @@ const useStatusUpdaters = (): UseStatusUpdateReturn => {
       stickToContainerBottom() {
         setIsSticky(true);
         setIsIsAbsolute(true);
-      },
-
-      stickyToScreenBottom() {
-        setIsSticky(true);
-        setIsIsAbsolute(false);
       },
 
       unStick() {
