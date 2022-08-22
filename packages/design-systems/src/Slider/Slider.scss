@@ -1,0 +1,17 @@
+.slider {
+  position: relative;
+  cursor: pointer;
+  height: 14px;
+}
+
+.slider__rail {
+  width: 100%;
+  background-color: cadetblue;
+  opacity: 0.2;
+  height: inherit;
+}
+
+.slider__track {
+  background-color: cadetblue;
+  height: inherit;
+}
