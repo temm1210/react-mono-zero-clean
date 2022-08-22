@@ -10,7 +10,10 @@ export interface SliderProps {
 function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
   return (
     <div className="slider">
+      <div className="slider__rail" />
+      <div className="slider_track" />
       <div
+        className="slider__number"
         role="slider"
         aria-label="horizontal slider"
         aria-valuenow={defaultValue}
