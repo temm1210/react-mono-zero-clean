@@ -19,7 +19,7 @@ export type UseStatusUpdateReturn = [UseStatusUpdateHandlersReturn, UseStatusSta
 /**
  * sticky component의 상태값을 업데이트
  * sticky component의 상태값 추가, 변경 이외에는 수정되면 안됨
- * 오로지 상태값관련 역할만 담당
+ * 오로지 sticky 상태값 관련 역할만 담당
  */
 const useStatusUpdaters = (): UseStatusUpdateReturn => {
   const [isSticky, setIsSticky] = useState(false);

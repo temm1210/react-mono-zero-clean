@@ -12,15 +12,9 @@ export type UseStickyOperationReturn = UseStatusState;
 
 /**
  * Sticky component의 기본 로직을 만들고 상태를 업데이트하는 custom hook
- * Sticky의 동작과 관련된 최상위 custom hook
+ * Sticky component의 handler를 만들고 mode에따른 mapper를 만드는 역할
  */
 function useStickyOperation({ calculatePositionHandlers, mode }: UseStickyOperationProps): UseStickyOperationReturn {
-  // const [[parentRef, parentRect], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
-  //   usePositionCalculators({
-  //     top,
-  //     bottom,
-  //   });
-
   const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters();
 
   const stickyModeMapper = useMemo(
@@ -58,13 +52,6 @@ function useStickyOperation({ calculatePositionHandlers, mode }: UseStickyOperat
     }
     return unStick();
   }, [stickyMapper]);
-
-  // useEffect(() => {
-  //   // console.log("parentRect:", parentRect);
-  //   // update();
-  //   window.scrollTo(0, 40);
-  //   window.scrollTo(0, 0);
-  // }, []);
 
   useEventListener("scroll", update, { passive: true });
   useEventListener("resize", update);
