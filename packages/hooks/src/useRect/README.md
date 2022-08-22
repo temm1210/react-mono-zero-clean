@@ -18,7 +18,7 @@ function Component(object:Object) => {
 ## API
 
 ```typescript
-type Rect = Pick<DOMRectReadOnly, "top" | "left" | "right" | "bottom" | "height" | "width">;
+type Rect = Pick<DOMRectReadOnly, "top" | "left" | "right" | "bottom" | "height" | "width"> | null;
 
 export type UseRectRef<E> = (element: E | null) => void;
 export type UseRectResult<E> = [UseRectRef<E>, () => Rect];
