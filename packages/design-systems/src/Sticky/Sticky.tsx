@@ -3,7 +3,8 @@ import { useClosetParent, useDeepCompareEffect, useEventListener } from "@projec
 import { parentSelector } from "./utils";
 import { useStyles } from "./hooks";
 import StickyView, { StickyMode } from "./StickyView";
-import { usePositionCalculators, useStatusUpdaters } from "./hooks/useStickyOperation";
+import usePositionCalculators from "./hooks/usePositionCalculators";
+import useStatusUpdaters from "./hooks/useStatusUpdaters";
 
 import "./Sticky.scss";
 
