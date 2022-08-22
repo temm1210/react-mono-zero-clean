@@ -1,11 +1,11 @@
-import { useCallback, useState, useLayoutEffect } from "react";
-import { useClosetParent, useDeepCompareEffect } from "@project/react-hooks";
+import { useCallback, useState, useLayoutEffect, useMemo } from "react";
+import { useClosetParent, useDeepCompareEffect, useEventListener } from "@project/react-hooks";
 import { parentSelector } from "./utils";
-import { useStickyOperation, useStyles } from "./hooks";
+import { useStyles } from "./hooks";
 import StickyView, { StickyMode } from "./StickyView";
+import { usePositionCalculators, useStatusUpdaters } from "./hooks/useStickyOperation";
 
 import "./Sticky.scss";
-import usePositionCalculator from "./hooks/useStickyOperation/usePositionCalculators";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
 export type CallbackParameter = Record<keyof Rect, number>;
@@ -28,13 +28,52 @@ export interface Props {
 const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStick }: Props) => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
-  const [[setParentRef], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
-    usePositionCalculator({
+  const [[setParent], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
+    usePositionCalculators({
       top,
       bottom,
     });
 
-  const { isSticky, isAbsolute } = useStickyOperation({ mode, calculatePositionHandlers });
+  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
+
+  useDeepCompareEffect(() => {
+    setParent(parentNode || document.body);
+  }, [parentNode, setParent]);
+
+  const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters(!parentNode);
+
+  const stickyModeMapper = useMemo(
+    () => ({
+      top: {
+        isReachScreenToMode: () => calculatePositionHandlers().isReachScreenTop(),
+        isReachContainerBottomToMode: () => calculatePositionHandlers().isReachContainerBottomToTop(),
+      },
+      bottom: {
+        isReachScreenToMode: () => calculatePositionHandlers().isReachScreenBottom(),
+        isReachContainerBottomToMode: () => calculatePositionHandlers().isReachContainerBottomToBottom(),
+      },
+    }),
+    [calculatePositionHandlers],
+  );
+
+  const stickyMapper = stickyModeMapper[mode];
+
+  // scroll event에 등록할 handler
+  const update = useCallback(() => {
+    const { isReachScreenToMode, isReachContainerBottomToMode } = stickyMapper;
+
+    if (isReachScreenToMode()) {
+      if (isReachContainerBottomToMode()) {
+        return statusUpdaters?.stickToContainerBottom();
+      }
+
+      return statusUpdaters?.stickToScreenMode();
+    }
+    return statusUpdaters?.unStick();
+  }, [statusUpdaters, stickyMapper]);
+
+  useEventListener("scroll", update, { passive: true });
+  useEventListener("resize", update);
 
   // sticky status state가 변할 때 실행할 callback
   const handleOnStickyStateUpdate = useCallback(
@@ -62,12 +101,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     }
     return handleOnUnSticky();
   }, [isSticky, handleOnUnSticky, handleOnSticky]);
-
-  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
-
-  useDeepCompareEffect(() => {
-    setParentRef(parentNode || document.body);
-  }, [parentNode, setParentRef]);
 
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
     mode,
