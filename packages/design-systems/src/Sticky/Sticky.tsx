@@ -1,10 +1,11 @@
-import { useCallback, useState, useEffect, useLayoutEffect } from "react";
-import { useClosetParent } from "@project/react-hooks";
+import { useCallback, useState, useLayoutEffect } from "react";
+import { useClosetParent, useDeepCompareEffect } from "@project/react-hooks";
 import { parentSelector } from "./utils";
 import { useStickyOperation, useStyles } from "./hooks";
 import StickyView, { StickyMode } from "./StickyView";
 
 import "./Sticky.scss";
+import usePositionCalculator from "./hooks/useStickyOperation/usePositionCalculators";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
 export type CallbackParameter = Record<keyof Rect, number>;
@@ -27,11 +28,13 @@ export interface Props {
 const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStick }: Props) => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
-  const [[setParentRef], [stickyRef, stickyRect], [fakeRef, fakeRect], { isSticky, isAbsolute }] = useStickyOperation({
-    mode,
-    top,
-    bottom,
-  });
+  const [[setParentRef], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
+    usePositionCalculator({
+      top,
+      bottom,
+    });
+
+  const { isSticky, isAbsolute } = useStickyOperation({ mode, calculatePositionHandlers });
 
   // sticky status state가 변할 때 실행할 callback
   const handleOnStickyStateUpdate = useCallback(
@@ -45,18 +48,24 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     [bottom, top],
   );
 
-  useLayoutEffect(() => {
-    if (!fakeRect?.width || !stickyRect?.height) return;
+  const handleOnSticky = useCallback(() => {
+    handleOnStickyStateUpdate(fakeRect.width, stickyRect.height, onStick);
+  }, [fakeRect.width, handleOnStickyStateUpdate, onStick, stickyRect.height]);
 
+  const handleOnUnSticky = useCallback(() => {
+    handleOnStickyStateUpdate(fakeRect.width, 0, onUnStick);
+  }, [fakeRect.width, handleOnStickyStateUpdate, onUnStick]);
+
+  useLayoutEffect(() => {
     if (isSticky) {
-      return handleOnStickyStateUpdate(fakeRect.width, stickyRect.height, onStick);
+      return handleOnSticky();
     }
-    return handleOnStickyStateUpdate(fakeRect.width, 0, onUnStick);
-  }, [handleOnStickyStateUpdate, isSticky, stickyRect?.height, fakeRect?.width, onUnStick, onStick]);
+    return handleOnUnSticky();
+  }, [isSticky, handleOnUnSticky, handleOnSticky]);
 
   const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
 
-  useEffect(() => {
+  useDeepCompareEffect(() => {
     setParentRef(parentNode || document.body);
   }, [parentNode, setParentRef]);
 

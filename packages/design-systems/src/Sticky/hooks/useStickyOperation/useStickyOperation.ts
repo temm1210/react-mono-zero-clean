@@ -1,28 +1,27 @@
 import { useEventListener } from "@project/react-hooks";
 import { useMemo, useCallback } from "react";
-import usePositionCalculators, { UsePositionCalculatorRectReturns } from "./usePositionCalculators";
+import { UsePositionCalculatorHandlers } from "./usePositionCalculators";
 import useStatusUpdaters, { UseStatusState } from "./useStatusUpdaters";
 import { StickyMode } from "../../StickyView";
 
 export interface UseStickyOperationProps {
   mode: StickyMode;
-  top: number;
-  bottom: number;
+  calculatePositionHandlers: () => UsePositionCalculatorHandlers;
 }
-export type UseStickyOperationReturn = [...UsePositionCalculatorRectReturns, UseStatusState];
+export type UseStickyOperationReturn = UseStatusState;
 
 /**
  * Sticky component의 기본 로직을 만들고 상태를 업데이트하는 custom hook
  * Sticky의 동작과 관련된 최상위 custom hook
  */
-function useStickyOperation({ top, bottom, mode }: UseStickyOperationProps): UseStickyOperationReturn {
-  const [[parentRef, parentRect], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
-    usePositionCalculators({
-      top,
-      bottom,
-    });
+function useStickyOperation({ calculatePositionHandlers, mode }: UseStickyOperationProps): UseStickyOperationReturn {
+  // const [[parentRef, parentRect], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
+  //   usePositionCalculators({
+  //     top,
+  //     bottom,
+  //   });
 
-  const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters({ initIsSticky: !parentRect });
+  const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters();
 
   const stickyModeMapper = useMemo(
     () => ({
@@ -60,10 +59,17 @@ function useStickyOperation({ top, bottom, mode }: UseStickyOperationProps): Use
     return unStick();
   }, [stickyMapper]);
 
+  // useEffect(() => {
+  //   // console.log("parentRect:", parentRect);
+  //   // update();
+  //   window.scrollTo(0, 40);
+  //   window.scrollTo(0, 0);
+  // }, []);
+
   useEventListener("scroll", update, { passive: true });
   useEventListener("resize", update);
 
-  return [[parentRef, parentRect], [stickyRef, stickyRect], [fakeRef, fakeRect], { isSticky, isAbsolute }];
+  return { isSticky, isAbsolute };
 }
 
 export default useStickyOperation;

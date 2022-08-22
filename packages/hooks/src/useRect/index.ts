@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export type UseClientRect = Pick<DOMRectReadOnly, "top" | "left" | "right" | "bottom" | "height" | "width">;
 
@@ -17,7 +17,7 @@ const defaultState: UseClientRect = {
 const useRect = <F extends Element>(): UseRectResult<F> => {
   const [element, ref] = useState<Element | null>(null);
 
-  const getRect = () => element?.getBoundingClientRect() || defaultState;
+  const getRect = useCallback(() => element?.getBoundingClientRect() || defaultState, [element]);
 
   return [ref, getRect];
 };
