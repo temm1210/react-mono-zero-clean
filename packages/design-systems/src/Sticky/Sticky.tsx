@@ -46,11 +46,13 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   );
 
   useLayoutEffect(() => {
+    if (!fakeRect?.width || !stickyRect?.height) return;
+
     if (isSticky) {
       return handleOnStickyStateUpdate(fakeRect.width, stickyRect.height, onStick);
     }
     return handleOnStickyStateUpdate(fakeRect.width, 0, onUnStick);
-  }, [handleOnStickyStateUpdate, isSticky, stickyRect.height, fakeRect.width, onUnStick, onStick]);
+  }, [handleOnStickyStateUpdate, isSticky, stickyRect?.height, fakeRect?.width, onUnStick, onStick]);
 
   const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
 

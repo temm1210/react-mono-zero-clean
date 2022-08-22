@@ -21,6 +21,7 @@ function useStickyOperation({ top, bottom, mode }: UseStickyOperationProps): Use
       top,
       bottom,
     });
+
   const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters({ initIsSticky: !parentRect });
 
   const stickyModeMapper = useMemo(
