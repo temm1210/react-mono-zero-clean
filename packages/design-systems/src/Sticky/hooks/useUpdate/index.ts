@@ -9,6 +9,10 @@ export interface UseUpdateProps {
   statusUpdaters: UseStatusUpdateHandlersReturn;
   mode: StickyMode;
 }
+
+/**
+ * Sticky컴포넌트가 어떠한 방식으로 움직이고 업데이트할지를 결정하는 hook
+ */
 function useUpdate({ positionHandlers, statusUpdaters, mode }: UseUpdateProps) {
   const stickyModeMapper = useMemo(
     () => ({
