@@ -1,11 +1,13 @@
-import { useCallback, useState, useLayoutEffect, useMemo } from "react";
-import { useClosetParent, useDeepCompareEffect, useEventListener } from "@project/react-hooks";
+import { useCallback, useState, useLayoutEffect } from "react";
+import { useClosetParent, useDeepCompareEffect } from "@project/react-hooks";
 import { parentSelector } from "./utils";
 import { useStyles } from "./hooks";
 import StickyView, { StickyMode } from "./StickyView";
-import { usePositionCalculators, useStatusUpdaters } from "./hooks/useStickyOperation";
+import usePositionCalculators from "./hooks/usePositionCalculators";
+import useStatusUpdaters from "./hooks/useStatusUpdaters";
 
 import "./Sticky.scss";
+import useUpdate from "./hooks/useUpdate";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
 export type CallbackParameter = Record<keyof Rect, number>;
@@ -42,39 +44,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
 
   const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters(!parentNode);
 
-  const stickyModeMapper = useMemo(
-    () => ({
-      top: {
-        isReachScreenToMode: () => calculatePositionHandlers().isReachScreenTop(),
-        isReachContainerBottomToMode: () => calculatePositionHandlers().isReachContainerBottomToTop(),
-      },
-      bottom: {
-        isReachScreenToMode: () => calculatePositionHandlers().isReachScreenBottom(),
-        isReachContainerBottomToMode: () => calculatePositionHandlers().isReachContainerBottomToBottom(),
-      },
-    }),
-    [calculatePositionHandlers],
-  );
-
-  const stickyMapper = stickyModeMapper[mode];
-
-  // scroll event에 등록할 handler
-  const update = useCallback(() => {
-    const { isReachScreenToMode, isReachContainerBottomToMode } = stickyMapper;
-
-    if (isReachScreenToMode()) {
-      if (isReachContainerBottomToMode()) {
-        return statusUpdaters?.stickToContainerBottom();
-      }
-
-      return statusUpdaters?.stickToScreenMode();
-    }
-    return statusUpdaters?.unStick();
-  }, [statusUpdaters, stickyMapper]);
-
-  useEventListener("scroll", update, { passive: true });
-  useEventListener("resize", update);
-
   // sticky status state가 변할 때 실행할 callback
   const handleOnStickyStateUpdate = useCallback(
     (pWidth: number, pHeight: number, callback?: Callback) => {
@@ -101,6 +70,8 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     }
     return handleOnUnSticky();
   }, [isSticky, handleOnUnSticky, handleOnSticky]);
+
+  useUpdate({ mode, positionHandlers: calculatePositionHandlers, statusUpdaters });
 
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
     mode,
