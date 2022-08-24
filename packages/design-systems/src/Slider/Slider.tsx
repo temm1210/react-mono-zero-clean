@@ -1,3 +1,6 @@
+import useRect from "@project/react-hooks/src/useRect";
+import React, { useState } from "react";
+
 import "./Slider.scss";
 
 export interface SliderProps {
@@ -10,25 +13,43 @@ export interface SliderProps {
 }
 
 function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
-  // const onMouseMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   setX(event.clientX);
-  // };
+  const [setSliderElement, sliderElementRect] = useRect();
 
-  // const onMouseUp = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   console.log(event);
-  // };
+  const [value, setValue] = useState(defaultValue);
 
-  // window.addEventListener("mouseM")
+  const onMove = (event: MouseEvent) => {
+    console.log("move:", event);
+  };
 
+  const onMouseUp = (event: MouseEvent) => {
+    console.log("up:", event.clientX);
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onMouseUp);
+  };
+
+  const onMouseDown = (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", onMouseUp);
+
+    const { width, left } = sliderElementRect();
+
+    const nextValue = (Math.abs(event.clientX - left) * 100) / width;
+
+    setValue(Math.ceil(nextValue));
+  };
+
+  console.log("value:", value);
   return (
-    <div className="slider">
+    <div className="slider" onMouseDown={onMouseDown} ref={setSliderElement}>
       <div className="slider__rail" />
       <div className="slider__track" />
       <div
         className="slider__controller"
         role="slider"
         aria-label="가로방향 슬라이더"
-        aria-valuenow={defaultValue}
+        aria-valuenow={value}
         aria-valuemax={max}
         aria-valuemin={min}
         aria-orientation="horizontal"
