@@ -10,6 +10,16 @@ export interface SliderProps {
 }
 
 function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
+  // const onMouseMove = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  //   setX(event.clientX);
+  // };
+
+  // const onMouseUp = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  //   console.log(event);
+  // };
+
+  // window.addEventListener("mouseM")
+
   return (
     <div className="slider">
       <div className="slider__rail" />
