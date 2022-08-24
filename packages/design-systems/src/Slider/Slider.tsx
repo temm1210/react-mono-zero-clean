@@ -35,7 +35,11 @@ function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
 
     const { width, left } = sliderElementRect();
 
-    const nextValue = (Math.abs(event.clientX - left) * 100) / width;
+    const moveDistance = event.clientX - left;
+
+    if (moveDistance < 0) return;
+
+    const nextValue = (moveDistance * 100) / width;
 
     setValue(Math.ceil(nextValue));
   };
