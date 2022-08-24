@@ -1,23 +1,34 @@
 .slider {
   position: relative;
   cursor: pointer;
-  height: 14px;
+  // controller및 slider 센터위치
+  padding: 5px 0;
+  // controller의 height - padding위아래
+  height: 4px;
 }
 
 .slider__rail {
   position: absolute;
-  top: 0;
   width: 100%;
+  height: 4px;
   background-color: cadetblue;
   opacity: 0.2;
-  height: inherit;
 }
 
 .slider__track {
   position: absolute;
-  top: 0;
   left: 0;
   width: 30%;
+  height: 4px;
   background-color: cadetblue;
-  height: inherit;
+}
+
+.slider__controller {
+  position: absolute;
+  top: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: red;
+  transform: translateX(-50%);
 }
