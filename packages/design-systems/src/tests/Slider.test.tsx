@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import Slider from "../Slider";
 
 describe("Slider component test", () => {
@@ -19,5 +19,17 @@ describe("Slider component test", () => {
     expect(slider.getAttribute("aria-valuenow")).toBe(`${defaultValue}`);
     expect(slider.getAttribute("aria-valuemax")).toBe(`${max}`);
     expect(slider.getAttribute("aria-valuemin")).toBe(`${min}`);
+  });
+
+  it("slider controller이 draggable이여야 하고 drag가 끝나는 지점에서의 값으로 value가 설정되어야한다.", () => {
+    render(<Slider />);
+
+    const sliderController = screen.getByRole("slider");
+
+    fireEvent.mouseDown(sliderController);
+    fireEvent.mouseMove(sliderController, { clientX: 20 });
+    fireEvent.mouseUp(sliderController);
+
+    expect(sliderController).toHaveAttribute("aria-valuenow", 20);
   });
 });

@@ -1,13 +1,13 @@
 import { useCallback, useState, useLayoutEffect } from "react";
 import { useClosetParent, useDeepCompareEffect } from "@project/react-hooks";
 import { parentSelector } from "./utils";
-import { useStyles } from "./hooks";
 import StickyView, { StickyMode } from "./StickyView";
 import usePositionCalculators from "./hooks/usePositionCalculators";
 import useStatusUpdaters from "./hooks/useStatusUpdaters";
+import useUpdate from "./hooks/useUpdate";
+import useStyles from "./hooks/useStyles";
 
 import "./Sticky.scss";
-import useUpdate from "./hooks/useUpdate";
 
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
 export type CallbackParameter = Record<keyof Rect, number>;

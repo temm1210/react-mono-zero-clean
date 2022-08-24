@@ -5,6 +5,8 @@
 }
 
 .slider__rail {
+  position: absolute;
+  top: 0;
   width: 100%;
   background-color: cadetblue;
   opacity: 0.2;
@@ -12,6 +14,10 @@
 }
 
 .slider__track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30%;
   background-color: cadetblue;
   height: inherit;
 }
