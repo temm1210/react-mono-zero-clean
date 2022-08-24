@@ -12,9 +12,9 @@ export default {
   },
 } as Meta;
 
-const Test = () => (
+const BaseStory = () => (
   <div style={{ padding: "20px" }}>
     <Slider />
   </div>
 );
-export const Base = Test.bind({});
+export const Base = BaseStory.bind({});
