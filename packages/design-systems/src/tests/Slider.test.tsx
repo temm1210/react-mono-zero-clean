@@ -30,6 +30,6 @@ describe("Slider component test", () => {
     fireEvent.mouseMove(sliderController, { clientX: 20 });
     fireEvent.mouseUp(sliderController);
 
-    expect(sliderController).toHaveAttribute("aria-valuenow", 20);
+    expect(sliderController).toHaveAttribute("aria-valuenow", "20");
   });
 });
