@@ -21,13 +21,13 @@ describe("Slider component test", () => {
     expect(slider.getAttribute("aria-valuemin")).toBe(`${min}`);
   });
 
-  it("slider controller이 draggable이여야 하고 drag가 끝나는 지점에서의 값으로 value가 설정되어야한다.", () => {
+  it("slider controller이 draggable이여야 하고 drag가 끝나는 지점에서의 값으로 value가 설정되어야한다.", async () => {
     render(<Slider />);
 
     const sliderController = screen.getByRole("slider");
 
     fireEvent.mouseDown(sliderController);
-    fireEvent.mouseMove(sliderController, { clientX: 20 });
+    fireEvent.mouseMove(sliderController, { clientX: 100 });
     fireEvent.mouseUp(sliderController);
 
     expect(sliderController).toHaveAttribute("aria-valuenow", "20");

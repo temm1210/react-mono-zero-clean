@@ -17,12 +17,28 @@ function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
 
   const [value, setValue] = useState(defaultValue);
 
+  const calculateNextValue = (xPosition: number) => {
+    const { width, left } = sliderElementRect();
+
+    const moveDistance = xPosition - left;
+
+    const nextValue = Math.floor((moveDistance * 100) / width);
+
+    if (nextValue > 100 || nextValue < 0) return;
+    return nextValue;
+  };
+
   const onMove = (event: MouseEvent) => {
-    console.log("move:", event);
+    event.preventDefault();
+
+    const nextValue = calculateNextValue(event.clientX);
+
+    if (nextValue) setValue(nextValue);
   };
 
   const onMouseUp = (event: MouseEvent) => {
-    console.log("up:", event.clientX);
+    event.preventDefault();
+
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onMouseUp);
   };
@@ -33,23 +49,26 @@ function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onMouseUp);
 
-    const { width, left } = sliderElementRect();
+    const nextValue = calculateNextValue(event.clientX);
 
-    const moveDistance = event.clientX - left;
+    if (nextValue) setValue(nextValue);
+  };
 
-    if (moveDistance < 0) return;
+  const trackStyles = {
+    width: `${value}%`,
+  };
 
-    const nextValue = (moveDistance * 100) / width;
-
-    setValue(Math.ceil(nextValue));
+  const controllerStyles = {
+    left: `${value}%`,
   };
 
   console.log("value:", value);
   return (
     <div className="slider" onMouseDown={onMouseDown} ref={setSliderElement}>
       <div className="slider__rail" />
-      <div className="slider__track" />
+      <div className="slider__track" style={trackStyles} />
       <div
+        style={controllerStyles}
         className="slider__controller"
         role="slider"
         aria-label="가로방향 슬라이더"
