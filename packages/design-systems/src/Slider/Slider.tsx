@@ -1,4 +1,4 @@
-import useRect from "@project/react-hooks/src/useRect";
+import { useRect } from "@project/react-hooks";
 import React, { useState } from "react";
 
 import "./Slider.scss";
