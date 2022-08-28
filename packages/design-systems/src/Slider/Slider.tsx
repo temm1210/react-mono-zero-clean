@@ -12,7 +12,7 @@ export interface SliderProps {
   defaultValue?: number;
 }
 
-function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
+function Slider({ min = 10, max = 200, defaultValue = 10 }: SliderProps) {
   const [setSliderElement, sliderElementRect] = useRect();
 
   const [value, setValue] = useState(Math.max(min, defaultValue));
@@ -27,11 +27,11 @@ function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
 
   // drag시 변하는 value값 계산담당
   const calculateNextValue = (distance: number, denominator: number) => {
-    return (distance * (max - min)) / denominator + min;
+    return Math.floor((distance * (max - min)) / denominator + min);
   };
 
   const convertToPercent = (_value: number) => {
-    return `${((_value - min) * 100) / (max - min)}%`;
+    return `${Math.floor(((_value - min) * 100) / (max - min))}%`;
   };
 
   const onMove = (event: MouseEvent) => {
