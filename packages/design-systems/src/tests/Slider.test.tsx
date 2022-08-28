@@ -49,4 +49,23 @@ describe("Slider component test", () => {
     const sliderTack = container.getElementsByClassName("slider__track")[0];
     expect(sliderTack).toHaveStyle(`width:26%`);
   });
+
+  it("max <= min 일시 error를 발생시킨다.", () => {
+    expect(() => render(<Slider min={200} max={100} />)).toThrowError("'max prop' must be greater than 'min prop'");
+    expect(() => render(<Slider min={200} max={200} />)).toThrowError("'max prop' must be greater than 'min prop'");
+  });
+
+  it("defaultValue >= min, defaultValue <=max 이어야 한다.", () => {
+    // defaultValue validation전에 max, min먼저 validation 확인
+    expect(() => render(<Slider min={200} max={100} defaultValue={100} />)).toThrowError(
+      "'max prop' must be greater than 'min prop'",
+    );
+
+    expect(() => render(<Slider min={100} max={300} defaultValue={50} />)).toThrowError(
+      "'defaultValue prop' must be equal or greater than 'min prop'",
+    );
+
+    // 모든 validation 통과시에는 error를 던지면안됨
+    expect(() => render(<Slider min={100} max={300} defaultValue={100} />)).not.toThrowError();
+  });
 });

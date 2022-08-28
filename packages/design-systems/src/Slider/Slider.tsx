@@ -1,5 +1,5 @@
 import { useRect } from "@project/react-hooks";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./Slider.scss";
 
@@ -65,6 +65,16 @@ function Slider({ min = 10, max = 200, defaultValue = 10 }: SliderProps) {
   const controllerStyles = {
     left: convertToPercent(value),
   };
+
+  useEffect(() => {
+    if (min >= max) {
+      throw Error("'max prop' must be greater than 'min prop'");
+    }
+
+    if (min > defaultValue) {
+      throw Error("'defaultValue prop' must be equal or greater than 'min prop'");
+    }
+  }, [max, min, defaultValue]);
 
   console.log(value);
 
