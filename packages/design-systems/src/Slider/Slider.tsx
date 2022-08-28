@@ -12,28 +12,33 @@ export interface SliderProps {
   defaultValue?: number;
 }
 
-function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
+function Slider({ min = 50, max = 200, defaultValue = 0 }: SliderProps) {
   const [setSliderElement, sliderElementRect] = useRect();
 
-  const [value, setValue] = useState(defaultValue);
+  const [value, setValue] = useState(Math.max(min, defaultValue));
 
-  const calculateNextValue = (xPosition: number) => {
-    const { width, left } = sliderElementRect();
+  // validation성공시 값을 업데이트하는 함수
+  // update시 필요한 validation은 해당 함수에 모두 작성
+  const updateValueOnCondition = (_nextValue: number) => {
+    if (_nextValue > max || _nextValue < min) return;
 
-    const moveDistance = xPosition - left;
+    setValue(_nextValue);
+  };
 
-    const nextValue = Math.floor((moveDistance * 100) / width);
+  // drag시 변하는 value값 계산담당
+  const calculateNextValue = (distance: number, denominator: number) => {
+    return (distance * (max - min)) / denominator + min;
+  };
 
-    if (nextValue > 100 || nextValue < 0) return;
-    return nextValue;
+  const convertToPercent = (_value: number) => {
+    return `${((_value - min) * 100) / (max - min)}%`;
   };
 
   const onMove = (event: MouseEvent) => {
     event.preventDefault();
 
-    const nextValue = calculateNextValue(event.clientX);
-
-    if (nextValue) setValue(nextValue);
+    const { width, left } = sliderElementRect();
+    updateValueOnCondition(calculateNextValue(event.clientX - left, width));
   };
 
   const onMouseUp = (event: MouseEvent) => {
@@ -49,20 +54,20 @@ function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onMouseUp);
 
-    const nextValue = calculateNextValue(event.clientX);
-
-    if (nextValue) setValue(nextValue);
+    const { width, left } = sliderElementRect();
+    updateValueOnCondition(calculateNextValue(event.clientX - left, width));
   };
 
   const trackStyles = {
-    width: `${value}%`,
+    width: convertToPercent(value),
   };
 
   const controllerStyles = {
-    left: `${value}%`,
+    left: convertToPercent(value),
   };
 
-  console.log("value:", value);
+  console.log(value);
+
   return (
     <div className="slider" onMouseDown={onMouseDown} ref={setSliderElement}>
       <div className="slider__rail" />
