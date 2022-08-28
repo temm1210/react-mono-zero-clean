@@ -70,7 +70,11 @@ function Slider({ min = 10, max = 200, defaultValue = 10 }: SliderProps) {
     if (min >= max) {
       throw Error("'max prop' must be greater than 'min prop'");
     }
-  }, [max, min]);
+
+    if (min > defaultValue) {
+      throw Error("'defaultValue prop' must be equal or greater than 'min prop'");
+    }
+  }, [max, min, defaultValue]);
 
   console.log(value);
 
