@@ -1,18 +1,19 @@
 import { useRect } from "@project/react-hooks";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useValidation, UseValidationProps } from "./hooks";
 
 import "./Slider.scss";
 
 export interface SliderProps {
   /** 도달할 수 있는 최소값 */
-  min?: number;
+  min?: UseValidationProps["min"];
   /** 도달할 수 있는 최대값 */
-  max?: number;
+  max?: UseValidationProps["max"];
   /** 초기값 */
-  defaultValue?: number;
+  defaultValue?: UseValidationProps["defaultValue"];
 }
 
-function Slider({ min = 10, max = 200, defaultValue = 10 }: SliderProps) {
+function Slider({ min = 0, max = 100, defaultValue = min || 0 }: SliderProps) {
   const [setSliderElement, sliderElementRect] = useRect();
 
   const [value, setValue] = useState(Math.max(min, defaultValue));
@@ -66,16 +67,7 @@ function Slider({ min = 10, max = 200, defaultValue = 10 }: SliderProps) {
     left: convertToPercent(value),
   };
 
-  useEffect(() => {
-    if (min >= max) {
-      throw Error("'max prop' must be greater than 'min prop'");
-    }
-
-    if (min > defaultValue) {
-      throw Error("'defaultValue prop' must be equal or greater than 'min prop'");
-    }
-  }, [max, min, defaultValue]);
-
+  useValidation({ max, min, defaultValue });
   console.log(value);
 
   return (
