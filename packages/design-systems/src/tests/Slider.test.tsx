@@ -21,15 +21,32 @@ describe("Slider component test", () => {
     expect(slider.getAttribute("aria-valuemin")).toBe(`${min}`);
   });
 
-  it("slider controller이 draggable이여야 하고 drag가 끝나는 지점에서의 값으로 value가 설정되어야한다.", async () => {
-    render(<Slider />);
+  it("drag가 끝나는 지점에서의 값(style, value)이 올바르게 계산되어야한다.", () => {
+    const { container, getByRole } = render(<Slider min={10} max={200} defaultValue={10} />);
 
-    const sliderController = screen.getByRole("slider");
+    const sliderContainer = container.getElementsByClassName("slider")[0];
+
+    sliderContainer.getBoundingClientRect = jest.fn(() => {
+      return {
+        width: 300,
+        height: 10,
+        top: 0,
+        left: 20,
+        bottom: 0,
+        right: 0,
+      } as DOMRect;
+    });
+
+    const sliderController = getByRole("slider");
 
     fireEvent.mouseDown(sliderController);
     fireEvent.mouseMove(sliderController, { clientX: 100 });
     fireEvent.mouseUp(sliderController);
 
-    expect(sliderController).toHaveAttribute("aria-valuenow", "20");
+    expect(sliderController).toHaveAttribute("aria-valuenow", `${60}`);
+    expect(sliderController).toHaveStyle(`left:26%`);
+
+    const sliderTack = container.getElementsByClassName("slider__track")[0];
+    expect(sliderTack).toHaveStyle(`width:26%`);
   });
 });
