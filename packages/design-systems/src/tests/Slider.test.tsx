@@ -49,4 +49,9 @@ describe("Slider component test", () => {
     const sliderTack = container.getElementsByClassName("slider__track")[0];
     expect(sliderTack).toHaveStyle(`width:26%`);
   });
+
+  it("max <= min 일시 error를 발생시킨다.", () => {
+    expect(() => render(<Slider min={200} max={100} />)).toThrowError("'max prop' must be greater than 'min prop'");
+    expect(() => render(<Slider min={200} max={200} />)).toThrowError("'max prop' must be greater than 'min prop'");
+  });
 });
