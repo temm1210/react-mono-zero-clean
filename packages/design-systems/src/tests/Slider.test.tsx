@@ -46,8 +46,6 @@ describe("Slider component test", () => {
     const controller = getByRole("slider");
     const sliderTack = container.getElementsByClassName("slider__track")[0];
 
-    console.log("sliderContainer:", sliderContainer);
-
     // minxClientX <= clientX <= maxClientX
     const maxClientX = width + left;
     const minxClientX = left;
@@ -110,5 +108,9 @@ describe("Slider component test", () => {
 
     // 모든 validation 통과시에는 error를 던지면안됨
     expect(() => render(<Slider min={100} max={300} defaultValue={100} />)).not.toThrowError();
+  });
+
+  it("주어진 step만큼 value가 변해야한다.", () => {
+    render(<Slider step={10} />);
   });
 });
