@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/react";
 import Slider from "../Slider";
+import BaseStory from "./BaseStory";
 
 export default {
   component: Slider,
@@ -12,9 +13,9 @@ export default {
   },
 } as Meta;
 
-const BaseStory = () => (
-  <div style={{ padding: "20px" }}>
-    <Slider />
-  </div>
-);
 export const Base = BaseStory.bind({});
+Base.args = {
+  min: 0,
+  max: 300,
+  defaultValue: 0,
+};
