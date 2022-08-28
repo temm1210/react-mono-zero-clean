@@ -93,12 +93,12 @@ describe("Slider component test", () => {
     expect(sliderTack).toHaveStyle(`width:100%`);
   });
 
-  it("max <= min 일시 error를 발생시킨다.", () => {
+  it("max <= min일시 error를 발생시킨다.", () => {
     expect(() => render(<Slider min={200} max={100} />)).toThrowError("'max prop' must be greater than 'min prop'");
     expect(() => render(<Slider min={200} max={200} />)).toThrowError("'max prop' must be greater than 'min prop'");
   });
 
-  it("defaultValue >= min, defaultValue <=max 이어야 한다.", () => {
+  it("defaultValue < min, defaultValue > max일시 error를 발생시킨다.", () => {
     // defaultValue validation전에 max, min먼저 validation 확인
     expect(() => render(<Slider min={200} max={100} defaultValue={100} />)).toThrowError(
       "'max prop' must be greater than 'min prop'",
