@@ -12,7 +12,7 @@ export interface SliderProps {
   defaultValue?: number;
 }
 
-function Slider({ min = 50, max = 200, defaultValue = 0 }: SliderProps) {
+function Slider({ min = 0, max = 100, defaultValue = 0 }: SliderProps) {
   const [setSliderElement, sliderElementRect] = useRect();
 
   const [value, setValue] = useState(Math.max(min, defaultValue));
