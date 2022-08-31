@@ -15,7 +15,7 @@ function useValidation({ max, min, defaultValue }: UseValidationProps) {
       throw Error("'max prop' must be greater than 'min prop'");
     }
 
-    if (min > defaultValue) {
+    if (min > defaultValue || defaultValue > max) {
       throw Error("'defaultValue prop' must be equal or greater than 'min prop'");
     }
   }, [max, min, defaultValue]);

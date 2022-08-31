@@ -11,22 +11,25 @@ export interface SliderProps {
   max?: UseValidationProps["max"];
   /** 초기값 */
   defaultValue?: UseValidationProps["defaultValue"];
+  /** 증가나 감소시킬 값의 크기 */
+  step?: number;
 }
 
-function Slider({ min = 0, max = 100, defaultValue = min || 0 }: SliderProps) {
+function Slider({ min = 0, max = 100, defaultValue = min || 0, step = 1 }: SliderProps) {
   const [setSliderElement, sliderElementRect] = useRect();
-
   const [value, setValue] = useState(Math.max(min, defaultValue));
 
   // validation성공시 값을 업데이트하는 함수
   // update시 필요한 validation은 해당 함수에 모두 작성
-  const updateValueOnCondition = (_nextValue: number) => {
-    if (_nextValue > max || _nextValue < min) return;
+  const updateValueOnCondition = (_value: number) => {
+    if (_value > max || _value < min) return;
 
-    setValue(_nextValue);
+    const nextValue = min + Math.round((_value - min) / step) * step;
+
+    setValue(nextValue);
   };
 
-  // drag시 변하는 value값 계산담당
+  // slider value값 계산담당
   const calculateNextValue = (distance: number, denominator: number) => {
     return Math.floor((distance * (max - min)) / denominator + min);
   };
@@ -68,6 +71,7 @@ function Slider({ min = 0, max = 100, defaultValue = min || 0 }: SliderProps) {
   };
 
   useValidation({ max, min, defaultValue });
+
   console.log(value);
 
   return (
