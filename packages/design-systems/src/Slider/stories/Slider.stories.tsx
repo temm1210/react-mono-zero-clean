@@ -14,8 +14,3 @@ export default {
 } as Meta;
 
 export const Base = BaseStory.bind({});
-Base.args = {
-  min: 0,
-  max: 300,
-  defaultValue: 0,
-};
