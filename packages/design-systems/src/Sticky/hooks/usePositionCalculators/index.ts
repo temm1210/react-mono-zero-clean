@@ -19,8 +19,8 @@ export type UsePositionCalculatorRectReturns = [
 ];
 
 export interface UsePositionCalculatorRectProps {
-  top: number;
-  bottom: number;
+  top?: number;
+  bottom?: number;
 }
 export type UsePositionCalculatorReturn = [
   ...UsePositionCalculatorRectReturns,
