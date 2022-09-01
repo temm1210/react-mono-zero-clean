@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useClosetParent, useDeepCompareEffect } from "@project/react-hooks";
-import cx from "clsx";
 import { forwardRef, ReactNode, useImperativeHandle } from "react";
-import usePositionCalculators from "./hooks/usePositionCalculators";
-import { StickyModeMapperRef } from "./types";
-import { parentSelector } from "./utils";
+import cx from "clsx";
+import usePositionCalculators from "../hooks/usePositionCalculators";
+import { StickyModeMapperRef } from "../types";
+import { parentSelector } from "../utils";
 
-export interface TopStickyProps {
-  top: number;
+export interface BottomStickyProps {
+  bottom: number;
   width: number;
   height: number;
   isSticky: boolean;
@@ -16,14 +16,14 @@ export interface TopStickyProps {
 }
 
 /**
- * mode가 top인 경우에 해당하는 component
- * forwardedRef에 mode가 top일시 해야할 일 정의
+ * mode가 bottom인 경우에 해당하는 component
+ * forwardedRef에 mode가 bottom일시 해야할 일 정의
  */
-const TopSticky = forwardRef<StickyModeMapperRef, TopStickyProps>(
-  ({ top, width, height, isSticky, isAbsolute, children }, forwardedRef) => {
+const BottomSticky = forwardRef<StickyModeMapperRef, BottomStickyProps>(
+  ({ bottom, width, height, isSticky, isAbsolute, children }, forwardedRef) => {
     const [[setParent], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
       usePositionCalculators({
-        top,
+        bottom,
       });
 
     const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
@@ -33,8 +33,8 @@ const TopSticky = forwardRef<StickyModeMapperRef, TopStickyProps>(
     }, [parentNode, setParent]);
 
     useImperativeHandle(forwardedRef, () => ({
-      isReachScreenToMode: () => calculatePositionHandlers().isReachScreenTop(),
-      isReachContainerBottomToMode: () => calculatePositionHandlers().isReachContainerBottomToTop(),
+      isReachScreenToMode: () => calculatePositionHandlers().isReachScreenBottom(),
+      isReachContainerBottomToMode: () => calculatePositionHandlers().isReachContainerBottomToBottom(),
       stickyRect: stickyRect as DOMRectReadOnly,
       fakeRect: fakeRect as DOMRectReadOnly,
       parentNode,
@@ -48,22 +48,21 @@ const TopSticky = forwardRef<StickyModeMapperRef, TopStickyProps>(
     const calculateStickyStyle = () => {
       if (!isSticky) return;
       return {
-        top: isAbsolute ? undefined : top,
-        bottom: isAbsolute ? 0 : undefined,
+        bottom: isAbsolute ? 0 : bottom,
         width,
       };
     };
 
     return (
       <div ref={findParentFrom} className="sticky-wrap">
-        {/* fake element */}
-        <div ref={fakeRef} className="sticky__fake" style={{ height }} />
         <div ref={stickyRef} className={stickyClassNames} style={calculateStickyStyle()}>
           {children}
         </div>
+        {/* fake element */}
+        <div ref={fakeRef} className="sticky__fake" style={{ height }} />
       </div>
     );
   },
 );
 
-export default TopSticky;
+export default BottomSticky;
