@@ -13,9 +13,20 @@ export interface SliderProps {
   defaultValue?: UseValidationProps["defaultValue"];
   /** 증가나 감소시킬 값의 크기 */
   step?: number;
+  /** slider controller의 크기(정사각형) */
+  controllerSize?: number;
+  /** slider rail의 height(track도 같이적용) */
+  railHeight?: number;
 }
 
-function Slider({ min = 0, max = 100, defaultValue = min || 0, step = 1 }: SliderProps) {
+function Slider({
+  min = 0,
+  max = 100,
+  defaultValue = min || 0,
+  step = 1,
+  controllerSize = 20,
+  railHeight = 6,
+}: SliderProps) {
   const [setSliderElement, sliderElementRect] = useRect();
   const [value, setValue] = useState(Math.max(min, defaultValue));
 
@@ -62,12 +73,23 @@ function Slider({ min = 0, max = 100, defaultValue = min || 0, step = 1 }: Slide
     updateValueOnCondition(calculateNextValue(event.clientX - left, width));
   };
 
+  const railStyles = {
+    height: `${railHeight}px`,
+  };
   const trackStyles = {
     width: convertToPercent(value),
+    height: `${railHeight}px`,
   };
 
   const controllerStyles = {
+    width: `${controllerSize}px`,
+    height: `${controllerSize}px`,
     left: convertToPercent(value),
+  };
+
+  const sliderStyles = {
+    padding: `${(controllerSize - railHeight) / 2}px 0`,
+    height: `${railHeight}px`,
   };
 
   useValidation({ max, min, defaultValue });
@@ -75,8 +97,8 @@ function Slider({ min = 0, max = 100, defaultValue = min || 0, step = 1 }: Slide
   console.log(value);
 
   return (
-    <div className="slider" onMouseDown={onMouseDown} ref={setSliderElement}>
-      <div className="slider__rail" />
+    <div className="slider" onMouseDown={onMouseDown} style={sliderStyles} ref={setSliderElement}>
+      <div className="slider__rail" style={railStyles} />
       <div className="slider__track" style={trackStyles} />
       <div
         style={controllerStyles}
