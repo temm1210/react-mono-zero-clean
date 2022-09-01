@@ -1,9 +1,10 @@
 import { useRect } from "@project/react-hooks";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useValidation, UseValidationProps } from "./hooks";
 
 import "./Slider.scss";
 
+export type SliderOnChange = (value: number) => void;
 export interface SliderProps {
   /** 도달할 수 있는 최소값 */
   min?: UseValidationProps["min"];
@@ -17,6 +18,8 @@ export interface SliderProps {
   controllerSize?: number;
   /** slider rail의 height(track도 같이적용) */
   railHeight?: number;
+  /** slider의 value가 변경될 때 실행할 callback 함수 */
+  onChange?: SliderOnChange;
 }
 
 function Slider({
@@ -26,6 +29,7 @@ function Slider({
   step = 1,
   controllerSize = 20,
   railHeight = 6,
+  onChange,
 }: SliderProps) {
   const [setSliderElement, sliderElementRect] = useRect();
   const [value, setValue] = useState(Math.max(min, defaultValue));
@@ -73,6 +77,12 @@ function Slider({
     updateValueOnCondition(calculateNextValue(event.clientX - left, width));
   };
 
+  useEffect(() => {
+    onChange?.(value);
+  }, [onChange, value]);
+
+  useValidation({ max, min, defaultValue });
+
   const railStyles = {
     height: `${railHeight}px`,
   };
@@ -91,10 +101,6 @@ function Slider({
     padding: `${(controllerSize - railHeight) / 2}px 0`,
     height: `${railHeight}px`,
   };
-
-  useValidation({ max, min, defaultValue });
-
-  console.log(value);
 
   return (
     <div className="slider" onMouseDown={onMouseDown} style={sliderStyles} ref={setSliderElement}>

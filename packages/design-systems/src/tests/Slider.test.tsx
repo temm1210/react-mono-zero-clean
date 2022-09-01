@@ -220,4 +220,69 @@ describe("Slider component test", () => {
     expect(sliderContainer).toHaveStyle(`height:${railHeight}px`);
     expect(sliderContainer).toHaveStyle(`padding:${(controllerSize - railHeight) / 2}px 0`);
   });
+  it("slider의 props에 onChange가 존재할 시, slider의 value가 변할때마다 호출되어야한다.", () => {
+    const onChange = jest.fn();
+
+    const min = 50;
+    const max = 250;
+    const step = 25;
+    const { container, getByRole } = render(<Slider min={min} max={max} onChange={onChange} step={step} />);
+
+    // 마운트된 이후 한번호출
+    expect(onChange).toHaveBeenCalledTimes(1);
+
+    onChange.mockClear();
+
+    const sliderContainer = container.getElementsByClassName("slider")[0];
+
+    const left = 20;
+    const width = 350;
+
+    const minxClientX = left;
+
+    sliderContainer.getBoundingClientRect = jest.fn(() => {
+      return {
+        width,
+        height: 10,
+        top: 0,
+        left,
+        bottom: 0,
+        right: 0,
+      } as DOMRect;
+    });
+
+    const controller = getByRole("slider");
+
+    // rail의 특정부분을 클릭했을때
+    fireEvent.mouseDown(controller, { clientX: minxClientX + 120 });
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith(min + step * 3);
+
+    onChange.mockClear();
+
+    // value에 변화가 없을때
+    fireEvent.mouseDown(controller, { clientX: minxClientX });
+    fireEvent.mouseUp(controller);
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenLastCalledWith(min);
+
+    // mouse를 drag하면서 value를 변화시킬때
+    fireEvent.mouseDown(controller, { clientX: minxClientX });
+    fireEvent.mouseMove(controller, { clientX: minxClientX + 40 });
+    expect(onChange).toHaveBeenCalledTimes(2);
+    expect(onChange).toHaveBeenLastCalledWith(min + step);
+
+    fireEvent.mouseMove(controller, { clientX: minxClientX + 80 });
+    expect(onChange).toHaveBeenCalledTimes(3);
+    expect(onChange).toHaveBeenLastCalledWith(min + step * 2);
+
+    fireEvent.mouseMove(controller, { clientX: minxClientX + 120 });
+    expect(onChange).toHaveBeenCalledTimes(4);
+    expect(onChange).toHaveBeenLastCalledWith(min + step * 3);
+
+    fireEvent.mouseMove(controller, { clientX: minxClientX + 160 });
+    fireEvent.mouseUp(controller);
+    expect(onChange).toHaveBeenCalledTimes(5);
+    expect(onChange).toHaveBeenLastCalledWith(min + step * 4);
+  });
 });
