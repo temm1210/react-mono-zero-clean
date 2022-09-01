@@ -206,4 +206,18 @@ describe("Slider component test", () => {
     expect(controller).toHaveStyle(`left:${Math.floor(step / 2)}%`);
     expect(sliderTrack).toHaveStyle(`width:${Math.floor(step / 2)}%`);
   });
+
+  it("slider의 container padding = controller height - container height 이여야 한다.", () => {
+    const railHeight = 20;
+    const controllerSize = 50;
+
+    const { container } = render(
+      <Slider min={30} max={100} defaultValue={50} step={15} controllerSize={controllerSize} railHeight={railHeight} />,
+    );
+
+    const sliderContainer = container.getElementsByClassName("slider")[0];
+
+    expect(sliderContainer).toHaveStyle(`height:${railHeight}px`);
+    expect(sliderContainer).toHaveStyle(`padding:${(controllerSize - railHeight) / 2}px 0`);
+  });
 });
