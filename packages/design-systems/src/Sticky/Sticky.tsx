@@ -1,7 +1,6 @@
 import { useCallback, useState, useLayoutEffect, useRef } from "react";
 import { useEventListener } from "@project/react-hooks";
 import useStatusUpdaters from "./hooks/useStatusUpdaters";
-import useStyles from "./hooks/useStyles";
 import { StickyModeMapperRef } from "./types";
 import TopSticky from "./TopSticky";
 import BottomSticky from "./BottomSticky";
@@ -84,33 +83,18 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   useEventListener("scroll", update, { passive: true });
   useEventListener("resize", update);
 
-  const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
-    mode,
-    isSticky,
-    isAbsolute,
-    width,
-    height,
-    top,
-    bottom,
-  });
-
   return mode === "top" ? (
-    <TopSticky
-      ref={modeMapperRef}
-      top={top}
-      fakeStyle={fakeStyle}
-      calculateStickyStyle={calculateStickyStyle}
-      stickyClassNames={stickyClassNames}
-    >
+    <TopSticky ref={modeMapperRef} top={top} width={width} height={height} isSticky={isSticky} isAbsolute={isAbsolute}>
       {children}
     </TopSticky>
   ) : (
     <BottomSticky
       ref={modeMapperRef}
       bottom={bottom}
-      fakeStyle={fakeStyle}
-      calculateStickyStyle={calculateStickyStyle}
-      stickyClassNames={stickyClassNames}
+      width={width}
+      height={height}
+      isSticky={isSticky}
+      isAbsolute={isAbsolute}
     >
       {children}
     </BottomSticky>

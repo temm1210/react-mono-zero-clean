@@ -1,21 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useClosetParent, useDeepCompareEffect } from "@project/react-hooks";
+import cx from "clsx";
 import { forwardRef, ReactNode, useImperativeHandle } from "react";
 import usePositionCalculators from "./hooks/usePositionCalculators";
 import { StickyModeMapperRef } from "./types";
 import { parentSelector } from "./utils";
 
-export type TopStickyCalculateStickyStyle = () => Record<string, any> | undefined;
-export type TopStickyFakeStyle = Record<string, any>;
-
-interface TopStickyStyleProps {
-  calculateStickyStyle: TopStickyCalculateStickyStyle;
-  stickyClassNames: string;
-  fakeStyle: TopStickyFakeStyle;
+export interface TopStickyProps {
+  top: number;
+  width: number;
+  height: number;
+  isSticky: boolean;
+  isAbsolute: boolean;
   children: ReactNode;
-}
-export interface TopStickyProps extends TopStickyStyleProps {
-  top?: number;
 }
 
 /**
@@ -23,7 +20,7 @@ export interface TopStickyProps extends TopStickyStyleProps {
  * forwardedRef에 mode가 top일시 해야할 일 정의
  */
 const TopSticky = forwardRef<StickyModeMapperRef, TopStickyProps>(
-  ({ top, calculateStickyStyle, stickyClassNames, fakeStyle, children }, forwardedRef) => {
+  ({ top, width, height, isSticky, isAbsolute, children }, forwardedRef) => {
     const [[setParent], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
       usePositionCalculators({
         top,
@@ -43,10 +40,24 @@ const TopSticky = forwardRef<StickyModeMapperRef, TopStickyProps>(
       parentNode,
     }));
 
+    const stickyClassNames = cx(
+      !isSticky && "sticky__content",
+      isSticky && (isAbsolute ? "sticky__content--absolute" : "sticky__content--fixed"),
+    );
+
+    const calculateStickyStyle = () => {
+      if (!isSticky) return;
+      return {
+        top: isAbsolute ? undefined : top,
+        bottom: isAbsolute ? 0 : undefined,
+        width,
+      };
+    };
+
     return (
       <div ref={findParentFrom} className="sticky-wrap">
         {/* fake element */}
-        <div ref={fakeRef} className="sticky__fake" style={fakeStyle} />
+        <div ref={fakeRef} className="sticky__fake" style={{ height }} />
         <div ref={stickyRef} className={stickyClassNames} style={calculateStickyStyle()}>
           {children}
         </div>
