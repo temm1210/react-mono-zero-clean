@@ -1,4 +1,4 @@
-# mono repo + zero config
+# This repo just for study
 
 ## 시작방법
 
