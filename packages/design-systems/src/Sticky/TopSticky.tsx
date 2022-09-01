@@ -5,16 +5,16 @@ import usePositionCalculators from "./hooks/usePositionCalculators";
 import { StickyModeMapperRef } from "./types";
 import { parentSelector } from "./utils";
 
-export type StickyViewCalculateStickyStyle = () => Record<string, any> | undefined;
-export type StickyViewFakeStyle = Record<string, any>;
+export type TopStickyCalculateStickyStyle = () => Record<string, any> | undefined;
+export type TopStickyFakeStyle = Record<string, any>;
 
-interface StickyViewStyleProps {
-  calculateStickyStyle: StickyViewCalculateStickyStyle;
+interface TopStickyStyleProps {
+  calculateStickyStyle: TopStickyCalculateStickyStyle;
   stickyClassNames: string;
-  fakeStyle: StickyViewFakeStyle;
+  fakeStyle: TopStickyFakeStyle;
   children: ReactNode;
 }
-export interface StickyViewProps extends StickyViewStyleProps {
+export interface TopStickyProps extends TopStickyStyleProps {
   top?: number;
 }
 
@@ -22,7 +22,7 @@ export interface StickyViewProps extends StickyViewStyleProps {
  * mode가 top인 경우에 해당하는 component
  * forwardedRef에 mode가 top일시 해야할 일 정의
  */
-const TopSticky = forwardRef<StickyModeMapperRef, StickyViewProps>(
+const TopSticky = forwardRef<StickyModeMapperRef, TopStickyProps>(
   ({ top, calculateStickyStyle, stickyClassNames, fakeStyle, children }, forwardedRef) => {
     const [[setParent], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
       usePositionCalculators({
