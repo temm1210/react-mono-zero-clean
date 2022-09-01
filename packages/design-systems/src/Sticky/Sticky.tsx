@@ -2,10 +2,11 @@ import { useCallback, useState, useLayoutEffect, useRef } from "react";
 import { useEventListener } from "@project/react-hooks";
 import useStatusUpdaters from "./hooks/useStatusUpdaters";
 import useStyles from "./hooks/useStyles";
-
-import "./Sticky.scss";
 import { StickyModeMapperRef } from "./types";
 import TopSticky from "./TopSticky";
+import BottomSticky from "./BottomSticky";
+
+import "./Sticky.scss";
 
 export type StickyMode = "top" | "bottom";
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
@@ -31,20 +32,8 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   const [height, setHeight] = useState(0);
 
   const modeMapperRef = useRef<StickyModeMapperRef>(null);
-  // const [[setParent], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
-  //   usePositionCalculators({
-  //     top,
-  //     bottom,
-  //   });
-
-  // const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
-
-  // useDeepCompareEffect(() => {
-  //   setParent(parentNode || document.body);
-  // }, [parentNode, setParent]);
 
   const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters(!modeMapperRef.current?.parentNode);
-  console.log("modeMapperRef.current?.parentNode:", modeMapperRef.current?.parentNode);
 
   // sticky status state가 변할 때 실행할 callback
   const handleOnStickyStateUpdate = useCallback(
@@ -78,8 +67,6 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     return handleOnUnSticky();
   }, [isSticky, handleOnUnSticky, handleOnSticky]);
 
-  // useUpdate({ mode, positionHandlers: calculatePositionHandlers, statusUpdaters });
-
   const update = () => {
     if (!modeMapperRef.current) return;
 
@@ -107,17 +94,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     bottom,
   });
 
-  // const props = {
-  //   mode,
-  //   fakeRef,
-  //   stickyRef,
-  //   parentRef: findParentFrom,
-  //   fakeStyle,
-  //   stickyClassNames,
-  //   calculateStickyStyle,
-  // };
-
-  return (
+  return mode === "top" ? (
     <TopSticky
       ref={modeMapperRef}
       top={top}
@@ -127,6 +104,16 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     >
       {children}
     </TopSticky>
+  ) : (
+    <BottomSticky
+      ref={modeMapperRef}
+      bottom={bottom}
+      fakeStyle={fakeStyle}
+      calculateStickyStyle={calculateStickyStyle}
+      stickyClassNames={stickyClassNames}
+    >
+      {children}
+    </BottomSticky>
   );
 };
 
