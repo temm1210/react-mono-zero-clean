@@ -1,14 +1,13 @@
-import { useCallback, useState, useLayoutEffect } from "react";
-import { useClosetParent, useDeepCompareEffect } from "@project/react-hooks";
-import { parentSelector } from "./utils";
-import StickyView, { StickyMode } from "./StickyView";
-import usePositionCalculators from "./hooks/usePositionCalculators";
+import { useCallback, useState, useLayoutEffect, useRef } from "react";
+import { useEventListener } from "@project/react-hooks";
 import useStatusUpdaters from "./hooks/useStatusUpdaters";
-import useUpdate from "./hooks/useUpdate";
 import useStyles from "./hooks/useStyles";
 
 import "./Sticky.scss";
+import { StickyModeMapperRef } from "./types";
+import TopSticky from "./TopSticky";
 
+export type StickyMode = "top" | "bottom";
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
 export type CallbackParameter = Record<keyof Rect, number>;
 export type Callback = (rect: CallbackParameter) => void;
@@ -30,19 +29,22 @@ export interface Props {
 const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStick }: Props) => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
-  const [[setParent], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
-    usePositionCalculators({
-      top,
-      bottom,
-    });
 
-  const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
+  const modeMapperRef = useRef<StickyModeMapperRef>(null);
+  // const [[setParent], [stickyRef, stickyRect], [fakeRef, fakeRect], { calculatePositionHandlers }] =
+  //   usePositionCalculators({
+  //     top,
+  //     bottom,
+  //   });
 
-  useDeepCompareEffect(() => {
-    setParent(parentNode || document.body);
-  }, [parentNode, setParent]);
+  // const { parentNode, findParentFrom } = useClosetParent(`.${parentSelector}`);
 
-  const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters(!parentNode);
+  // useDeepCompareEffect(() => {
+  //   setParent(parentNode || document.body);
+  // }, [parentNode, setParent]);
+
+  const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters(!modeMapperRef.current?.parentNode);
+  console.log("modeMapperRef.current?.parentNode:", modeMapperRef.current?.parentNode);
 
   // sticky status state가 변할 때 실행할 callback
   const handleOnStickyStateUpdate = useCallback(
@@ -57,12 +59,17 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   );
 
   const handleOnSticky = useCallback(() => {
-    handleOnStickyStateUpdate(fakeRect.width, stickyRect.height, onStick);
-  }, [fakeRect.width, handleOnStickyStateUpdate, onStick, stickyRect.height]);
+    if (modeMapperRef.current) {
+      const { fakeRect, stickyRect } = modeMapperRef.current;
+      handleOnStickyStateUpdate(fakeRect.width, stickyRect.height, onStick);
+    }
+  }, [handleOnStickyStateUpdate, onStick]);
 
   const handleOnUnSticky = useCallback(() => {
-    handleOnStickyStateUpdate(fakeRect.width, 0, onUnStick);
-  }, [fakeRect.width, handleOnStickyStateUpdate, onUnStick]);
+    if (modeMapperRef.current) {
+      handleOnStickyStateUpdate(modeMapperRef.current?.fakeRect.width, 0, onUnStick);
+    }
+  }, [handleOnStickyStateUpdate, onUnStick]);
 
   useLayoutEffect(() => {
     if (isSticky) {
@@ -71,7 +78,24 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     return handleOnUnSticky();
   }, [isSticky, handleOnUnSticky, handleOnSticky]);
 
-  useUpdate({ mode, positionHandlers: calculatePositionHandlers, statusUpdaters });
+  // useUpdate({ mode, positionHandlers: calculatePositionHandlers, statusUpdaters });
+
+  const update = () => {
+    if (!modeMapperRef.current) return;
+
+    const { isReachScreenToMode, isReachContainerBottomToMode } = modeMapperRef.current;
+
+    if (isReachScreenToMode()) {
+      if (isReachContainerBottomToMode()) {
+        return statusUpdaters?.stickToContainerBottom();
+      }
+      return statusUpdaters?.stickToScreenMode();
+    }
+    return statusUpdaters?.unStick();
+  };
+
+  useEventListener("scroll", update, { passive: true });
+  useEventListener("resize", update);
 
   const { fakeStyle, stickyClassNames, calculateStickyStyle } = useStyles({
     mode,
@@ -83,17 +107,27 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
     bottom,
   });
 
-  const props = {
-    mode,
-    fakeRef,
-    stickyRef,
-    parentRef: findParentFrom,
-    fakeStyle,
-    stickyClassNames,
-    calculateStickyStyle,
-  };
+  // const props = {
+  //   mode,
+  //   fakeRef,
+  //   stickyRef,
+  //   parentRef: findParentFrom,
+  //   fakeStyle,
+  //   stickyClassNames,
+  //   calculateStickyStyle,
+  // };
 
-  return <StickyView {...props}>{children}</StickyView>;
+  return (
+    <TopSticky
+      ref={modeMapperRef}
+      top={top}
+      fakeStyle={fakeStyle}
+      calculateStickyStyle={calculateStickyStyle}
+      stickyClassNames={stickyClassNames}
+    >
+      {children}
+    </TopSticky>
+  );
 };
 
 export default Sticky;
