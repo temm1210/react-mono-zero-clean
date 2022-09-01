@@ -14,3 +14,6 @@ export default {
 } as Meta;
 
 export const Base = BaseStory.bind({});
+Base.args = {
+  onChange: (value: number) => console.log("value:", value),
+};
