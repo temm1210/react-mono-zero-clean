@@ -1,12 +1,13 @@
 import { useRect } from "@project/react-hooks";
 import { UseClientRect, UseRectRef } from "@project/react-hooks/src/useRect";
-import { CalculatorHandler } from "../../types";
+
+export type UsePositionCalculatorHandler = () => boolean;
 
 export interface UsePositionCalculatorHandlers {
-  isReachContainerBottomToTop: CalculatorHandler;
-  isReachContainerBottomToBottom: CalculatorHandler;
-  isReachScreenTop: CalculatorHandler;
-  isReachScreenBottom: CalculatorHandler;
+  isReachContainerBottomToTop: UsePositionCalculatorHandler;
+  isReachContainerBottomToBottom: UsePositionCalculatorHandler;
+  isReachScreenTop: UsePositionCalculatorHandler;
+  isReachScreenBottom: UsePositionCalculatorHandler;
 }
 
 export type UsePositionCalculatorRect = [UseRectRef, UseClientRect];
