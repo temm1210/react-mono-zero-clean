@@ -3,7 +3,7 @@ import { useClosetParent, useDeepCompareEffect } from "@project/react-hooks";
 import cx from "clsx";
 import { forwardRef, ReactNode, useImperativeHandle } from "react";
 import usePositionCalculators from "../hooks/usePositionCalculators";
-import { StickyModeMapperRef } from "../types";
+import { StickyModeMapperRef } from "../interface";
 import { parentSelector } from "../utils";
 
 export interface TopStickyProps {
