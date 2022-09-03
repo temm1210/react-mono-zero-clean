@@ -1,14 +1,14 @@
 {
   "name": "@project/react-router-utils",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "source": "src/index.ts",
   "main": "dist/cjs/index.cjs.js",
   "module": "dist/es/index.esm.js",
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@project/utils": "1.0.0",
+    "@project/utils": "^1.0.1",
     "lodash": "^4.17.21"
   },
   "scripts": {
@@ -29,6 +29,8 @@
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@types/jest": "^27.0.1",
     "@types/lodash": "^4.14.172",
+    "@types/react": "^17.0.43",
+    "@types/react-dom": "^17.0.14",
     "babel-plugin-lodash": "^3.3.4",
     "jest": "^27.0.6",
     "nodemon": "^2.0.12",
@@ -39,8 +41,6 @@
     "rollup-plugin-typescript2": "^0.30.0",
     "ts-node": "^10.2.0",
     "tsconfig-paths": "^3.10.1",
-    "typescript": "^4.3.5",
-    "@types/react": "^17.0.43",
-    "@types/react-dom": "^17.0.14"
+    "typescript": "^4.3.5"
   }
 }
