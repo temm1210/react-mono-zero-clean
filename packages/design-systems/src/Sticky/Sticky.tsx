@@ -1,13 +1,13 @@
 import { useCallback, useState, useLayoutEffect, useRef } from "react";
 import { useEventListener } from "@project/react-hooks";
 import useStatusUpdaters from "./hooks/useStatusUpdaters";
-import { StickyModeMapperRef } from "./types";
+import { StickyModeMapperRef } from "./interface";
 import TopSticky from "./Mode/TopSticky";
 import BottomSticky from "./Mode/BottomSticky";
 
 import "./Sticky.scss";
 
-export type StickyMode = "top" | "bottom";
+export type StickyModeType = "top" | "bottom";
 export type Rect = Pick<DOMRectReadOnly, "top" | "bottom" | "height" | "width">;
 export type CallbackParameter = Record<keyof Rect, number>;
 export type Callback = (rect: CallbackParameter) => void;
@@ -15,7 +15,7 @@ export type Callback = (rect: CallbackParameter) => void;
 export interface Props {
   children: React.ReactNode;
   /** 상단에 붙을지 하단에 붙을지 결정 */
-  mode?: StickyMode;
+  mode?: StickyModeType;
   /** 상단에서 얼마나 떨어진 상태로 sticky가 진행될지 결정 */
   top?: number;
   /** 하단에서 얼마나 떨어진 상태로 sticky가 진행될지 결정 */
