@@ -9,9 +9,9 @@
     .slider__track {
       box-shadow: 0 0 1.5px #24bc60;
     }
-    .slider__controller {
-      box-shadow: 0 0 3px #24bc60;
-    }
+    // .slider__controller {
+    //   box-shadow: 0 0 3px #24bc60;
+    // }
   }
 }
 
@@ -46,4 +46,10 @@
   background-color: #fff;
   transform: translateX(-50%);
   transition: box-shadow 0.2s;
+
+  &:hover {
+    &::selection {
+      box-shadow: 0 0 0 5px #24bc60;
+    }
+  }
 }
