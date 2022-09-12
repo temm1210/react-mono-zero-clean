@@ -21,13 +21,16 @@ describe("Slider component test", () => {
     expect(slider.getAttribute("aria-valuemin")).toBe(`${min}`);
   });
 
-  it("controller가 있는 지점에서의 값(style, value)이 올바르게 계산되어야한다.", () => {
+  it("mode = horizontal일 때 style과 value가 맞게 변화해야한다.", () => {
     const max = 200;
     const min = 10;
+    let step = 1;
 
-    const { container, getByRole } = render(<Slider min={min} max={max} step={1} />);
+    const { container, getByRole, rerender } = render(<Slider min={min} max={max} step={step} />);
 
     const sliderContainer = container.getElementsByClassName("slider")[0];
+    const controller = getByRole("slider");
+    const sliderTrack = container.getElementsByClassName("slider__track")[0];
 
     const left = 40;
     const width = 300;
@@ -43,52 +46,152 @@ describe("Slider component test", () => {
       } as DOMRect;
     });
 
-    const controller = getByRole("slider");
-    const sliderTrack = container.getElementsByClassName("slider__track")[0];
-
     // minxClientX <= clientX <= maxClientX
     const maxClientX = width + left;
     const minxClientX = left;
 
     // 초기 값
-    expect(controller).toHaveAttribute("aria-valuenow", `${min}`);
-    expect(controller).toHaveStyle(`left:0%`);
-    expect(sliderTrack).toHaveStyle(`width:0%`);
+    expect(controller).toHaveAttribute("aria-valuenow", "10");
+    expect(controller).toHaveStyle("left:0%");
+    expect(sliderTrack).toHaveStyle("width:0%");
 
     // controller를 rail의 특정 부분에 click시
     fireEvent.mouseDown(controller, { clientX: 200 });
     fireEvent.mouseUp(controller);
 
-    expect(controller).toHaveAttribute("aria-valuenow", `${111}`);
-    expect(controller).toHaveStyle(`left:53%`);
-    expect(sliderTrack).toHaveStyle(`width:53%`);
+    expect(controller).toHaveAttribute("aria-valuenow", "111");
+    expect(controller).toHaveStyle("left:53%");
+    expect(sliderTrack).toHaveStyle("width:53%");
 
     // controller를 start지점으로 drag시
     fireEvent.mouseDown(controller, { clientX: 150 });
     fireEvent.mouseMove(controller, { clientX: minxClientX });
     fireEvent.mouseUp(controller);
 
-    expect(controller).toHaveAttribute("aria-valuenow", `${min}`);
-    expect(controller).toHaveStyle(`left:0%`);
-    expect(sliderTrack).toHaveStyle(`width:0%`);
+    expect(controller).toHaveAttribute("aria-valuenow", "10");
+    expect(controller).toHaveStyle("left:0%");
+    expect(sliderTrack).toHaveStyle("width:0%");
 
     // controller를 rail의 특정(min < rail < max) 부분에 drag시
     fireEvent.mouseDown(controller, { clientX: 0 });
     fireEvent.mouseMove(controller, { clientX: 150 });
     fireEvent.mouseUp(controller);
 
-    expect(controller).toHaveAttribute("aria-valuenow", `${79}`);
-    expect(controller).toHaveStyle(`left:36%`);
-    expect(sliderTrack).toHaveStyle(`width:36%`);
+    expect(controller).toHaveAttribute("aria-valuenow", "79");
+    expect(controller).toHaveStyle("left:36%");
+    expect(sliderTrack).toHaveStyle("width:36%");
 
     // controller를 끝까지 drag시
     fireEvent.mouseDown(controller, { clientX: 0 });
     fireEvent.mouseMove(controller, { clientX: maxClientX });
     fireEvent.mouseUp(controller);
 
-    expect(controller).toHaveAttribute("aria-valuenow", `${max}`);
-    expect(controller).toHaveStyle(`left:100%`);
-    expect(sliderTrack).toHaveStyle(`width:100%`);
+    expect(controller).toHaveAttribute("aria-valuenow", "200");
+    expect(controller).toHaveStyle("left:100%");
+    expect(sliderTrack).toHaveStyle("width:100%");
+
+    step = 20;
+    rerender(<Slider step={step} min={min} max={max} />);
+
+    fireEvent.mouseDown(controller, { clientX: left });
+    fireEvent.mouseMove(controller, { clientX: left + 10 });
+    fireEvent.mouseUp(controller);
+
+    expect(controller).toHaveAttribute("aria-valuenow", "10");
+    expect(controller).toHaveStyle("left:0%");
+    expect(sliderTrack).toHaveStyle("width:0%");
+
+    fireEvent.mouseDown(controller, { clientX: left });
+    fireEvent.mouseMove(controller, { clientX: left + 18 });
+    fireEvent.mouseUp(controller);
+
+    expect(controller).toHaveAttribute("aria-valuenow", "30");
+    expect(controller).toHaveStyle("left:10%");
+    expect(sliderTrack).toHaveStyle("width:10%");
+
+    step = 35;
+    rerender(<Slider step={step} min={min} max={max} />);
+
+    fireEvent.mouseDown(controller, { clientX: left });
+    fireEvent.mouseMove(controller, { clientX: left + step });
+    fireEvent.mouseUp(controller);
+
+    expect(controller).toHaveAttribute("aria-valuenow", "45");
+    expect(controller).toHaveStyle("left:18%");
+    expect(sliderTrack).toHaveStyle("width:18%");
+
+    fireEvent.mouseDown(controller, { clientX: left });
+    fireEvent.mouseMove(controller, { clientX: maxClientX });
+    fireEvent.mouseUp(controller);
+
+    expect(controller).toHaveAttribute("aria-valuenow", "200");
+    expect(controller).toHaveStyle("left:100%");
+    expect(sliderTrack).toHaveStyle("width:100%");
+  });
+  it("mode = vertical일 때 style과 value가 맞게 변화해야한다.", () => {
+    const max = 205;
+    const min = 10;
+    let step = 1;
+
+    const { container, getByRole, rerender } = render(<Slider min={min} max={max} step={step} />);
+
+    const sliderContainer = container.getElementsByClassName("slider")[0];
+    const controller = getByRole("slider");
+    const sliderTrack = container.getElementsByClassName("slider__track")[0];
+
+    const height = 300;
+    const bottom = height;
+
+    sliderContainer.getBoundingClientRect = jest.fn(() => {
+      return {
+        width: 10,
+        height,
+        top: 0,
+        left: 0,
+        bottom,
+        right: 0,
+      } as DOMRect;
+    });
+
+    step = 15;
+    rerender(<Slider min={min} max={max} step={step} orientation="vertical" />);
+
+    // 초기값
+    expect(controller).toHaveAttribute("aria-valuenow", "10");
+    expect(controller).toHaveStyle("bottom:0%");
+    expect(sliderTrack).toHaveStyle("height:0%");
+
+    fireEvent.mouseDown(controller, { clientY: 0 });
+    fireEvent.mouseMove(controller, { clientY: 280 });
+    fireEvent.mouseUp(controller);
+
+    expect(controller).toHaveAttribute("aria-valuenow", "25");
+    expect(controller).toHaveStyle("bottom:7%");
+    expect(sliderTrack).toHaveStyle("height:7%");
+
+    fireEvent.mouseDown(controller, { clientY: 0 });
+    fireEvent.mouseMove(controller, { clientY: 250 });
+    fireEvent.mouseUp(controller);
+
+    expect(controller).toHaveAttribute("aria-valuenow", "40");
+    expect(controller).toHaveStyle("bottom:15%");
+    expect(sliderTrack).toHaveStyle("height:15%");
+
+    fireEvent.mouseDown(controller, { clientY: 0 });
+    fireEvent.mouseMove(controller, { clientY: 200 });
+    fireEvent.mouseUp(controller);
+
+    expect(controller).toHaveAttribute("aria-valuenow", "70");
+    expect(controller).toHaveStyle("bottom:30%");
+    expect(sliderTrack).toHaveStyle("height:30%");
+
+    fireEvent.mouseDown(controller, { clientY: 0 });
+    fireEvent.mouseMove(controller, { clientY: 0 });
+    fireEvent.mouseUp(controller);
+
+    expect(controller).toHaveAttribute("aria-valuenow", "205");
+    expect(controller).toHaveStyle("bottom:100%");
+    expect(sliderTrack).toHaveStyle("height:100%");
   });
 
   it("max <= min일시 error를 발생시킨다.", () => {
@@ -109,116 +212,41 @@ describe("Slider component test", () => {
     // 모든 validation 통과시에는 error를 던지면안됨
     expect(() => render(<Slider min={100} max={300} defaultValue={100} />)).not.toThrowError();
   });
-
-  it("style, value가 주어진 step에 맞게 변화해야한다.", () => {
-    const max = 250;
-    const min = 50;
-
-    let step = 20;
-
-    const { container, getByRole, rerender } = render(<Slider step={step} min={min} max={max} />);
-
-    const sliderContainer = container.getElementsByClassName("slider")[0];
-
-    const left = 20;
-    const width = 350;
-
-    sliderContainer.getBoundingClientRect = jest.fn(() => {
-      return {
-        width,
-        height: 10,
-        top: 0,
-        left,
-        bottom: 0,
-        right: 0,
-      } as DOMRect;
-    });
-
-    const controller = getByRole("slider");
-    const sliderTrack = container.getElementsByClassName("slider__track")[0];
-
-    // controller를 rail의 특정(min < rail < max) 부분에 drag시
-    fireEvent.mouseDown(controller, { clientX: left });
-    fireEvent.mouseMove(controller, { clientX: left + 5 });
-    fireEvent.mouseUp(controller);
-
-    expect(controller).toHaveAttribute("aria-valuenow", `${min}`);
-
-    fireEvent.mouseDown(controller, { clientX: left });
-    fireEvent.mouseMove(controller, { clientX: left + 17 });
-    fireEvent.mouseUp(controller);
-
-    expect(controller).toHaveAttribute("aria-valuenow", `${min}`);
-    expect(controller).toHaveStyle(`left:0%`);
-    expect(sliderTrack).toHaveStyle(`width:0%`);
-
-    fireEvent.mouseDown(controller, { clientX: left });
-    fireEvent.mouseMove(controller, { clientX: left + 18 });
-    fireEvent.mouseUp(controller);
-
-    expect(controller).toHaveAttribute("aria-valuenow", `${min + step}`);
-    expect(controller).toHaveStyle(`left:${Math.floor(step / 2)}%`);
-    expect(sliderTrack).toHaveStyle(`width:${Math.floor(step / 2)}%`);
-
-    fireEvent.mouseDown(controller, { clientX: left });
-    fireEvent.mouseMove(controller, { clientX: left + 53 });
-    fireEvent.mouseUp(controller);
-
-    expect(controller).toHaveAttribute("aria-valuenow", `${min + 2 * step}`);
-    expect(controller).toHaveStyle(`left:${2 * Math.floor(step / 2)}%`);
-    expect(sliderTrack).toHaveStyle(`width:${2 * Math.floor(step / 2)}%`);
-
-    step = 30;
-    rerender(<Slider step={step} min={min} max={max} />);
-
-    fireEvent.mouseDown(controller, { clientX: left });
-    fireEvent.mouseMove(controller, { clientX: left + 5 });
-    fireEvent.mouseUp(controller);
-
-    expect(controller).toHaveAttribute("aria-valuenow", `${min}`);
-    expect(controller).toHaveStyle(`left:0%`);
-    expect(sliderTrack).toHaveStyle(`width:0%`);
-
-    fireEvent.mouseDown(controller, { clientX: left });
-    fireEvent.mouseMove(controller, { clientX: left + step });
-    fireEvent.mouseUp(controller);
-
-    expect(controller).toHaveAttribute("aria-valuenow", `${min + step}`);
-    expect(controller).toHaveStyle(`left:${Math.floor(step / 2)}%`);
-    expect(sliderTrack).toHaveStyle(`width:${Math.floor(step / 2)}%`);
-
-    step = 35;
-    rerender(<Slider step={step} min={min} max={max} />);
-
-    fireEvent.mouseDown(controller, { clientX: left });
-    fireEvent.mouseMove(controller, { clientX: left + 5 });
-    fireEvent.mouseUp(controller);
-
-    expect(controller).toHaveAttribute("aria-valuenow", `${min}`);
-    expect(controller).toHaveStyle(`left:0%`);
-    expect(sliderTrack).toHaveStyle(`width:0%`);
-
-    fireEvent.mouseDown(controller, { clientX: left });
-    fireEvent.mouseMove(controller, { clientX: left + step });
-    fireEvent.mouseUp(controller);
-
-    expect(controller).toHaveAttribute("aria-valuenow", `${min + step}`);
-    expect(controller).toHaveStyle(`left:${Math.floor(step / 2)}%`);
-    expect(sliderTrack).toHaveStyle(`width:${Math.floor(step / 2)}%`);
-  });
-
   it("slider의 container padding = controller height - container height 이여야 한다.", () => {
-    const railHeight = 20;
+    const railSize = 20;
     const controllerSize = 50;
 
-    const { container } = render(
-      <Slider min={30} max={100} defaultValue={50} step={15} controllerSize={controllerSize} railHeight={railHeight} />,
+    const { container, rerender } = render(
+      <Slider
+        min={30}
+        max={100}
+        defaultValue={50}
+        step={15}
+        controllerSize={controllerSize}
+        orientation="horizontal"
+        railSize={railSize}
+      />,
     );
 
     const sliderContainer = container.getElementsByClassName("slider")[0];
 
-    expect(sliderContainer).toHaveStyle(`height:${railHeight}px`);
-    expect(sliderContainer).toHaveStyle(`padding:${(controllerSize - railHeight) / 2}px 0`);
+    expect(sliderContainer).toHaveStyle("height:20px");
+    expect(sliderContainer).toHaveStyle("padding:15px 0");
+
+    rerender(
+      <Slider
+        min={30}
+        max={100}
+        defaultValue={50}
+        step={15}
+        controllerSize={controllerSize}
+        orientation="vertical"
+        railSize={railSize}
+      />,
+    );
+
+    expect(sliderContainer).toHaveStyle("width:20px");
+    expect(sliderContainer).toHaveStyle("padding:0 15px");
   });
   it("slider의 props에 onChange가 존재할 시, slider의 value가 변할때마다 호출되어야한다.", () => {
     const onChange = jest.fn();

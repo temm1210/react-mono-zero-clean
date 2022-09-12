@@ -17,3 +17,18 @@ export const Base = BaseStory.bind({});
 Base.args = {
   onChange: (value: number) => console.log("value:", value),
 };
+
+export const StepSlider = BaseStory.bind({});
+StepSlider.args = {
+  step: 20,
+  onChange: (value: number) => console.log("value:", value),
+};
+
+export const VerticalSlider = BaseStory.bind({});
+VerticalSlider.args = {
+  orientation: "vertical",
+  max: 95,
+  step: 10,
+  size: "150px",
+  onChange: (value: number) => console.log("value:", value),
+};

@@ -1,10 +1,12 @@
 import { useRect } from "@project/react-hooks";
+import { convertHexToRGBA } from "@project/utils";
 import React, { useEffect, useState } from "react";
 import { useValidation, UseValidationProps } from "./hooks";
 
 import "./Slider.scss";
 
 export type SliderOnChange = (value: number) => void;
+export type SliderOrientation = "horizontal" | "vertical";
 export interface SliderProps {
   /** 도달할 수 있는 최소값 */
   min?: UseValidationProps["min"];
@@ -16,21 +18,33 @@ export interface SliderProps {
   step?: number;
   /** slider controller의 크기(정사각형) */
   controllerSize?: number;
-  /** slider rail의 height(track도 같이적용) */
-  railHeight?: number;
+  /** slider rail의 크기(track도 같이적용) */
+  railSize?: number;
+  /** slider의 크기(horizontal일때는 width, vertical일때는 height로 적용됨) */
+  size?: string;
+  /** slider track의 color */
+  trackColor?: string;
+  /** slider의 방향(horizontal,vertical) */
+  orientation?: SliderOrientation;
   /** slider의 value가 변경될 때 실행할 callback 함수 */
   onChange?: SliderOnChange;
 }
 
+// TODO: orientation에 따른 코드분리
+// TODO: style분리 확인
 function Slider({
   min = 0,
   max = 100,
   defaultValue = min || 0,
   step = 1,
   controllerSize = 20,
-  railHeight = 6,
+  railSize = 6,
+  size,
+  trackColor = "#19ce60",
+  orientation = "horizontal",
   onChange,
 }: SliderProps) {
+  const [isDragging, setIsDragging] = useState(false);
   const [setSliderElement, sliderElementRect] = useRect();
   const [value, setValue] = useState(Math.max(min, defaultValue));
 
@@ -39,8 +53,10 @@ function Slider({
   const updateValueOnCondition = (_value: number) => {
     if (_value > max || _value < min) return;
 
-    const nextValue = min + Math.round((_value - min) / step) * step;
+    if (_value === max) return setValue(max);
+    if (_value === min) return setValue(min);
 
+    const nextValue = min + Math.round((_value - min) / step) * step;
     setValue(nextValue);
   };
 
@@ -56,8 +72,13 @@ function Slider({
   const onMove = (event: MouseEvent) => {
     event.preventDefault();
 
-    const { width, left } = sliderElementRect();
-    updateValueOnCondition(calculateNextValue(event.clientX - left, width));
+    if (orientation === "horizontal") {
+      const { width, left } = sliderElementRect();
+      updateValueOnCondition(calculateNextValue(event.clientX - left, width));
+    } else {
+      const { height, bottom } = sliderElementRect();
+      updateValueOnCondition(calculateNextValue(bottom - event.clientY, height));
+    }
   };
 
   const onMouseUp = (event: MouseEvent) => {
@@ -65,6 +86,8 @@ function Slider({
 
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onMouseUp);
+
+    setIsDragging(false);
   };
 
   const onMouseDown = (event: React.MouseEvent) => {
@@ -73,8 +96,15 @@ function Slider({
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onMouseUp);
 
-    const { width, left } = sliderElementRect();
-    updateValueOnCondition(calculateNextValue(event.clientX - left, width));
+    if (orientation === "horizontal") {
+      const { width, left } = sliderElementRect();
+      updateValueOnCondition(calculateNextValue(event.clientX - left, width));
+    } else {
+      const { height, bottom } = sliderElementRect();
+      updateValueOnCondition(calculateNextValue(bottom - event.clientY, height));
+    }
+
+    setIsDragging(true);
   };
 
   useEffect(() => {
@@ -83,23 +113,53 @@ function Slider({
 
   useValidation({ max, min, defaultValue });
 
+  const railRectStyles =
+    orientation === "horizontal"
+      ? { height: `${railSize}px`, width: "100%", top: "50%", transform: "translateY(-50%)" }
+      : { width: `${railSize}px`, height: "100%", left: "50%", transform: "translateX(-50%)" };
   const railStyles = {
-    height: `${railHeight}px`,
-  };
-  const trackStyles = {
-    width: convertToPercent(value),
-    height: `${railHeight}px`,
+    ...railRectStyles,
   };
 
+  const trackRectStyles =
+    orientation === "horizontal"
+      ? {
+          width: convertToPercent(value),
+          height: `${railSize}px`,
+          top: "50%",
+          left: 0,
+          transform: "translateY(-50%)",
+        }
+      : {
+          width: `${railSize}px`,
+          height: convertToPercent(value),
+          bottom: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
+        };
+  const trackStyles = {
+    backgroundColor: trackColor,
+    ...trackRectStyles,
+  };
+
+  const controllerOrientationStyles =
+    orientation === "horizontal"
+      ? { left: convertToPercent(value), transform: "translateX(-50%)", top: 0 }
+      : { bottom: convertToPercent(value), transform: "translateY(50%)", left: 0 };
   const controllerStyles = {
     width: `${controllerSize}px`,
+    boxShadow: isDragging ? `0px 0px 0px 8px ${convertHexToRGBA(trackColor, 10)}` : undefined,
+    border: `2px solid ${trackColor}`,
     height: `${controllerSize}px`,
-    left: convertToPercent(value),
+    ...controllerOrientationStyles,
   };
 
+  const sliderRectStyles =
+    orientation === "horizontal"
+      ? { height: `${railSize}px`, padding: `${(controllerSize - railSize) / 2}px 0`, width: size || "100%" }
+      : { height: size || "300px", width: `${railSize}px`, padding: `0 ${(controllerSize - railSize) / 2}px` };
   const sliderStyles = {
-    padding: `${(controllerSize - railHeight) / 2}px 0`,
-    height: `${railHeight}px`,
+    ...sliderRectStyles,
   };
 
   return (
