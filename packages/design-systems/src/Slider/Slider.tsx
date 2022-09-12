@@ -1,4 +1,5 @@
 import { useRect } from "@project/react-hooks";
+import { convertHexToRGBA } from "@project/utils";
 import React, { useEffect, useState } from "react";
 import { useValidation, UseValidationProps } from "./hooks";
 
@@ -31,6 +32,7 @@ function Slider({
   railHeight = 6,
   onChange,
 }: SliderProps) {
+  const [isDragging, setIsDragging] = useState(false);
   const [setSliderElement, sliderElementRect] = useRect();
   const [value, setValue] = useState(Math.max(min, defaultValue));
 
@@ -65,6 +67,8 @@ function Slider({
 
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onMouseUp);
+
+    setIsDragging(false);
   };
 
   const onMouseDown = (event: React.MouseEvent) => {
@@ -75,6 +79,8 @@ function Slider({
 
     const { width, left } = sliderElementRect();
     updateValueOnCondition(calculateNextValue(event.clientX - left, width));
+
+    setIsDragging(true);
   };
 
   useEffect(() => {
@@ -87,12 +93,15 @@ function Slider({
     height: `${railHeight}px`,
   };
   const trackStyles = {
+    backgroundColor: "#19ce60",
     width: convertToPercent(value),
     height: `${railHeight}px`,
   };
 
   const controllerStyles = {
     width: `${controllerSize}px`,
+    boxShadow: isDragging ? `0px 0px 0px 8px ${convertHexToRGBA("#19ce60", 10)}` : undefined,
+    border: "2px solid #19ce60",
     height: `${controllerSize}px`,
     left: convertToPercent(value),
   };
