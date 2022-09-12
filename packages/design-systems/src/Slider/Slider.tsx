@@ -19,6 +19,8 @@ export interface SliderProps {
   controllerSize?: number;
   /** slider rail의 height(track도 같이적용) */
   railHeight?: number;
+  /** slider track의 color */
+  trackColor?: string;
   /** slider의 value가 변경될 때 실행할 callback 함수 */
   onChange?: SliderOnChange;
 }
@@ -30,6 +32,7 @@ function Slider({
   step = 1,
   controllerSize = 20,
   railHeight = 6,
+  trackColor = "#19ce60",
   onChange,
 }: SliderProps) {
   const [isDragging, setIsDragging] = useState(false);
@@ -93,14 +96,14 @@ function Slider({
     height: `${railHeight}px`,
   };
   const trackStyles = {
-    backgroundColor: "#19ce60",
+    backgroundColor: trackColor,
     width: convertToPercent(value),
     height: `${railHeight}px`,
   };
 
   const controllerStyles = {
     width: `${controllerSize}px`,
-    boxShadow: isDragging ? `0px 0px 0px 8px ${convertHexToRGBA("#19ce60", 10)}` : undefined,
+    boxShadow: isDragging ? `0px 0px 0px 8px ${convertHexToRGBA(trackColor, 10)}` : undefined,
     border: "2px solid #19ce60",
     height: `${controllerSize}px`,
     left: convertToPercent(value),
