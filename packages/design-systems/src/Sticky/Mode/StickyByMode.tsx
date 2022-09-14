@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import BottomSticky from "./BottomSticky";
 import TopSticky from "./TopSticky";
@@ -14,25 +15,31 @@ export interface StickyByModeProps {
   isSticky: boolean;
   isAbsolute: boolean;
   children: React.ReactNode;
-  testRef: React.RefObject<StickyModeMapperRef>;
+  modeRef: React.RefObject<StickyModeMapperRef>;
 }
 
-const StickyByMode = ({ mode, testRef, top, bottom, children, ...rest }: StickyByModeProps) => {
+const StickyByMode = ({ mode, top, modeRef, bottom, ...rest }: StickyByModeProps) => {
   const mapper = {
-    top: (
-      <TopSticky ref={testRef} top={top} {...rest}>
-        {children}
-      </TopSticky>
-    ),
+    top: {
+      component: TopSticky,
+      props: {
+        top,
+        ref: modeRef,
+        ...rest,
+      },
+    },
 
-    bottom: (
-      <BottomSticky ref={testRef} bottom={bottom} {...rest}>
-        {children}
-      </BottomSticky>
-    ),
-  };
+    bottom: {
+      component: BottomSticky,
+      props: {
+        bottom,
+        ref: modeRef,
+        ...rest,
+      },
+    },
+  } as any;
 
-  return mapper[mode];
+  return React.createElement(mapper[mode].component, mapper[mode].props);
 };
 
 export default StickyByMode;

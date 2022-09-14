@@ -88,7 +88,7 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
       isAbsolute={isAbsolute}
       isSticky={isSticky}
       mode={mode}
-      testRef={modeMapperRef}
+      modeRef={modeMapperRef}
       top={top}
       bottom={bottom}
       width={width}

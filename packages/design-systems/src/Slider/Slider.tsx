@@ -162,6 +162,7 @@ function Slider({
     ...sliderRectStyles,
   };
 
+  // TODO 세로방향 슬라이더
   return (
     <div className="slider" onMouseDown={onMouseDown} style={sliderStyles} ref={setSliderElement}>
       <div className="slider__rail" style={railStyles} />
