@@ -162,7 +162,8 @@ function Slider({
     ...sliderRectStyles,
   };
 
-  // TODO 세로방향 슬라이더
+  const ariaLabel = orientation === "horizontal" ? "가로방향 슬라이더" : "세로방향 슬라이더";
+
   return (
     <div className="slider" onMouseDown={onMouseDown} style={sliderStyles} ref={setSliderElement}>
       <div className="slider__rail" style={railStyles} />
@@ -171,7 +172,7 @@ function Slider({
         style={controllerStyles}
         className="slider__controller"
         role="slider"
-        aria-label="가로방향 슬라이더"
+        aria-label={ariaLabel}
         aria-valuenow={value}
         aria-valuemax={max}
         aria-valuemin={min}
