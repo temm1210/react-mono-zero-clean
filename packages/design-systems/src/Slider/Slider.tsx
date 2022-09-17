@@ -50,7 +50,7 @@ function Slider({
 
   // validation성공시 값을 업데이트하는 함수
   // update시 필요한 validation은 해당 함수에 모두 작성
-  const updateValueOnCondition = (_value: number) => {
+  const updateValue = (_value: number) => {
     if (_value > max || _value < min) return;
 
     if (_value === max) return setValue(max);
@@ -74,10 +74,10 @@ function Slider({
 
     if (orientation === "horizontal") {
       const { width, left } = sliderElementRect();
-      updateValueOnCondition(calculateNextValue(event.clientX - left, width));
+      updateValue(calculateNextValue(event.clientX - left, width));
     } else {
       const { height, bottom } = sliderElementRect();
-      updateValueOnCondition(calculateNextValue(bottom - event.clientY, height));
+      updateValue(calculateNextValue(bottom - event.clientY, height));
     }
   };
 
@@ -98,10 +98,10 @@ function Slider({
 
     if (orientation === "horizontal") {
       const { width, left } = sliderElementRect();
-      updateValueOnCondition(calculateNextValue(event.clientX - left, width));
+      updateValue(calculateNextValue(event.clientX - left, width));
     } else {
       const { height, bottom } = sliderElementRect();
-      updateValueOnCondition(calculateNextValue(bottom - event.clientY, height));
+      updateValue(calculateNextValue(bottom - event.clientY, height));
     }
 
     setIsDragging(true);

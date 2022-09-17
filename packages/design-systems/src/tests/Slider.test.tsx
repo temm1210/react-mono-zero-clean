@@ -18,10 +18,13 @@ describe("Slider component test", () => {
     const slider = getByRole("slider");
 
     expect(slider.getAttribute("aria-label")).toBe("가로방향 슬라이더");
+    expect(slider.getAttribute("aria-valuenow")).toBe(`${defaultValue}`);
+    expect(slider.getAttribute("aria-valuemax")).toBe(`${max}`);
+    expect(slider.getAttribute("aria-valuemin")).toBe(`${min}`);
 
     rerender(<Slider min={min} max={max} defaultValue={defaultValue} orientation="vertical" />);
-    expect(slider.getAttribute("aria-label")).toBe("세로방향 슬라이더");
 
+    expect(slider.getAttribute("aria-label")).toBe("세로방향 슬라이더");
     expect(slider.getAttribute("aria-valuenow")).toBe(`${defaultValue}`);
     expect(slider.getAttribute("aria-valuemax")).toBe(`${max}`);
     expect(slider.getAttribute("aria-valuemin")).toBe(`${min}`);

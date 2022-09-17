@@ -34,30 +34,23 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
   const modeMapperRef = useRef<StickyModeMapperRef>(null);
   const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters(!modeMapperRef.current?.parentNode);
 
-  // sticky status state가 변할 때 실행할 callback
-  const handleOnStickyStateUpdate = useCallback(
-    (pWidth: number, pHeight: number, callback?: Callback) => {
-      const rect = { width: pWidth, height: pHeight, top, bottom };
-
-      setWidth(pWidth);
-      setHeight(pHeight);
-      callback?.(rect);
-    },
-    [bottom, top],
-  );
-
   const handleOnSticky = useCallback(() => {
     if (modeMapperRef.current) {
       const { fakeRect, stickyRect } = modeMapperRef.current;
-      handleOnStickyStateUpdate(fakeRect.width, stickyRect.height, onStick);
+
+      setWidth(fakeRect.width);
+      setHeight(stickyRect.height);
+      onStick?.({ width: fakeRect.width, height: stickyRect.height, top, bottom });
     }
-  }, [handleOnStickyStateUpdate, onStick]);
+  }, [bottom, onStick, top]);
 
   const handleOnUnSticky = useCallback(() => {
     if (modeMapperRef.current) {
-      handleOnStickyStateUpdate(modeMapperRef.current?.fakeRect.width, 0, onUnStick);
+      setWidth(modeMapperRef.current?.fakeRect.width);
+      setHeight(0);
+      onUnStick?.({ width: modeMapperRef.current?.fakeRect.width, height: 0, top, bottom });
     }
-  }, [handleOnStickyStateUpdate, onUnStick]);
+  }, [bottom, onUnStick, top]);
 
   useLayoutEffect(() => {
     if (isSticky) {
