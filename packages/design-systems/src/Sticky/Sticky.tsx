@@ -1,4 +1,4 @@
-import { useCallback, useState, useLayoutEffect, useRef } from "react";
+import { useState, useLayoutEffect, useRef } from "react";
 import { useEventListener } from "@project/react-hooks";
 import useStatusUpdaters from "./hooks/useStatusUpdaters";
 import { StickyModeMapperRef } from "./interface";
@@ -25,16 +25,22 @@ export interface Props {
   onUnStick?: Callback;
 }
 
+interface StickyCallbackOnStatusRef {
+  handleOnSticky: () => void;
+  handleOnUnSticky: () => void;
+}
+
 const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStick }: Props) => {
   const [width, setWidth] = useState(0);
   const [height, setHeight] = useState(0);
+
   // 공통기능은 해당컴포넌트에서 구현
   // 공통기능이 아닌 mode마다 다른기능은 해당하는 자식컴포넌트에서 구현하는 용도
   // 자식컴포넌트에서는 StickyModeMapperRef interface의 요구사항을 반드시 모두 구현해야함
   const modeMapperRef = useRef<StickyModeMapperRef>(null);
   const [statusUpdaters, { isSticky, isAbsolute }] = useStatusUpdaters(!modeMapperRef.current?.parentNode);
 
-  const handleOnSticky = useCallback(() => {
+  const handleOnSticky = () => {
     if (modeMapperRef.current) {
       const { fakeRect, stickyRect } = modeMapperRef.current;
 
@@ -42,22 +48,27 @@ const Sticky = ({ children, top = 0, bottom = 0, mode = "top", onStick, onUnStic
       setHeight(stickyRect.height);
       onStick?.({ width: fakeRect.width, height: stickyRect.height, top, bottom });
     }
-  }, [bottom, onStick, top]);
+  };
 
-  const handleOnUnSticky = useCallback(() => {
+  const handleOnUnSticky = () => {
     if (modeMapperRef.current) {
       setWidth(modeMapperRef.current?.fakeRect.width);
       setHeight(0);
       onUnStick?.({ width: modeMapperRef.current?.fakeRect.width, height: 0, top, bottom });
     }
-  }, [bottom, onUnStick, top]);
+  };
+
+  const callbacksOnStatusRef = useRef<StickyCallbackOnStatusRef>({
+    handleOnSticky,
+    handleOnUnSticky,
+  });
 
   useLayoutEffect(() => {
     if (isSticky) {
-      return handleOnSticky();
+      return callbacksOnStatusRef.current?.handleOnSticky();
     }
-    return handleOnUnSticky();
-  }, [isSticky, handleOnUnSticky, handleOnSticky]);
+    return callbacksOnStatusRef.current?.handleOnUnSticky();
+  }, [isSticky]);
 
   const update = () => {
     if (!modeMapperRef.current) return;
