@@ -1,4 +1,4 @@
-# This repo just for study
+# This repo is just for study
 
 ## 시작방법
 
